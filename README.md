@@ -13,9 +13,9 @@ hidden test suite to be run (`submit_patch`). A run succeeds when that test suit
 
 Output of the abstraction and automata-learning steps, run on the 20 collected traces.
 
-- `abstractions.json` / `abstractions.txt`: every (action, observation) pair from every run, labeled by the model with an abstract (action category, observation category) pair. The `.json` is the machine-readable version used by the next step; the `.txt` is the same data in a human-readable form.
-- `hb_mc.dot`: the Markov chain learned from the abstracted traces (Alergia algorithm), one state per (action category, output category), with transition probabilities.
-- `model_summary.txt`: a readable listing of every state in `hb_mc.dot` with its outgoing transitions and probabilities.
+- `abstractions.json` / `abstractions.txt`: every (action, observation) pair from every run, labeled by the model with an abstract (action category, observation category) pair
+- `hb_mc.dot`: the Markov chain learned from the abstracted traces (Alergia algorithm), one state per (action category, output category), with transition probabilities
+- `model_summary.txt`: a readable listing of every state in `hb_mc.dot` with its outgoing transitions and probabilities
 - `hb_mc_0.pdf`: a rendered chart of `hb_mc.dot`
 
 ### `job_logs/`
