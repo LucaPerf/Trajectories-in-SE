@@ -1,0 +1,4926 @@
+==============================================================================
+Run transcript: astropy__astropy-12907
+run id: 8    tag: 'vm_0_iter_0'    turns: 12
+model: SWE-bench Pilot Task
+final state: got root
+started: 2026-10-08 23:12:11.065438    stopped: 2026-10-08 21:25:23  (start is local time, stop is UTC)
+==============================================================================
+
+HOW TO READ THIS FILE
+Each TURN is one round trip with the model:
+  1. prompt   what we send: the task, the available commands and the history of the earlier commands
+  2. reply    what the model answered, complete and unedited
+  3. command  the single line we extracted from the reply and actually executed in the container
+  4. result   what the container printed (this becomes part of the history in the next prompt)
+The run ends with a status line: "got root" means the tests passed (that is the framework's name for
+any success), anything else is the reason the run stopped.
+
+------------------------------------------------------------------------------
+TURN 1
+------------------------------------------------------------------------------
+
+[prompt sent to the model, 2404 characters]
+You are a software engineer working inside a checked-out git repository
+at /testbed. Your goal is to resolve the following issue by editing the code so that the
+project's test suite passes.
+
+ISSUE:
+Modeling's `separability_matrix` does not compute separability correctly for nested CompoundModels
+Consider the following model:
+
+```python
+from astropy.modeling import models as m
+from astropy.modeling.separable import separability_matrix
+
+cm = m.Linear1D(10) & m.Linear1D(5)
+```
+
+It's separability matrix as you might expect is a diagonal:
+
+```python
+>>> separability_matrix(cm)
+array([[ True, False],
+       [False,  True]])
+```
+
+If I make the model more complex:
+```python
+>>> separability_matrix(m.Pix2Sky_TAN() & m.Linear1D(10) & m.Linear1D(5))
+array([[ True,  True, False, False],
+       [ True,  True, False, False],
+       [False, False,  True, False],
+       [False, False, False,  True]])
+```
+
+The output matrix is again, as expected, the outputs and inputs to the linear models are separable and independent of each other.
+
+If however, I nest these compound models:
+```python
+>>> separability_matrix(m.Pix2Sky_TAN() & cm)
+array([[ True,  True, False, False],
+       [ True,  True, False, False],
+       [False, False,  True,  True],
+       [False, False,  True,  True]])
+```
+Suddenly the inputs and outputs are no longer separable?
+
+This feels like a bug to me, but I might be missing something?
+
+
+You can either
+
+- `exec_command command`: give a command to be executed and I will respond with the terminal output when running this command inside the task's container. The given command must not require user interaction. Do not use quotation marks in front and after your command.
+- `submit_patch note`: Call this when you believe the issue is fixed. I will run the project's test suite inside the container and tell you whether it passes. Usage: submit_patch <short note about what you changed>
+
+
+Decide your next single action. Use exec_command to read/search/edit files or run commands, and
+submit_patch only once you believe the fix is complete and want it verified against the test
+suite.
+
+Your entire reply must be exactly one line, in one of these two forms, and nothing else:
+exec_command <shell command on one line>
+submit_patch <short note>
+Do not explain your reasoning, do not add markup, and do not continue the conversation after that line.
+
+
+[model reply, complete and unedited] (715 tokens in, 65 tokens out)
+exec_command grep -n "def separability_matrix" -r astropy/modeling/separable.py astropy/modeling --include="*.py" | head -20
+
+[command executed: exec_command]
+grep -n "def separability_matrix" -r astropy/modeling/separable.py astropy/modeling --include="*.py" | head -20
+
+[result]
+astropy/modeling/separable.py:66:def separability_matrix(transform):
+astropy/modeling/separable.py:66:def separability_matrix(transform):
+
+
+------------------------------------------------------------------------------
+TURN 2
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 2796 characters, the same as turn 1 plus the history below]
+$exec_command grep -n "def separability_matrix" -r astropy/modeling/separable.py astropy/modeling --include="*.py" | head -20
+ astropy/modeling/separable.py:66:def separability_matrix(transform):
+astropy/modeling/separable.py:66:def separability_matrix(transform):
+
+
+
+[model reply, complete and unedited] (812 tokens in, 56 tokens out)
+exec_command sed -n '1,220p' astropy/modeling/separable.py
+
+[command executed: exec_command]
+sed -n '1,220p' astropy/modeling/separable.py
+
+[result]
+# Licensed under a 3-clause BSD style license - see LICENSE.rst
+
+"""
+Functions to determine if a model is separable, i.e.
+if the model outputs are independent.
+
+It analyzes ``n_inputs``, ``n_outputs`` and the operators
+in a compound model by stepping through the transforms
+and creating a ``coord_matrix`` of shape (``n_outputs``, ``n_inputs``).
+
+
+Each modeling operator is represented by a function which
+takes two simple models (or two ``coord_matrix`` arrays) and
+returns an array of shape (``n_outputs``, ``n_inputs``).
+
+"""
+
+import numpy as np
+
+from .core import Model, ModelDefinitionError, CompoundModel
+from .mappings import Mapping
+
+
+__all__ = ["is_separable", "separability_matrix"]
+
+
+def is_separable(transform):
+    """
+    A separability test for the outputs of a transform.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    is_separable : ndarray
+        A boolean array with size ``transform.n_outputs`` where
+        each element indicates whether the output is independent
+        and the result of a separable transform.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> is_separable(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([ True,  True]...)
+    >>> is_separable(Shift(1) & Shift(2) | Rotation2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([ True,  True,  True,  True]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        is_separable = np.array([False] * transform.n_outputs).T
+        return is_separable
+    separable_matrix = _separable(transform)
+    is_separable = separable_matrix.sum(1)
+    is_separable = np.where(is_separable != 1, False, True)
+    return is_separable
+
+
+def separability_matrix(transform):
+    """
+    Compute the correlation between outputs and inputs.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    separable_matrix : ndarray
+        A boolean correlation matrix of shape (n_outputs, n_inputs).
+        Indicates the dependence of outputs on inputs. For completely
+        independent outputs, the diagonal elements are True and
+        off-diagonal elements are False.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> separability_matrix(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([[ True, False], [False,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Rotation2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([[ True, False], [False,  True], [ True, False], [False,  True]]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        return np.ones((transform.n_outputs, transform.n_inputs),
+                       dtype=np.bool_)
+    separable_matrix = _separable(transform)
+    separable_matrix = np.where(separable_matrix != 0, True, False)
+    return separable_matrix
+
+
+def _compute_n_outputs(left, right):
+    """
+    Compute the number of outputs of two models.
+
+    The two models are the left and right model to an operation in
+    the expression tree of a compound model.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    """
+    if isinstance(left, Model):
+        lnout = left.n_outputs
+    else:
+        lnout = left.shape[0]
+    if isinstance(right, Model):
+        rnout = right.n_outputs
+    else:
+        rnout = right.shape[0]
+    noutp = lnout + rnout
+    return noutp
+
+
+def _arith_oper(left, right):
+    """
+    Function corresponding to one of the arithmetic operators
+    ['+', '-'. '*', '/', '**'].
+
+    This always returns a nonseparable output.
+
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+    # models have the same number of inputs and outputs
+    def _n_inputs_outputs(input):
+        if isinstance(input, Model):
+            n_outputs, n_inputs = input.n_outputs, input.n_inputs
+        else:
+            n_outputs, n_inputs = input.shape
+        return n_inputs, n_outputs
+
+    left_inputs, left_outputs = _n_inputs_outputs(left)
+    right_inputs, right_outputs = _n_inputs_outputs(right)
+
+    if left_inputs != right_inputs or left_outputs != right_outputs:
+        raise ModelDefinitionError(
+            "Unsupported operands for arithmetic operator: left (n_inputs={}, "
+            "n_outputs={}) and right (n_inputs={}, n_outputs={}); "
+            "models must have the same n_inputs and the same "
+            "n_outputs for this operator.".format(
+                left_inputs, left_outputs, right_inputs, right_outputs))
+
+    result = np.ones((left_outputs, left_inputs))
+    return result
+
+
+def _coord_matrix(model, pos, noutp):
+    """
+    Create an array representing inputs and outputs of a simple model.
+
+    The array has a shape (noutp, model.n_inputs).
+
+    Parameters
+    ----------
+    model : `astropy.modeling.Model`
+        model
+    pos : str
+        Position of this model in the expression tree.
+        One of ['left', 'right'].
+    noutp : int
+        Number of outputs of the compound model of which the input model
+        is a left or right child.
+
+    """
+    if isinstance(model, Mapping):
+        axes = []
+        for i in model.mapping:
+            axis = np.zeros((model.n_inputs,))
+            axis[i] = 1
+            axes.append(axis)
+        m = np.vstack(axes)
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[: model.n_outputs, :model.n_inputs] = m
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = m
+        return mat
+    if not model.separable:
+        # this does not work for more than 2 coordinates
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[:model.n_outputs, : model.n_inputs] = 1
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = 1
+    else:
+        mat = np.zeros((noutp, model.n_inputs))
+
+        for i in range(model.n_inputs):
+            mat[i, i] = 1
+        if pos == 'right':
+            mat = np.roll(mat, (noutp - model.n_outputs))
+    return mat
+
+
+def _cstack(left, right):
+    """
+
+
+------------------------------------------------------------------------------
+TURN 3
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 9804 characters, the same as turn 1 plus the history below]
+$exec_command grep -n "def separability_matrix" -r astropy/modeling/separable.py astropy/modeling --include="*.py" | head -20
+ astropy/modeling/separable.py:66:def separability_matrix(transform):
+astropy/modeling/separable.py:66:def separability_matrix(transform):
+
+
+$exec_command sed -n '1,220p' astropy/modeling/separable.py
+ # Licensed under a 3-clause BSD style license - see LICENSE.rst
+
+"""
+Functions to determine if a model is separable, i.e.
+if the model outputs are independent.
+
+It analyzes ``n_inputs``, ``n_outputs`` and the operators
+in a compound model by stepping through the transforms
+and creating a ``coord_matrix`` of shape (``n_outputs``, ``n_inputs``).
+
+
+Each modeling operator is represented by a function which
+takes two simple models (or two ``coord_matrix`` arrays) and
+returns an array of shape (``n_outputs``, ``n_inputs``).
+
+"""
+
+import numpy as np
+
+from .core import Model, ModelDefinitionError, CompoundModel
+from .mappings import Mapping
+
+
+__all__ = ["is_separable", "separability_matrix"]
+
+
+def is_separable(transform):
+    """
+    A separability test for the outputs of a transform.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    is_separable : ndarray
+        A boolean array with size ``transform.n_outputs`` where
+        each element indicates whether the output is independent
+        and the result of a separable transform.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> is_separable(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([ True,  True]...)
+    >>> is_separable(Shift(1) & Shift(2) | Rotation2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([ True,  True,  True,  True]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        is_separable = np.array([False] * transform.n_outputs).T
+        return is_separable
+    separable_matrix = _separable(transform)
+    is_separable = separable_matrix.sum(1)
+    is_separable = np.where(is_separable != 1, False, True)
+    return is_separable
+
+
+def separability_matrix(transform):
+    """
+    Compute the correlation between outputs and inputs.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    separable_matrix : ndarray
+        A boolean correlation matrix of shape (n_outputs, n_inputs).
+        Indicates the dependence of outputs on inputs. For completely
+        independent outputs, the diagonal elements are True and
+        off-diagonal elements are False.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> separability_matrix(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([[ True, False], [False,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Rotation2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([[ True, False], [False,  True], [ True, False], [False,  True]]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        return np.ones((transform.n_outputs, transform.n_inputs),
+                       dtype=np.bool_)
+    separable_matrix = _separable(transform)
+    separable_matrix = np.where(separable_matrix != 0, True, False)
+    return separable_matrix
+
+
+def _compute_n_outputs(left, right):
+    """
+    Compute the number of outputs of two models.
+
+    The two models are the left and right model to an operation in
+    the expression tree of a compound model.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    """
+    if isinstance(left, Model):
+        lnout = left.n_outputs
+    else:
+        lnout = left.shape[0]
+    if isinstance(right, Model):
+        rnout = right.n_outputs
+    else:
+        rnout = right.shape[0]
+    noutp = lnout + rnout
+    return noutp
+
+
+def _arith_oper(left, right):
+    """
+    Function corresponding to one of the arithmetic operators
+    ['+', '-'. '*', '/', '**'].
+
+    This always returns a nonseparable output.
+
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+    # models have the same number of inputs and outputs
+    def _n_inputs_outputs(input):
+        if isinstance(input, Model):
+            n_outputs, n_inputs = input.n_outputs, input.n_inputs
+        else:
+            n_outputs, n_inputs = input.shape
+        return n_inputs, n_outputs
+
+    left_inputs, left_outputs = _n_inputs_outputs(left)
+    right_inputs, right_outputs = _n_inputs_outputs(right)
+
+    if left_inputs != right_inputs or left_outputs != right_outputs:
+        raise ModelDefinitionError(
+            "Unsupported operands for arithmetic operator: left (n_inputs={}, "
+            "n_outputs={}) and right (n_inputs={}, n_outputs={}); "
+            "models must have the same n_inputs and the same "
+            "n_outputs for this operator.".format(
+                left_inputs, left_outputs, right_inputs, right_outputs))
+
+    result = np.ones((left_outputs, left_inputs))
+    return result
+
+
+def _coord_matrix(model, pos, noutp):
+    """
+    Create an array representing inputs and outputs of a simple model.
+
+    The array has a shape (noutp, model.n_inputs).
+
+    Parameters
+    ----------
+    model : `astropy.modeling.Model`
+        model
+    pos : str
+        Position of this model in the expression tree.
+        One of ['left', 'right'].
+    noutp : int
+        Number of outputs of the compound model of which the input model
+        is a left or right child.
+
+    """
+    if isinstance(model, Mapping):
+        axes = []
+        for i in model.mapping:
+            axis = np.zeros((model.n_inputs,))
+            axis[i] = 1
+            axes.append(axis)
+        m = np.vstack(axes)
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[: model.n_outputs, :model.n_inputs] = m
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = m
+        return mat
+    if not model.separable:
+        # this does not work for more than 2 coordinates
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[:model.n_outputs, : model.n_inputs] = 1
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = 1
+    else:
+        mat = np.zeros((noutp, model.n_inputs))
+
+        for i in range(model.n_inputs):
+            mat[i, i] = 1
+        if pos == 'right':
+            mat = np.roll(mat, (noutp - model.n_outputs))
+    return mat
+
+
+def _cstack(left, right):
+    """
+
+
+
+[model reply, complete and unedited] (2664 tokens in, 89 tokens out)
+exec_command sed -n '220,420p' astropy/modeling/separable.py
+
+[command executed: exec_command]
+sed -n '220,420p' astropy/modeling/separable.py
+
+[result]
+    """
+    Function corresponding to '&' operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+
+    """
+    noutp = _compute_n_outputs(left, right)
+
+    if isinstance(left, Model):
+        cleft = _coord_matrix(left, 'left', noutp)
+    else:
+        cleft = np.zeros((noutp, left.shape[1]))
+        cleft[: left.shape[0], : left.shape[1]] = left
+    if isinstance(right, Model):
+        cright = _coord_matrix(right, 'right', noutp)
+    else:
+        cright = np.zeros((noutp, right.shape[1]))
+        cright[-right.shape[0]:, -right.shape[1]:] = 1
+
+    return np.hstack([cleft, cright])
+
+
+def _cdot(left, right):
+    """
+    Function corresponding to "|" operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+
+    left, right = right, left
+
+    def _n_inputs_outputs(input, position):
+        """
+        Return ``n_inputs``, ``n_outputs`` for a model or coord_matrix.
+        """
+        if isinstance(input, Model):
+            coords = _coord_matrix(input, position, input.n_outputs)
+        else:
+            coords = input
+        return coords
+
+    cleft = _n_inputs_outputs(left, 'left')
+    cright = _n_inputs_outputs(right, 'right')
+
+    try:
+        result = np.dot(cleft, cright)
+    except ValueError:
+        raise ModelDefinitionError(
+            'Models cannot be combined with the "|" operator; '
+            'left coord_matrix is {}, right coord_matrix is {}'.format(
+                cright, cleft))
+    return result
+
+
+def _separable(transform):
+    """
+    Calculate the separability of outputs.
+
+    Parameters
+    ----------
+    transform : `astropy.modeling.Model`
+        A transform (usually a compound model).
+
+    Returns :
+    is_separable : ndarray of dtype np.bool
+        An array of shape (transform.n_outputs,) of boolean type
+        Each element represents the separablity of the corresponding output.
+    """
+    if (transform_matrix := transform._calculate_separability_matrix()) is not NotImplemented:
+        return transform_matrix
+    elif isinstance(transform, CompoundModel):
+        sepleft = _separable(transform.left)
+        sepright = _separable(transform.right)
+        return _operators[transform.op](sepleft, sepright)
+    elif isinstance(transform, Model):
+        return _coord_matrix(transform, 'left', transform.n_outputs)
+
+
+# Maps modeling operators to a function computing and represents the
+# relationship of axes as an array of 0-es and 1-s
+_operators = {'&': _cstack, '|': _cdot, '+': _arith_oper, '-': _arith_oper,
+              '*': _arith_oper, '/': _arith_oper, '**': _arith_oper}
+
+
+------------------------------------------------------------------------------
+TURN 4
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 12810 characters, the same as turn 1 plus the history below]
+$exec_command grep -n "def separability_matrix" -r astropy/modeling/separable.py astropy/modeling --include="*.py" | head -20
+ astropy/modeling/separable.py:66:def separability_matrix(transform):
+astropy/modeling/separable.py:66:def separability_matrix(transform):
+
+
+$exec_command sed -n '1,220p' astropy/modeling/separable.py
+ # Licensed under a 3-clause BSD style license - see LICENSE.rst
+
+"""
+Functions to determine if a model is separable, i.e.
+if the model outputs are independent.
+
+It analyzes ``n_inputs``, ``n_outputs`` and the operators
+in a compound model by stepping through the transforms
+and creating a ``coord_matrix`` of shape (``n_outputs``, ``n_inputs``).
+
+
+Each modeling operator is represented by a function which
+takes two simple models (or two ``coord_matrix`` arrays) and
+returns an array of shape (``n_outputs``, ``n_inputs``).
+
+"""
+
+import numpy as np
+
+from .core import Model, ModelDefinitionError, CompoundModel
+from .mappings import Mapping
+
+
+__all__ = ["is_separable", "separability_matrix"]
+
+
+def is_separable(transform):
+    """
+    A separability test for the outputs of a transform.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    is_separable : ndarray
+        A boolean array with size ``transform.n_outputs`` where
+        each element indicates whether the output is independent
+        and the result of a separable transform.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> is_separable(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([ True,  True]...)
+    >>> is_separable(Shift(1) & Shift(2) | Rotation2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([ True,  True,  True,  True]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        is_separable = np.array([False] * transform.n_outputs).T
+        return is_separable
+    separable_matrix = _separable(transform)
+    is_separable = separable_matrix.sum(1)
+    is_separable = np.where(is_separable != 1, False, True)
+    return is_separable
+
+
+def separability_matrix(transform):
+    """
+    Compute the correlation between outputs and inputs.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    separable_matrix : ndarray
+        A boolean correlation matrix of shape (n_outputs, n_inputs).
+        Indicates the dependence of outputs on inputs. For completely
+        independent outputs, the diagonal elements are True and
+        off-diagonal elements are False.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> separability_matrix(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([[ True, False], [False,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Rotation2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([[ True, False], [False,  True], [ True, False], [False,  True]]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        return np.ones((transform.n_outputs, transform.n_inputs),
+                       dtype=np.bool_)
+    separable_matrix = _separable(transform)
+    separable_matrix = np.where(separable_matrix != 0, True, False)
+    return separable_matrix
+
+
+def _compute_n_outputs(left, right):
+    """
+    Compute the number of outputs of two models.
+
+    The two models are the left and right model to an operation in
+    the expression tree of a compound model.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    """
+    if isinstance(left, Model):
+        lnout = left.n_outputs
+    else:
+        lnout = left.shape[0]
+    if isinstance(right, Model):
+        rnout = right.n_outputs
+    else:
+        rnout = right.shape[0]
+    noutp = lnout + rnout
+    return noutp
+
+
+def _arith_oper(left, right):
+    """
+    Function corresponding to one of the arithmetic operators
+    ['+', '-'. '*', '/', '**'].
+
+    This always returns a nonseparable output.
+
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+    # models have the same number of inputs and outputs
+    def _n_inputs_outputs(input):
+        if isinstance(input, Model):
+            n_outputs, n_inputs = input.n_outputs, input.n_inputs
+        else:
+            n_outputs, n_inputs = input.shape
+        return n_inputs, n_outputs
+
+    left_inputs, left_outputs = _n_inputs_outputs(left)
+    right_inputs, right_outputs = _n_inputs_outputs(right)
+
+    if left_inputs != right_inputs or left_outputs != right_outputs:
+        raise ModelDefinitionError(
+            "Unsupported operands for arithmetic operator: left (n_inputs={}, "
+            "n_outputs={}) and right (n_inputs={}, n_outputs={}); "
+            "models must have the same n_inputs and the same "
+            "n_outputs for this operator.".format(
+                left_inputs, left_outputs, right_inputs, right_outputs))
+
+    result = np.ones((left_outputs, left_inputs))
+    return result
+
+
+def _coord_matrix(model, pos, noutp):
+    """
+    Create an array representing inputs and outputs of a simple model.
+
+    The array has a shape (noutp, model.n_inputs).
+
+    Parameters
+    ----------
+    model : `astropy.modeling.Model`
+        model
+    pos : str
+        Position of this model in the expression tree.
+        One of ['left', 'right'].
+    noutp : int
+        Number of outputs of the compound model of which the input model
+        is a left or right child.
+
+    """
+    if isinstance(model, Mapping):
+        axes = []
+        for i in model.mapping:
+            axis = np.zeros((model.n_inputs,))
+            axis[i] = 1
+            axes.append(axis)
+        m = np.vstack(axes)
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[: model.n_outputs, :model.n_inputs] = m
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = m
+        return mat
+    if not model.separable:
+        # this does not work for more than 2 coordinates
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[:model.n_outputs, : model.n_inputs] = 1
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = 1
+    else:
+        mat = np.zeros((noutp, model.n_inputs))
+
+        for i in range(model.n_inputs):
+            mat[i, i] = 1
+        if pos == 'right':
+            mat = np.roll(mat, (noutp - model.n_outputs))
+    return mat
+
+
+def _cstack(left, right):
+    """
+
+
+$exec_command sed -n '220,420p' astropy/modeling/separable.py
+     """
+    Function corresponding to '&' operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+
+    """
+    noutp = _compute_n_outputs(left, right)
+
+    if isinstance(left, Model):
+        cleft = _coord_matrix(left, 'left', noutp)
+    else:
+        cleft = np.zeros((noutp, left.shape[1]))
+        cleft[: left.shape[0], : left.shape[1]] = left
+    if isinstance(right, Model):
+        cright = _coord_matrix(right, 'right', noutp)
+    else:
+        cright = np.zeros((noutp, right.shape[1]))
+        cright[-right.shape[0]:, -right.shape[1]:] = 1
+
+    return np.hstack([cleft, cright])
+
+
+def _cdot(left, right):
+    """
+    Function corresponding to "|" operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+
+    left, right = right, left
+
+    def _n_inputs_outputs(input, position):
+        """
+        Return ``n_inputs``, ``n_outputs`` for a model or coord_matrix.
+        """
+        if isinstance(input, Model):
+            coords = _coord_matrix(input, position, input.n_outputs)
+        else:
+            coords = input
+        return coords
+
+    cleft = _n_inputs_outputs(left, 'left')
+    cright = _n_inputs_outputs(right, 'right')
+
+    try:
+        result = np.dot(cleft, cright)
+    except ValueError:
+        raise ModelDefinitionError(
+            'Models cannot be combined with the "|" operator; '
+            'left coord_matrix is {}, right coord_matrix is {}'.format(
+                cright, cleft))
+    return result
+
+
+def _separable(transform):
+    """
+    Calculate the separability of outputs.
+
+    Parameters
+    ----------
+    transform : `astropy.modeling.Model`
+        A transform (usually a compound model).
+
+    Returns :
+    is_separable : ndarray of dtype np.bool
+        An array of shape (transform.n_outputs,) of boolean type
+        Each element represents the separablity of the corresponding output.
+    """
+    if (transform_matrix := transform._calculate_separability_matrix()) is not NotImplemented:
+        return transform_matrix
+    elif isinstance(transform, CompoundModel):
+        sepleft = _separable(transform.left)
+        sepright = _separable(transform.right)
+        return _operators[transform.op](sepleft, sepright)
+    elif isinstance(transform, Model):
+        return _coord_matrix(transform, 'left', transform.n_outputs)
+
+
+# Maps modeling operators to a function computing and represents the
+# relationship of axes as an array of 0-es and 1-s
+_operators = {'&': _cstack, '|': _cdot, '+': _arith_oper, '-': _arith_oper,
+              '*': _arith_oper, '/': _arith_oper, '**': _arith_oper}
+
+
+
+[model reply, complete and unedited] (3423 tokens in, 2199 tokens out)
+exec_command grep -rn "separability_matrix\|_cstack" astropy/modeling/tests/ --include="*.py" | head -50
+
+[command executed: exec_command]
+grep -rn "separability_matrix\|_cstack" astropy/modeling/tests/ --include="*.py" | head -50
+
+[result]
+astropy/modeling/tests/test_separable.py:14:                                        _cstack, _arith_oper, separability_matrix)
+astropy/modeling/tests/test_separable.py:98:def test_cstack():
+astropy/modeling/tests/test_separable.py:99:    result = _cstack(sh1, scl1)
+astropy/modeling/tests/test_separable.py:102:    result = _cstack(sh1, rot)
+astropy/modeling/tests/test_separable.py:108:    result = _cstack(rot, sh1)
+astropy/modeling/tests/test_separable.py:135:    assert_allclose(separability_matrix(compound_model), result[1])
+astropy/modeling/tests/test_separable.py:150:    assert np.all(separability_matrix(model_c()) == [True, True])
+astropy/modeling/tests/test_core.py:19:from astropy.modeling.separable import separability_matrix
+astropy/modeling/tests/test_core.py:214:    assert (separability_matrix(m) == [[True, True],
+astropy/modeling/tests/test_core.py:226:    assert (separability_matrix(m) == [[True, True, True],
+astropy/modeling/tests/test_models.py:24:from astropy.modeling.separable import separability_matrix
+astropy/modeling/tests/test_models.py:1072:    def _calculate_separability_matrix(self):
+astropy/modeling/tests/test_models.py:1076:def test_custom_separability_matrix():
+astropy/modeling/tests/test_models.py:1077:    original = separability_matrix(ModelDefault(slope=1, intercept=2))
+astropy/modeling/tests/test_models.py:1080:    custom = separability_matrix(ModelCustom(slope=1, intercept=2))
+
+
+------------------------------------------------------------------------------
+TURN 5
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 14347 characters, the same as turn 1 plus the history below]
+$exec_command grep -n "def separability_matrix" -r astropy/modeling/separable.py astropy/modeling --include="*.py" | head -20
+ astropy/modeling/separable.py:66:def separability_matrix(transform):
+astropy/modeling/separable.py:66:def separability_matrix(transform):
+
+
+$exec_command sed -n '1,220p' astropy/modeling/separable.py
+ # Licensed under a 3-clause BSD style license - see LICENSE.rst
+
+"""
+Functions to determine if a model is separable, i.e.
+if the model outputs are independent.
+
+It analyzes ``n_inputs``, ``n_outputs`` and the operators
+in a compound model by stepping through the transforms
+and creating a ``coord_matrix`` of shape (``n_outputs``, ``n_inputs``).
+
+
+Each modeling operator is represented by a function which
+takes two simple models (or two ``coord_matrix`` arrays) and
+returns an array of shape (``n_outputs``, ``n_inputs``).
+
+"""
+
+import numpy as np
+
+from .core import Model, ModelDefinitionError, CompoundModel
+from .mappings import Mapping
+
+
+__all__ = ["is_separable", "separability_matrix"]
+
+
+def is_separable(transform):
+    """
+    A separability test for the outputs of a transform.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    is_separable : ndarray
+        A boolean array with size ``transform.n_outputs`` where
+        each element indicates whether the output is independent
+        and the result of a separable transform.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> is_separable(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([ True,  True]...)
+    >>> is_separable(Shift(1) & Shift(2) | Rotation2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([ True,  True,  True,  True]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        is_separable = np.array([False] * transform.n_outputs).T
+        return is_separable
+    separable_matrix = _separable(transform)
+    is_separable = separable_matrix.sum(1)
+    is_separable = np.where(is_separable != 1, False, True)
+    return is_separable
+
+
+def separability_matrix(transform):
+    """
+    Compute the correlation between outputs and inputs.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    separable_matrix : ndarray
+        A boolean correlation matrix of shape (n_outputs, n_inputs).
+        Indicates the dependence of outputs on inputs. For completely
+        independent outputs, the diagonal elements are True and
+        off-diagonal elements are False.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> separability_matrix(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([[ True, False], [False,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Rotation2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([[ True, False], [False,  True], [ True, False], [False,  True]]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        return np.ones((transform.n_outputs, transform.n_inputs),
+                       dtype=np.bool_)
+    separable_matrix = _separable(transform)
+    separable_matrix = np.where(separable_matrix != 0, True, False)
+    return separable_matrix
+
+
+def _compute_n_outputs(left, right):
+    """
+    Compute the number of outputs of two models.
+
+    The two models are the left and right model to an operation in
+    the expression tree of a compound model.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    """
+    if isinstance(left, Model):
+        lnout = left.n_outputs
+    else:
+        lnout = left.shape[0]
+    if isinstance(right, Model):
+        rnout = right.n_outputs
+    else:
+        rnout = right.shape[0]
+    noutp = lnout + rnout
+    return noutp
+
+
+def _arith_oper(left, right):
+    """
+    Function corresponding to one of the arithmetic operators
+    ['+', '-'. '*', '/', '**'].
+
+    This always returns a nonseparable output.
+
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+    # models have the same number of inputs and outputs
+    def _n_inputs_outputs(input):
+        if isinstance(input, Model):
+            n_outputs, n_inputs = input.n_outputs, input.n_inputs
+        else:
+            n_outputs, n_inputs = input.shape
+        return n_inputs, n_outputs
+
+    left_inputs, left_outputs = _n_inputs_outputs(left)
+    right_inputs, right_outputs = _n_inputs_outputs(right)
+
+    if left_inputs != right_inputs or left_outputs != right_outputs:
+        raise ModelDefinitionError(
+            "Unsupported operands for arithmetic operator: left (n_inputs={}, "
+            "n_outputs={}) and right (n_inputs={}, n_outputs={}); "
+            "models must have the same n_inputs and the same "
+            "n_outputs for this operator.".format(
+                left_inputs, left_outputs, right_inputs, right_outputs))
+
+    result = np.ones((left_outputs, left_inputs))
+    return result
+
+
+def _coord_matrix(model, pos, noutp):
+    """
+    Create an array representing inputs and outputs of a simple model.
+
+    The array has a shape (noutp, model.n_inputs).
+
+    Parameters
+    ----------
+    model : `astropy.modeling.Model`
+        model
+    pos : str
+        Position of this model in the expression tree.
+        One of ['left', 'right'].
+    noutp : int
+        Number of outputs of the compound model of which the input model
+        is a left or right child.
+
+    """
+    if isinstance(model, Mapping):
+        axes = []
+        for i in model.mapping:
+            axis = np.zeros((model.n_inputs,))
+            axis[i] = 1
+            axes.append(axis)
+        m = np.vstack(axes)
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[: model.n_outputs, :model.n_inputs] = m
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = m
+        return mat
+    if not model.separable:
+        # this does not work for more than 2 coordinates
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[:model.n_outputs, : model.n_inputs] = 1
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = 1
+    else:
+        mat = np.zeros((noutp, model.n_inputs))
+
+        for i in range(model.n_inputs):
+            mat[i, i] = 1
+        if pos == 'right':
+            mat = np.roll(mat, (noutp - model.n_outputs))
+    return mat
+
+
+def _cstack(left, right):
+    """
+
+
+$exec_command sed -n '220,420p' astropy/modeling/separable.py
+     """
+    Function corresponding to '&' operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+
+    """
+    noutp = _compute_n_outputs(left, right)
+
+    if isinstance(left, Model):
+        cleft = _coord_matrix(left, 'left', noutp)
+    else:
+        cleft = np.zeros((noutp, left.shape[1]))
+        cleft[: left.shape[0], : left.shape[1]] = left
+    if isinstance(right, Model):
+        cright = _coord_matrix(right, 'right', noutp)
+    else:
+        cright = np.zeros((noutp, right.shape[1]))
+        cright[-right.shape[0]:, -right.shape[1]:] = 1
+
+    return np.hstack([cleft, cright])
+
+
+def _cdot(left, right):
+    """
+    Function corresponding to "|" operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+
+    left, right = right, left
+
+    def _n_inputs_outputs(input, position):
+        """
+        Return ``n_inputs``, ``n_outputs`` for a model or coord_matrix.
+        """
+        if isinstance(input, Model):
+            coords = _coord_matrix(input, position, input.n_outputs)
+        else:
+            coords = input
+        return coords
+
+    cleft = _n_inputs_outputs(left, 'left')
+    cright = _n_inputs_outputs(right, 'right')
+
+    try:
+        result = np.dot(cleft, cright)
+    except ValueError:
+        raise ModelDefinitionError(
+            'Models cannot be combined with the "|" operator; '
+            'left coord_matrix is {}, right coord_matrix is {}'.format(
+                cright, cleft))
+    return result
+
+
+def _separable(transform):
+    """
+    Calculate the separability of outputs.
+
+    Parameters
+    ----------
+    transform : `astropy.modeling.Model`
+        A transform (usually a compound model).
+
+    Returns :
+    is_separable : ndarray of dtype np.bool
+        An array of shape (transform.n_outputs,) of boolean type
+        Each element represents the separablity of the corresponding output.
+    """
+    if (transform_matrix := transform._calculate_separability_matrix()) is not NotImplemented:
+        return transform_matrix
+    elif isinstance(transform, CompoundModel):
+        sepleft = _separable(transform.left)
+        sepright = _separable(transform.right)
+        return _operators[transform.op](sepleft, sepright)
+    elif isinstance(transform, Model):
+        return _coord_matrix(transform, 'left', transform.n_outputs)
+
+
+# Maps modeling operators to a function computing and represents the
+# relationship of axes as an array of 0-es and 1-s
+_operators = {'&': _cstack, '|': _cdot, '+': _arith_oper, '-': _arith_oper,
+              '*': _arith_oper, '/': _arith_oper, '**': _arith_oper}
+
+
+$exec_command grep -rn "separability_matrix\|_cstack" astropy/modeling/tests/ --include="*.py" | head -50
+ astropy/modeling/tests/test_separable.py:14:                                        _cstack, _arith_oper, separability_matrix)
+astropy/modeling/tests/test_separable.py:98:def test_cstack():
+astropy/modeling/tests/test_separable.py:99:    result = _cstack(sh1, scl1)
+astropy/modeling/tests/test_separable.py:102:    result = _cstack(sh1, rot)
+astropy/modeling/tests/test_separable.py:108:    result = _cstack(rot, sh1)
+astropy/modeling/tests/test_separable.py:135:    assert_allclose(separability_matrix(compound_model), result[1])
+astropy/modeling/tests/test_separable.py:150:    assert np.all(separability_matrix(model_c()) == [True, True])
+astropy/modeling/tests/test_core.py:19:from astropy.modeling.separable import separability_matrix
+astropy/modeling/tests/test_core.py:214:    assert (separability_matrix(m) == [[True, True],
+astropy/modeling/tests/test_core.py:226:    assert (separability_matrix(m) == [[True, True, True],
+astropy/modeling/tests/test_models.py:24:from astropy.modeling.separable import separability_matrix
+astropy/modeling/tests/test_models.py:1072:    def _calculate_separability_matrix(self):
+astropy/modeling/tests/test_models.py:1076:def test_custom_separability_matrix():
+astropy/modeling/tests/test_models.py:1077:    original = separability_matrix(ModelDefault(slope=1, intercept=2))
+astropy/modeling/tests/test_models.py:1080:    custom = separability_matrix(ModelCustom(slope=1, intercept=2))
+
+
+
+[model reply, complete and unedited] (3853 tokens in, 3808 tokens out)
+exec_command grep -n "separable" astropy/modeling/core.py | head -30
+
+[command executed: exec_command]
+grep -n "separable" astropy/modeling/core.py | head -30
+
+[result]
+655:    _separable = None
+656:    """ A boolean flag to indicate whether a model is separable."""
+810:        This is a hook which customises the behavior of modeling.separable.
+1532:    def separable(self):
+1533:        """ A flag indicating whether a model is separable."""
+1535:        if self._separable is not None:
+1536:            return self._separable
+1538:            'The "separable" property is not defined for '
+2826:    _separable = True
+4173:    The model is separable only if there is a single input.
+4353:    cls._separable = True if (len(inputs) == 1) else False
+
+
+------------------------------------------------------------------------------
+TURN 6
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 15001 characters, the same as turn 1 plus the history below]
+$exec_command grep -n "def separability_matrix" -r astropy/modeling/separable.py astropy/modeling --include="*.py" | head -20
+ astropy/modeling/separable.py:66:def separability_matrix(transform):
+astropy/modeling/separable.py:66:def separability_matrix(transform):
+
+
+$exec_command sed -n '1,220p' astropy/modeling/separable.py
+ # Licensed under a 3-clause BSD style license - see LICENSE.rst
+
+"""
+Functions to determine if a model is separable, i.e.
+if the model outputs are independent.
+
+It analyzes ``n_inputs``, ``n_outputs`` and the operators
+in a compound model by stepping through the transforms
+and creating a ``coord_matrix`` of shape (``n_outputs``, ``n_inputs``).
+
+
+Each modeling operator is represented by a function which
+takes two simple models (or two ``coord_matrix`` arrays) and
+returns an array of shape (``n_outputs``, ``n_inputs``).
+
+"""
+
+import numpy as np
+
+from .core import Model, ModelDefinitionError, CompoundModel
+from .mappings import Mapping
+
+
+__all__ = ["is_separable", "separability_matrix"]
+
+
+def is_separable(transform):
+    """
+    A separability test for the outputs of a transform.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    is_separable : ndarray
+        A boolean array with size ``transform.n_outputs`` where
+        each element indicates whether the output is independent
+        and the result of a separable transform.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> is_separable(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([ True,  True]...)
+    >>> is_separable(Shift(1) & Shift(2) | Rotation2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([ True,  True,  True,  True]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        is_separable = np.array([False] * transform.n_outputs).T
+        return is_separable
+    separable_matrix = _separable(transform)
+    is_separable = separable_matrix.sum(1)
+    is_separable = np.where(is_separable != 1, False, True)
+    return is_separable
+
+
+def separability_matrix(transform):
+    """
+    Compute the correlation between outputs and inputs.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    separable_matrix : ndarray
+        A boolean correlation matrix of shape (n_outputs, n_inputs).
+        Indicates the dependence of outputs on inputs. For completely
+        independent outputs, the diagonal elements are True and
+        off-diagonal elements are False.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> separability_matrix(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([[ True, False], [False,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Rotation2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([[ True, False], [False,  True], [ True, False], [False,  True]]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        return np.ones((transform.n_outputs, transform.n_inputs),
+                       dtype=np.bool_)
+    separable_matrix = _separable(transform)
+    separable_matrix = np.where(separable_matrix != 0, True, False)
+    return separable_matrix
+
+
+def _compute_n_outputs(left, right):
+    """
+    Compute the number of outputs of two models.
+
+    The two models are the left and right model to an operation in
+    the expression tree of a compound model.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    """
+    if isinstance(left, Model):
+        lnout = left.n_outputs
+    else:
+        lnout = left.shape[0]
+    if isinstance(right, Model):
+        rnout = right.n_outputs
+    else:
+        rnout = right.shape[0]
+    noutp = lnout + rnout
+    return noutp
+
+
+def _arith_oper(left, right):
+    """
+    Function corresponding to one of the arithmetic operators
+    ['+', '-'. '*', '/', '**'].
+
+    This always returns a nonseparable output.
+
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+    # models have the same number of inputs and outputs
+    def _n_inputs_outputs(input):
+        if isinstance(input, Model):
+            n_outputs, n_inputs = input.n_outputs, input.n_inputs
+        else:
+            n_outputs, n_inputs = input.shape
+        return n_inputs, n_outputs
+
+    left_inputs, left_outputs = _n_inputs_outputs(left)
+    right_inputs, right_outputs = _n_inputs_outputs(right)
+
+    if left_inputs != right_inputs or left_outputs != right_outputs:
+        raise ModelDefinitionError(
+            "Unsupported operands for arithmetic operator: left (n_inputs={}, "
+            "n_outputs={}) and right (n_inputs={}, n_outputs={}); "
+            "models must have the same n_inputs and the same "
+            "n_outputs for this operator.".format(
+                left_inputs, left_outputs, right_inputs, right_outputs))
+
+    result = np.ones((left_outputs, left_inputs))
+    return result
+
+
+def _coord_matrix(model, pos, noutp):
+    """
+    Create an array representing inputs and outputs of a simple model.
+
+    The array has a shape (noutp, model.n_inputs).
+
+    Parameters
+    ----------
+    model : `astropy.modeling.Model`
+        model
+    pos : str
+        Position of this model in the expression tree.
+        One of ['left', 'right'].
+    noutp : int
+        Number of outputs of the compound model of which the input model
+        is a left or right child.
+
+    """
+    if isinstance(model, Mapping):
+        axes = []
+        for i in model.mapping:
+            axis = np.zeros((model.n_inputs,))
+            axis[i] = 1
+            axes.append(axis)
+        m = np.vstack(axes)
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[: model.n_outputs, :model.n_inputs] = m
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = m
+        return mat
+    if not model.separable:
+        # this does not work for more than 2 coordinates
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[:model.n_outputs, : model.n_inputs] = 1
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = 1
+    else:
+        mat = np.zeros((noutp, model.n_inputs))
+
+        for i in range(model.n_inputs):
+            mat[i, i] = 1
+        if pos == 'right':
+            mat = np.roll(mat, (noutp - model.n_outputs))
+    return mat
+
+
+def _cstack(left, right):
+    """
+
+
+$exec_command sed -n '220,420p' astropy/modeling/separable.py
+     """
+    Function corresponding to '&' operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+
+    """
+    noutp = _compute_n_outputs(left, right)
+
+    if isinstance(left, Model):
+        cleft = _coord_matrix(left, 'left', noutp)
+    else:
+        cleft = np.zeros((noutp, left.shape[1]))
+        cleft[: left.shape[0], : left.shape[1]] = left
+    if isinstance(right, Model):
+        cright = _coord_matrix(right, 'right', noutp)
+    else:
+        cright = np.zeros((noutp, right.shape[1]))
+        cright[-right.shape[0]:, -right.shape[1]:] = 1
+
+    return np.hstack([cleft, cright])
+
+
+def _cdot(left, right):
+    """
+    Function corresponding to "|" operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+
+    left, right = right, left
+
+    def _n_inputs_outputs(input, position):
+        """
+        Return ``n_inputs``, ``n_outputs`` for a model or coord_matrix.
+        """
+        if isinstance(input, Model):
+            coords = _coord_matrix(input, position, input.n_outputs)
+        else:
+            coords = input
+        return coords
+
+    cleft = _n_inputs_outputs(left, 'left')
+    cright = _n_inputs_outputs(right, 'right')
+
+    try:
+        result = np.dot(cleft, cright)
+    except ValueError:
+        raise ModelDefinitionError(
+            'Models cannot be combined with the "|" operator; '
+            'left coord_matrix is {}, right coord_matrix is {}'.format(
+                cright, cleft))
+    return result
+
+
+def _separable(transform):
+    """
+    Calculate the separability of outputs.
+
+    Parameters
+    ----------
+    transform : `astropy.modeling.Model`
+        A transform (usually a compound model).
+
+    Returns :
+    is_separable : ndarray of dtype np.bool
+        An array of shape (transform.n_outputs,) of boolean type
+        Each element represents the separablity of the corresponding output.
+    """
+    if (transform_matrix := transform._calculate_separability_matrix()) is not NotImplemented:
+        return transform_matrix
+    elif isinstance(transform, CompoundModel):
+        sepleft = _separable(transform.left)
+        sepright = _separable(transform.right)
+        return _operators[transform.op](sepleft, sepright)
+    elif isinstance(transform, Model):
+        return _coord_matrix(transform, 'left', transform.n_outputs)
+
+
+# Maps modeling operators to a function computing and represents the
+# relationship of axes as an array of 0-es and 1-s
+_operators = {'&': _cstack, '|': _cdot, '+': _arith_oper, '-': _arith_oper,
+              '*': _arith_oper, '/': _arith_oper, '**': _arith_oper}
+
+
+$exec_command grep -rn "separability_matrix\|_cstack" astropy/modeling/tests/ --include="*.py" | head -50
+ astropy/modeling/tests/test_separable.py:14:                                        _cstack, _arith_oper, separability_matrix)
+astropy/modeling/tests/test_separable.py:98:def test_cstack():
+astropy/modeling/tests/test_separable.py:99:    result = _cstack(sh1, scl1)
+astropy/modeling/tests/test_separable.py:102:    result = _cstack(sh1, rot)
+astropy/modeling/tests/test_separable.py:108:    result = _cstack(rot, sh1)
+astropy/modeling/tests/test_separable.py:135:    assert_allclose(separability_matrix(compound_model), result[1])
+astropy/modeling/tests/test_separable.py:150:    assert np.all(separability_matrix(model_c()) == [True, True])
+astropy/modeling/tests/test_core.py:19:from astropy.modeling.separable import separability_matrix
+astropy/modeling/tests/test_core.py:214:    assert (separability_matrix(m) == [[True, True],
+astropy/modeling/tests/test_core.py:226:    assert (separability_matrix(m) == [[True, True, True],
+astropy/modeling/tests/test_models.py:24:from astropy.modeling.separable import separability_matrix
+astropy/modeling/tests/test_models.py:1072:    def _calculate_separability_matrix(self):
+astropy/modeling/tests/test_models.py:1076:def test_custom_separability_matrix():
+astropy/modeling/tests/test_models.py:1077:    original = separability_matrix(ModelDefault(slope=1, intercept=2))
+astropy/modeling/tests/test_models.py:1080:    custom = separability_matrix(ModelCustom(slope=1, intercept=2))
+
+
+$exec_command grep -n "separable" astropy/modeling/core.py | head -30
+ 655:    _separable = None
+656:    """ A boolean flag to indicate whether a model is separable."""
+810:        This is a hook which customises the behavior of modeling.separable.
+1532:    def separable(self):
+1533:        """ A flag indicating whether a model is separable."""
+1535:        if self._separable is not None:
+1536:            return self._separable
+1538:            'The "separable" property is not defined for '
+2826:    _separable = True
+4173:    The model is separable only if there is a single input.
+4353:    cls._separable = True if (len(inputs) == 1) else False
+
+
+
+[model reply, complete and unedited] (4026 tokens in, 5127 tokens out)
+exec_command python -c "p='astropy/modeling/separable.py'; s=open(p).read(); s=s.replace('cright[-right.shape[0]:, -right.shape[1]:] = 1','cright[-right.shape[0]:, -right.shape[1]:] = right'); open(p,'w').write(s)"
+
+[command executed: exec_command]
+python -c "p='astropy/modeling/separable.py'; s=open(p).read(); s=s.replace('cright[-right.shape[0]:, -right.shape[1]:] = 1','cright[-right.shape[0]:, -right.shape[1]:] = right'); open(p,'w').write(s)"
+
+[result]
+(no output)
+
+------------------------------------------------------------------------------
+TURN 7
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 15231 characters, the same as turn 1 plus the history below]
+$exec_command grep -n "def separability_matrix" -r astropy/modeling/separable.py astropy/modeling --include="*.py" | head -20
+ astropy/modeling/separable.py:66:def separability_matrix(transform):
+astropy/modeling/separable.py:66:def separability_matrix(transform):
+
+
+$exec_command sed -n '1,220p' astropy/modeling/separable.py
+ # Licensed under a 3-clause BSD style license - see LICENSE.rst
+
+"""
+Functions to determine if a model is separable, i.e.
+if the model outputs are independent.
+
+It analyzes ``n_inputs``, ``n_outputs`` and the operators
+in a compound model by stepping through the transforms
+and creating a ``coord_matrix`` of shape (``n_outputs``, ``n_inputs``).
+
+
+Each modeling operator is represented by a function which
+takes two simple models (or two ``coord_matrix`` arrays) and
+returns an array of shape (``n_outputs``, ``n_inputs``).
+
+"""
+
+import numpy as np
+
+from .core import Model, ModelDefinitionError, CompoundModel
+from .mappings import Mapping
+
+
+__all__ = ["is_separable", "separability_matrix"]
+
+
+def is_separable(transform):
+    """
+    A separability test for the outputs of a transform.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    is_separable : ndarray
+        A boolean array with size ``transform.n_outputs`` where
+        each element indicates whether the output is independent
+        and the result of a separable transform.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> is_separable(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([ True,  True]...)
+    >>> is_separable(Shift(1) & Shift(2) | Rotation2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([ True,  True,  True,  True]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        is_separable = np.array([False] * transform.n_outputs).T
+        return is_separable
+    separable_matrix = _separable(transform)
+    is_separable = separable_matrix.sum(1)
+    is_separable = np.where(is_separable != 1, False, True)
+    return is_separable
+
+
+def separability_matrix(transform):
+    """
+    Compute the correlation between outputs and inputs.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    separable_matrix : ndarray
+        A boolean correlation matrix of shape (n_outputs, n_inputs).
+        Indicates the dependence of outputs on inputs. For completely
+        independent outputs, the diagonal elements are True and
+        off-diagonal elements are False.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> separability_matrix(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([[ True, False], [False,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Rotation2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([[ True, False], [False,  True], [ True, False], [False,  True]]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        return np.ones((transform.n_outputs, transform.n_inputs),
+                       dtype=np.bool_)
+    separable_matrix = _separable(transform)
+    separable_matrix = np.where(separable_matrix != 0, True, False)
+    return separable_matrix
+
+
+def _compute_n_outputs(left, right):
+    """
+    Compute the number of outputs of two models.
+
+    The two models are the left and right model to an operation in
+    the expression tree of a compound model.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    """
+    if isinstance(left, Model):
+        lnout = left.n_outputs
+    else:
+        lnout = left.shape[0]
+    if isinstance(right, Model):
+        rnout = right.n_outputs
+    else:
+        rnout = right.shape[0]
+    noutp = lnout + rnout
+    return noutp
+
+
+def _arith_oper(left, right):
+    """
+    Function corresponding to one of the arithmetic operators
+    ['+', '-'. '*', '/', '**'].
+
+    This always returns a nonseparable output.
+
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+    # models have the same number of inputs and outputs
+    def _n_inputs_outputs(input):
+        if isinstance(input, Model):
+            n_outputs, n_inputs = input.n_outputs, input.n_inputs
+        else:
+            n_outputs, n_inputs = input.shape
+        return n_inputs, n_outputs
+
+    left_inputs, left_outputs = _n_inputs_outputs(left)
+    right_inputs, right_outputs = _n_inputs_outputs(right)
+
+    if left_inputs != right_inputs or left_outputs != right_outputs:
+        raise ModelDefinitionError(
+            "Unsupported operands for arithmetic operator: left (n_inputs={}, "
+            "n_outputs={}) and right (n_inputs={}, n_outputs={}); "
+            "models must have the same n_inputs and the same "
+            "n_outputs for this operator.".format(
+                left_inputs, left_outputs, right_inputs, right_outputs))
+
+    result = np.ones((left_outputs, left_inputs))
+    return result
+
+
+def _coord_matrix(model, pos, noutp):
+    """
+    Create an array representing inputs and outputs of a simple model.
+
+    The array has a shape (noutp, model.n_inputs).
+
+    Parameters
+    ----------
+    model : `astropy.modeling.Model`
+        model
+    pos : str
+        Position of this model in the expression tree.
+        One of ['left', 'right'].
+    noutp : int
+        Number of outputs of the compound model of which the input model
+        is a left or right child.
+
+    """
+    if isinstance(model, Mapping):
+        axes = []
+        for i in model.mapping:
+            axis = np.zeros((model.n_inputs,))
+            axis[i] = 1
+            axes.append(axis)
+        m = np.vstack(axes)
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[: model.n_outputs, :model.n_inputs] = m
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = m
+        return mat
+    if not model.separable:
+        # this does not work for more than 2 coordinates
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[:model.n_outputs, : model.n_inputs] = 1
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = 1
+    else:
+        mat = np.zeros((noutp, model.n_inputs))
+
+        for i in range(model.n_inputs):
+            mat[i, i] = 1
+        if pos == 'right':
+            mat = np.roll(mat, (noutp - model.n_outputs))
+    return mat
+
+
+def _cstack(left, right):
+    """
+
+
+$exec_command sed -n '220,420p' astropy/modeling/separable.py
+     """
+    Function corresponding to '&' operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+
+    """
+    noutp = _compute_n_outputs(left, right)
+
+    if isinstance(left, Model):
+        cleft = _coord_matrix(left, 'left', noutp)
+    else:
+        cleft = np.zeros((noutp, left.shape[1]))
+        cleft[: left.shape[0], : left.shape[1]] = left
+    if isinstance(right, Model):
+        cright = _coord_matrix(right, 'right', noutp)
+    else:
+        cright = np.zeros((noutp, right.shape[1]))
+        cright[-right.shape[0]:, -right.shape[1]:] = 1
+
+    return np.hstack([cleft, cright])
+
+
+def _cdot(left, right):
+    """
+    Function corresponding to "|" operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+
+    left, right = right, left
+
+    def _n_inputs_outputs(input, position):
+        """
+        Return ``n_inputs``, ``n_outputs`` for a model or coord_matrix.
+        """
+        if isinstance(input, Model):
+            coords = _coord_matrix(input, position, input.n_outputs)
+        else:
+            coords = input
+        return coords
+
+    cleft = _n_inputs_outputs(left, 'left')
+    cright = _n_inputs_outputs(right, 'right')
+
+    try:
+        result = np.dot(cleft, cright)
+    except ValueError:
+        raise ModelDefinitionError(
+            'Models cannot be combined with the "|" operator; '
+            'left coord_matrix is {}, right coord_matrix is {}'.format(
+                cright, cleft))
+    return result
+
+
+def _separable(transform):
+    """
+    Calculate the separability of outputs.
+
+    Parameters
+    ----------
+    transform : `astropy.modeling.Model`
+        A transform (usually a compound model).
+
+    Returns :
+    is_separable : ndarray of dtype np.bool
+        An array of shape (transform.n_outputs,) of boolean type
+        Each element represents the separablity of the corresponding output.
+    """
+    if (transform_matrix := transform._calculate_separability_matrix()) is not NotImplemented:
+        return transform_matrix
+    elif isinstance(transform, CompoundModel):
+        sepleft = _separable(transform.left)
+        sepright = _separable(transform.right)
+        return _operators[transform.op](sepleft, sepright)
+    elif isinstance(transform, Model):
+        return _coord_matrix(transform, 'left', transform.n_outputs)
+
+
+# Maps modeling operators to a function computing and represents the
+# relationship of axes as an array of 0-es and 1-s
+_operators = {'&': _cstack, '|': _cdot, '+': _arith_oper, '-': _arith_oper,
+              '*': _arith_oper, '/': _arith_oper, '**': _arith_oper}
+
+
+$exec_command grep -rn "separability_matrix\|_cstack" astropy/modeling/tests/ --include="*.py" | head -50
+ astropy/modeling/tests/test_separable.py:14:                                        _cstack, _arith_oper, separability_matrix)
+astropy/modeling/tests/test_separable.py:98:def test_cstack():
+astropy/modeling/tests/test_separable.py:99:    result = _cstack(sh1, scl1)
+astropy/modeling/tests/test_separable.py:102:    result = _cstack(sh1, rot)
+astropy/modeling/tests/test_separable.py:108:    result = _cstack(rot, sh1)
+astropy/modeling/tests/test_separable.py:135:    assert_allclose(separability_matrix(compound_model), result[1])
+astropy/modeling/tests/test_separable.py:150:    assert np.all(separability_matrix(model_c()) == [True, True])
+astropy/modeling/tests/test_core.py:19:from astropy.modeling.separable import separability_matrix
+astropy/modeling/tests/test_core.py:214:    assert (separability_matrix(m) == [[True, True],
+astropy/modeling/tests/test_core.py:226:    assert (separability_matrix(m) == [[True, True, True],
+astropy/modeling/tests/test_models.py:24:from astropy.modeling.separable import separability_matrix
+astropy/modeling/tests/test_models.py:1072:    def _calculate_separability_matrix(self):
+astropy/modeling/tests/test_models.py:1076:def test_custom_separability_matrix():
+astropy/modeling/tests/test_models.py:1077:    original = separability_matrix(ModelDefault(slope=1, intercept=2))
+astropy/modeling/tests/test_models.py:1080:    custom = separability_matrix(ModelCustom(slope=1, intercept=2))
+
+
+$exec_command grep -n "separable" astropy/modeling/core.py | head -30
+ 655:    _separable = None
+656:    """ A boolean flag to indicate whether a model is separable."""
+810:        This is a hook which customises the behavior of modeling.separable.
+1532:    def separable(self):
+1533:        """ A flag indicating whether a model is separable."""
+1535:        if self._separable is not None:
+1536:            return self._separable
+1538:            'The "separable" property is not defined for '
+2826:    _separable = True
+4173:    The model is separable only if there is a single input.
+4353:    cls._separable = True if (len(inputs) == 1) else False
+
+
+$exec_command python -c "p='astropy/modeling/separable.py'; s=open(p).read(); s=s.replace('cright[-right.shape[0]:, -right.shape[1]:] = 1','cright[-right.shape[0]:, -right.shape[1]:] = right'); open(p,'w').write(s)"
+ (no output)
+
+
+[model reply, complete and unedited] (4105 tokens in, 3341 tokens out)
+exec_command python -c "from astropy.modeling import models as m; from astropy.modeling.separable import separability_matrix; cm = m.Linear1D(10) & m.Linear1D(5); print(separability_matrix(m.Pix2Sky_TAN() & cm))"
+
+[command executed: exec_command]
+python -c "from astropy.modeling import models as m; from astropy.modeling.separable import separability_matrix; cm = m.Linear1D(10) & m.Linear1D(5); print(separability_matrix(m.Pix2Sky_TAN() & cm))"
+
+[result]
+[[ True  True False False]
+ [ True  True False False]
+ [False False  True False]
+ [False False False  True]]
+
+
+------------------------------------------------------------------------------
+TURN 8
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 15557 characters, the same as turn 1 plus the history below]
+$exec_command grep -n "def separability_matrix" -r astropy/modeling/separable.py astropy/modeling --include="*.py" | head -20
+ astropy/modeling/separable.py:66:def separability_matrix(transform):
+astropy/modeling/separable.py:66:def separability_matrix(transform):
+
+
+$exec_command sed -n '1,220p' astropy/modeling/separable.py
+ # Licensed under a 3-clause BSD style license - see LICENSE.rst
+
+"""
+Functions to determine if a model is separable, i.e.
+if the model outputs are independent.
+
+It analyzes ``n_inputs``, ``n_outputs`` and the operators
+in a compound model by stepping through the transforms
+and creating a ``coord_matrix`` of shape (``n_outputs``, ``n_inputs``).
+
+
+Each modeling operator is represented by a function which
+takes two simple models (or two ``coord_matrix`` arrays) and
+returns an array of shape (``n_outputs``, ``n_inputs``).
+
+"""
+
+import numpy as np
+
+from .core import Model, ModelDefinitionError, CompoundModel
+from .mappings import Mapping
+
+
+__all__ = ["is_separable", "separability_matrix"]
+
+
+def is_separable(transform):
+    """
+    A separability test for the outputs of a transform.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    is_separable : ndarray
+        A boolean array with size ``transform.n_outputs`` where
+        each element indicates whether the output is independent
+        and the result of a separable transform.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> is_separable(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([ True,  True]...)
+    >>> is_separable(Shift(1) & Shift(2) | Rotation2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([ True,  True,  True,  True]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        is_separable = np.array([False] * transform.n_outputs).T
+        return is_separable
+    separable_matrix = _separable(transform)
+    is_separable = separable_matrix.sum(1)
+    is_separable = np.where(is_separable != 1, False, True)
+    return is_separable
+
+
+def separability_matrix(transform):
+    """
+    Compute the correlation between outputs and inputs.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    separable_matrix : ndarray
+        A boolean correlation matrix of shape (n_outputs, n_inputs).
+        Indicates the dependence of outputs on inputs. For completely
+        independent outputs, the diagonal elements are True and
+        off-diagonal elements are False.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> separability_matrix(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([[ True, False], [False,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Rotation2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([[ True, False], [False,  True], [ True, False], [False,  True]]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        return np.ones((transform.n_outputs, transform.n_inputs),
+                       dtype=np.bool_)
+    separable_matrix = _separable(transform)
+    separable_matrix = np.where(separable_matrix != 0, True, False)
+    return separable_matrix
+
+
+def _compute_n_outputs(left, right):
+    """
+    Compute the number of outputs of two models.
+
+    The two models are the left and right model to an operation in
+    the expression tree of a compound model.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    """
+    if isinstance(left, Model):
+        lnout = left.n_outputs
+    else:
+        lnout = left.shape[0]
+    if isinstance(right, Model):
+        rnout = right.n_outputs
+    else:
+        rnout = right.shape[0]
+    noutp = lnout + rnout
+    return noutp
+
+
+def _arith_oper(left, right):
+    """
+    Function corresponding to one of the arithmetic operators
+    ['+', '-'. '*', '/', '**'].
+
+    This always returns a nonseparable output.
+
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+    # models have the same number of inputs and outputs
+    def _n_inputs_outputs(input):
+        if isinstance(input, Model):
+            n_outputs, n_inputs = input.n_outputs, input.n_inputs
+        else:
+            n_outputs, n_inputs = input.shape
+        return n_inputs, n_outputs
+
+    left_inputs, left_outputs = _n_inputs_outputs(left)
+    right_inputs, right_outputs = _n_inputs_outputs(right)
+
+    if left_inputs != right_inputs or left_outputs != right_outputs:
+        raise ModelDefinitionError(
+            "Unsupported operands for arithmetic operator: left (n_inputs={}, "
+            "n_outputs={}) and right (n_inputs={}, n_outputs={}); "
+            "models must have the same n_inputs and the same "
+            "n_outputs for this operator.".format(
+                left_inputs, left_outputs, right_inputs, right_outputs))
+
+    result = np.ones((left_outputs, left_inputs))
+    return result
+
+
+def _coord_matrix(model, pos, noutp):
+    """
+    Create an array representing inputs and outputs of a simple model.
+
+    The array has a shape (noutp, model.n_inputs).
+
+    Parameters
+    ----------
+    model : `astropy.modeling.Model`
+        model
+    pos : str
+        Position of this model in the expression tree.
+        One of ['left', 'right'].
+    noutp : int
+        Number of outputs of the compound model of which the input model
+        is a left or right child.
+
+    """
+    if isinstance(model, Mapping):
+        axes = []
+        for i in model.mapping:
+            axis = np.zeros((model.n_inputs,))
+            axis[i] = 1
+            axes.append(axis)
+        m = np.vstack(axes)
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[: model.n_outputs, :model.n_inputs] = m
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = m
+        return mat
+    if not model.separable:
+        # this does not work for more than 2 coordinates
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[:model.n_outputs, : model.n_inputs] = 1
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = 1
+    else:
+        mat = np.zeros((noutp, model.n_inputs))
+
+        for i in range(model.n_inputs):
+            mat[i, i] = 1
+        if pos == 'right':
+            mat = np.roll(mat, (noutp - model.n_outputs))
+    return mat
+
+
+def _cstack(left, right):
+    """
+
+
+$exec_command sed -n '220,420p' astropy/modeling/separable.py
+     """
+    Function corresponding to '&' operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+
+    """
+    noutp = _compute_n_outputs(left, right)
+
+    if isinstance(left, Model):
+        cleft = _coord_matrix(left, 'left', noutp)
+    else:
+        cleft = np.zeros((noutp, left.shape[1]))
+        cleft[: left.shape[0], : left.shape[1]] = left
+    if isinstance(right, Model):
+        cright = _coord_matrix(right, 'right', noutp)
+    else:
+        cright = np.zeros((noutp, right.shape[1]))
+        cright[-right.shape[0]:, -right.shape[1]:] = 1
+
+    return np.hstack([cleft, cright])
+
+
+def _cdot(left, right):
+    """
+    Function corresponding to "|" operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+
+    left, right = right, left
+
+    def _n_inputs_outputs(input, position):
+        """
+        Return ``n_inputs``, ``n_outputs`` for a model or coord_matrix.
+        """
+        if isinstance(input, Model):
+            coords = _coord_matrix(input, position, input.n_outputs)
+        else:
+            coords = input
+        return coords
+
+    cleft = _n_inputs_outputs(left, 'left')
+    cright = _n_inputs_outputs(right, 'right')
+
+    try:
+        result = np.dot(cleft, cright)
+    except ValueError:
+        raise ModelDefinitionError(
+            'Models cannot be combined with the "|" operator; '
+            'left coord_matrix is {}, right coord_matrix is {}'.format(
+                cright, cleft))
+    return result
+
+
+def _separable(transform):
+    """
+    Calculate the separability of outputs.
+
+    Parameters
+    ----------
+    transform : `astropy.modeling.Model`
+        A transform (usually a compound model).
+
+    Returns :
+    is_separable : ndarray of dtype np.bool
+        An array of shape (transform.n_outputs,) of boolean type
+        Each element represents the separablity of the corresponding output.
+    """
+    if (transform_matrix := transform._calculate_separability_matrix()) is not NotImplemented:
+        return transform_matrix
+    elif isinstance(transform, CompoundModel):
+        sepleft = _separable(transform.left)
+        sepright = _separable(transform.right)
+        return _operators[transform.op](sepleft, sepright)
+    elif isinstance(transform, Model):
+        return _coord_matrix(transform, 'left', transform.n_outputs)
+
+
+# Maps modeling operators to a function computing and represents the
+# relationship of axes as an array of 0-es and 1-s
+_operators = {'&': _cstack, '|': _cdot, '+': _arith_oper, '-': _arith_oper,
+              '*': _arith_oper, '/': _arith_oper, '**': _arith_oper}
+
+
+$exec_command grep -rn "separability_matrix\|_cstack" astropy/modeling/tests/ --include="*.py" | head -50
+ astropy/modeling/tests/test_separable.py:14:                                        _cstack, _arith_oper, separability_matrix)
+astropy/modeling/tests/test_separable.py:98:def test_cstack():
+astropy/modeling/tests/test_separable.py:99:    result = _cstack(sh1, scl1)
+astropy/modeling/tests/test_separable.py:102:    result = _cstack(sh1, rot)
+astropy/modeling/tests/test_separable.py:108:    result = _cstack(rot, sh1)
+astropy/modeling/tests/test_separable.py:135:    assert_allclose(separability_matrix(compound_model), result[1])
+astropy/modeling/tests/test_separable.py:150:    assert np.all(separability_matrix(model_c()) == [True, True])
+astropy/modeling/tests/test_core.py:19:from astropy.modeling.separable import separability_matrix
+astropy/modeling/tests/test_core.py:214:    assert (separability_matrix(m) == [[True, True],
+astropy/modeling/tests/test_core.py:226:    assert (separability_matrix(m) == [[True, True, True],
+astropy/modeling/tests/test_models.py:24:from astropy.modeling.separable import separability_matrix
+astropy/modeling/tests/test_models.py:1072:    def _calculate_separability_matrix(self):
+astropy/modeling/tests/test_models.py:1076:def test_custom_separability_matrix():
+astropy/modeling/tests/test_models.py:1077:    original = separability_matrix(ModelDefault(slope=1, intercept=2))
+astropy/modeling/tests/test_models.py:1080:    custom = separability_matrix(ModelCustom(slope=1, intercept=2))
+
+
+$exec_command grep -n "separable" astropy/modeling/core.py | head -30
+ 655:    _separable = None
+656:    """ A boolean flag to indicate whether a model is separable."""
+810:        This is a hook which customises the behavior of modeling.separable.
+1532:    def separable(self):
+1533:        """ A flag indicating whether a model is separable."""
+1535:        if self._separable is not None:
+1536:            return self._separable
+1538:            'The "separable" property is not defined for '
+2826:    _separable = True
+4173:    The model is separable only if there is a single input.
+4353:    cls._separable = True if (len(inputs) == 1) else False
+
+
+$exec_command python -c "p='astropy/modeling/separable.py'; s=open(p).read(); s=s.replace('cright[-right.shape[0]:, -right.shape[1]:] = 1','cright[-right.shape[0]:, -right.shape[1]:] = right'); open(p,'w').write(s)"
+ (no output)
+
+$exec_command python -c "from astropy.modeling import models as m; from astropy.modeling.separable import separability_matrix; cm = m.Linear1D(10) & m.Linear1D(5); print(separability_matrix(m.Pix2Sky_TAN() & cm))"
+ [[ True  True False False]
+ [ True  True False False]
+ [False False  True False]
+ [False False False  True]]
+
+
+
+[model reply, complete and unedited] (4199 tokens in, 3929 tokens out)
+exec_command git diff -- astropy/modeling/separable.py
+
+[command executed: exec_command]
+git diff -- astropy/modeling/separable.py
+
+[result]
+diff --git a/astropy/modeling/separable.py b/astropy/modeling/separable.py
+index a308e2729..45bea3608 100755
+--- a/astropy/modeling/separable.py
++++ b/astropy/modeling/separable.py
+@@ -242,7 +242,7 @@ def _cstack(left, right):
+         cright = _coord_matrix(right, 'right', noutp)
+     else:
+         cright = np.zeros((noutp, right.shape[1]))
+-        cright[-right.shape[0]:, -right.shape[1]:] = 1
++        cright[-right.shape[0]:, -right.shape[1]:] = right
+ 
+     return np.hstack([cleft, cright])
+ 
+
+
+------------------------------------------------------------------------------
+TURN 9
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 16120 characters, the same as turn 1 plus the history below]
+$exec_command grep -n "def separability_matrix" -r astropy/modeling/separable.py astropy/modeling --include="*.py" | head -20
+ astropy/modeling/separable.py:66:def separability_matrix(transform):
+astropy/modeling/separable.py:66:def separability_matrix(transform):
+
+
+$exec_command sed -n '1,220p' astropy/modeling/separable.py
+ # Licensed under a 3-clause BSD style license - see LICENSE.rst
+
+"""
+Functions to determine if a model is separable, i.e.
+if the model outputs are independent.
+
+It analyzes ``n_inputs``, ``n_outputs`` and the operators
+in a compound model by stepping through the transforms
+and creating a ``coord_matrix`` of shape (``n_outputs``, ``n_inputs``).
+
+
+Each modeling operator is represented by a function which
+takes two simple models (or two ``coord_matrix`` arrays) and
+returns an array of shape (``n_outputs``, ``n_inputs``).
+
+"""
+
+import numpy as np
+
+from .core import Model, ModelDefinitionError, CompoundModel
+from .mappings import Mapping
+
+
+__all__ = ["is_separable", "separability_matrix"]
+
+
+def is_separable(transform):
+    """
+    A separability test for the outputs of a transform.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    is_separable : ndarray
+        A boolean array with size ``transform.n_outputs`` where
+        each element indicates whether the output is independent
+        and the result of a separable transform.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> is_separable(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([ True,  True]...)
+    >>> is_separable(Shift(1) & Shift(2) | Rotation2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([ True,  True,  True,  True]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        is_separable = np.array([False] * transform.n_outputs).T
+        return is_separable
+    separable_matrix = _separable(transform)
+    is_separable = separable_matrix.sum(1)
+    is_separable = np.where(is_separable != 1, False, True)
+    return is_separable
+
+
+def separability_matrix(transform):
+    """
+    Compute the correlation between outputs and inputs.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    separable_matrix : ndarray
+        A boolean correlation matrix of shape (n_outputs, n_inputs).
+        Indicates the dependence of outputs on inputs. For completely
+        independent outputs, the diagonal elements are True and
+        off-diagonal elements are False.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> separability_matrix(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([[ True, False], [False,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Rotation2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([[ True, False], [False,  True], [ True, False], [False,  True]]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        return np.ones((transform.n_outputs, transform.n_inputs),
+                       dtype=np.bool_)
+    separable_matrix = _separable(transform)
+    separable_matrix = np.where(separable_matrix != 0, True, False)
+    return separable_matrix
+
+
+def _compute_n_outputs(left, right):
+    """
+    Compute the number of outputs of two models.
+
+    The two models are the left and right model to an operation in
+    the expression tree of a compound model.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    """
+    if isinstance(left, Model):
+        lnout = left.n_outputs
+    else:
+        lnout = left.shape[0]
+    if isinstance(right, Model):
+        rnout = right.n_outputs
+    else:
+        rnout = right.shape[0]
+    noutp = lnout + rnout
+    return noutp
+
+
+def _arith_oper(left, right):
+    """
+    Function corresponding to one of the arithmetic operators
+    ['+', '-'. '*', '/', '**'].
+
+    This always returns a nonseparable output.
+
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+    # models have the same number of inputs and outputs
+    def _n_inputs_outputs(input):
+        if isinstance(input, Model):
+            n_outputs, n_inputs = input.n_outputs, input.n_inputs
+        else:
+            n_outputs, n_inputs = input.shape
+        return n_inputs, n_outputs
+
+    left_inputs, left_outputs = _n_inputs_outputs(left)
+    right_inputs, right_outputs = _n_inputs_outputs(right)
+
+    if left_inputs != right_inputs or left_outputs != right_outputs:
+        raise ModelDefinitionError(
+            "Unsupported operands for arithmetic operator: left (n_inputs={}, "
+            "n_outputs={}) and right (n_inputs={}, n_outputs={}); "
+            "models must have the same n_inputs and the same "
+            "n_outputs for this operator.".format(
+                left_inputs, left_outputs, right_inputs, right_outputs))
+
+    result = np.ones((left_outputs, left_inputs))
+    return result
+
+
+def _coord_matrix(model, pos, noutp):
+    """
+    Create an array representing inputs and outputs of a simple model.
+
+    The array has a shape (noutp, model.n_inputs).
+
+    Parameters
+    ----------
+    model : `astropy.modeling.Model`
+        model
+    pos : str
+        Position of this model in the expression tree.
+        One of ['left', 'right'].
+    noutp : int
+        Number of outputs of the compound model of which the input model
+        is a left or right child.
+
+    """
+    if isinstance(model, Mapping):
+        axes = []
+        for i in model.mapping:
+            axis = np.zeros((model.n_inputs,))
+            axis[i] = 1
+            axes.append(axis)
+        m = np.vstack(axes)
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[: model.n_outputs, :model.n_inputs] = m
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = m
+        return mat
+    if not model.separable:
+        # this does not work for more than 2 coordinates
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[:model.n_outputs, : model.n_inputs] = 1
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = 1
+    else:
+        mat = np.zeros((noutp, model.n_inputs))
+
+        for i in range(model.n_inputs):
+            mat[i, i] = 1
+        if pos == 'right':
+            mat = np.roll(mat, (noutp - model.n_outputs))
+    return mat
+
+
+def _cstack(left, right):
+    """
+
+
+$exec_command sed -n '220,420p' astropy/modeling/separable.py
+     """
+    Function corresponding to '&' operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+
+    """
+    noutp = _compute_n_outputs(left, right)
+
+    if isinstance(left, Model):
+        cleft = _coord_matrix(left, 'left', noutp)
+    else:
+        cleft = np.zeros((noutp, left.shape[1]))
+        cleft[: left.shape[0], : left.shape[1]] = left
+    if isinstance(right, Model):
+        cright = _coord_matrix(right, 'right', noutp)
+    else:
+        cright = np.zeros((noutp, right.shape[1]))
+        cright[-right.shape[0]:, -right.shape[1]:] = 1
+
+    return np.hstack([cleft, cright])
+
+
+def _cdot(left, right):
+    """
+    Function corresponding to "|" operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+
+    left, right = right, left
+
+    def _n_inputs_outputs(input, position):
+        """
+        Return ``n_inputs``, ``n_outputs`` for a model or coord_matrix.
+        """
+        if isinstance(input, Model):
+            coords = _coord_matrix(input, position, input.n_outputs)
+        else:
+            coords = input
+        return coords
+
+    cleft = _n_inputs_outputs(left, 'left')
+    cright = _n_inputs_outputs(right, 'right')
+
+    try:
+        result = np.dot(cleft, cright)
+    except ValueError:
+        raise ModelDefinitionError(
+            'Models cannot be combined with the "|" operator; '
+            'left coord_matrix is {}, right coord_matrix is {}'.format(
+                cright, cleft))
+    return result
+
+
+def _separable(transform):
+    """
+    Calculate the separability of outputs.
+
+    Parameters
+    ----------
+    transform : `astropy.modeling.Model`
+        A transform (usually a compound model).
+
+    Returns :
+    is_separable : ndarray of dtype np.bool
+        An array of shape (transform.n_outputs,) of boolean type
+        Each element represents the separablity of the corresponding output.
+    """
+    if (transform_matrix := transform._calculate_separability_matrix()) is not NotImplemented:
+        return transform_matrix
+    elif isinstance(transform, CompoundModel):
+        sepleft = _separable(transform.left)
+        sepright = _separable(transform.right)
+        return _operators[transform.op](sepleft, sepright)
+    elif isinstance(transform, Model):
+        return _coord_matrix(transform, 'left', transform.n_outputs)
+
+
+# Maps modeling operators to a function computing and represents the
+# relationship of axes as an array of 0-es and 1-s
+_operators = {'&': _cstack, '|': _cdot, '+': _arith_oper, '-': _arith_oper,
+              '*': _arith_oper, '/': _arith_oper, '**': _arith_oper}
+
+
+$exec_command grep -rn "separability_matrix\|_cstack" astropy/modeling/tests/ --include="*.py" | head -50
+ astropy/modeling/tests/test_separable.py:14:                                        _cstack, _arith_oper, separability_matrix)
+astropy/modeling/tests/test_separable.py:98:def test_cstack():
+astropy/modeling/tests/test_separable.py:99:    result = _cstack(sh1, scl1)
+astropy/modeling/tests/test_separable.py:102:    result = _cstack(sh1, rot)
+astropy/modeling/tests/test_separable.py:108:    result = _cstack(rot, sh1)
+astropy/modeling/tests/test_separable.py:135:    assert_allclose(separability_matrix(compound_model), result[1])
+astropy/modeling/tests/test_separable.py:150:    assert np.all(separability_matrix(model_c()) == [True, True])
+astropy/modeling/tests/test_core.py:19:from astropy.modeling.separable import separability_matrix
+astropy/modeling/tests/test_core.py:214:    assert (separability_matrix(m) == [[True, True],
+astropy/modeling/tests/test_core.py:226:    assert (separability_matrix(m) == [[True, True, True],
+astropy/modeling/tests/test_models.py:24:from astropy.modeling.separable import separability_matrix
+astropy/modeling/tests/test_models.py:1072:    def _calculate_separability_matrix(self):
+astropy/modeling/tests/test_models.py:1076:def test_custom_separability_matrix():
+astropy/modeling/tests/test_models.py:1077:    original = separability_matrix(ModelDefault(slope=1, intercept=2))
+astropy/modeling/tests/test_models.py:1080:    custom = separability_matrix(ModelCustom(slope=1, intercept=2))
+
+
+$exec_command grep -n "separable" astropy/modeling/core.py | head -30
+ 655:    _separable = None
+656:    """ A boolean flag to indicate whether a model is separable."""
+810:        This is a hook which customises the behavior of modeling.separable.
+1532:    def separable(self):
+1533:        """ A flag indicating whether a model is separable."""
+1535:        if self._separable is not None:
+1536:            return self._separable
+1538:            'The "separable" property is not defined for '
+2826:    _separable = True
+4173:    The model is separable only if there is a single input.
+4353:    cls._separable = True if (len(inputs) == 1) else False
+
+
+$exec_command python -c "p='astropy/modeling/separable.py'; s=open(p).read(); s=s.replace('cright[-right.shape[0]:, -right.shape[1]:] = 1','cright[-right.shape[0]:, -right.shape[1]:] = right'); open(p,'w').write(s)"
+ (no output)
+
+$exec_command python -c "from astropy.modeling import models as m; from astropy.modeling.separable import separability_matrix; cm = m.Linear1D(10) & m.Linear1D(5); print(separability_matrix(m.Pix2Sky_TAN() & cm))"
+ [[ True  True False False]
+ [ True  True False False]
+ [False False  True False]
+ [False False False  True]]
+
+
+$exec_command git diff -- astropy/modeling/separable.py
+ diff --git a/astropy/modeling/separable.py b/astropy/modeling/separable.py
+index a308e2729..45bea3608 100755
+--- a/astropy/modeling/separable.py
++++ b/astropy/modeling/separable.py
+@@ -242,7 +242,7 @@ def _cstack(left, right):
+         cright = _coord_matrix(right, 'right', noutp)
+     else:
+         cright = np.zeros((noutp, right.shape[1]))
+-        cright[-right.shape[0]:, -right.shape[1]:] = 1
++        cright[-right.shape[0]:, -right.shape[1]:] = right
+ 
+     return np.hstack([cleft, cright])
+ 
+
+
+
+[model reply, complete and unedited] (4382 tokens in, 1134 tokens out)
+exec_command python -m pytest astropy/modeling/tests/test_separable.py -q
+
+[command executed: exec_command]
+python -m pytest astropy/modeling/tests/test_separable.py -q
+
+[result]
+Internet access disabled
+...........                                                              [100%]
+11 passed in 0.19s
+
+[stderr]
+<frozen importlib._bootstrap>:228: RuntimeWarning: numpy.ndarray size changed, may indicate binary incompatibility. Expected 80 from C header, got 96 from PyObject
+
+
+------------------------------------------------------------------------------
+TURN 10
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 16496 characters, the same as turn 1 plus the history below]
+$exec_command grep -n "def separability_matrix" -r astropy/modeling/separable.py astropy/modeling --include="*.py" | head -20
+ astropy/modeling/separable.py:66:def separability_matrix(transform):
+astropy/modeling/separable.py:66:def separability_matrix(transform):
+
+
+$exec_command sed -n '1,220p' astropy/modeling/separable.py
+ # Licensed under a 3-clause BSD style license - see LICENSE.rst
+
+"""
+Functions to determine if a model is separable, i.e.
+if the model outputs are independent.
+
+It analyzes ``n_inputs``, ``n_outputs`` and the operators
+in a compound model by stepping through the transforms
+and creating a ``coord_matrix`` of shape (``n_outputs``, ``n_inputs``).
+
+
+Each modeling operator is represented by a function which
+takes two simple models (or two ``coord_matrix`` arrays) and
+returns an array of shape (``n_outputs``, ``n_inputs``).
+
+"""
+
+import numpy as np
+
+from .core import Model, ModelDefinitionError, CompoundModel
+from .mappings import Mapping
+
+
+__all__ = ["is_separable", "separability_matrix"]
+
+
+def is_separable(transform):
+    """
+    A separability test for the outputs of a transform.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    is_separable : ndarray
+        A boolean array with size ``transform.n_outputs`` where
+        each element indicates whether the output is independent
+        and the result of a separable transform.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> is_separable(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([ True,  True]...)
+    >>> is_separable(Shift(1) & Shift(2) | Rotation2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([ True,  True,  True,  True]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        is_separable = np.array([False] * transform.n_outputs).T
+        return is_separable
+    separable_matrix = _separable(transform)
+    is_separable = separable_matrix.sum(1)
+    is_separable = np.where(is_separable != 1, False, True)
+    return is_separable
+
+
+def separability_matrix(transform):
+    """
+    Compute the correlation between outputs and inputs.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    separable_matrix : ndarray
+        A boolean correlation matrix of shape (n_outputs, n_inputs).
+        Indicates the dependence of outputs on inputs. For completely
+        independent outputs, the diagonal elements are True and
+        off-diagonal elements are False.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> separability_matrix(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([[ True, False], [False,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Rotation2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([[ True, False], [False,  True], [ True, False], [False,  True]]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        return np.ones((transform.n_outputs, transform.n_inputs),
+                       dtype=np.bool_)
+    separable_matrix = _separable(transform)
+    separable_matrix = np.where(separable_matrix != 0, True, False)
+    return separable_matrix
+
+
+def _compute_n_outputs(left, right):
+    """
+    Compute the number of outputs of two models.
+
+    The two models are the left and right model to an operation in
+    the expression tree of a compound model.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    """
+    if isinstance(left, Model):
+        lnout = left.n_outputs
+    else:
+        lnout = left.shape[0]
+    if isinstance(right, Model):
+        rnout = right.n_outputs
+    else:
+        rnout = right.shape[0]
+    noutp = lnout + rnout
+    return noutp
+
+
+def _arith_oper(left, right):
+    """
+    Function corresponding to one of the arithmetic operators
+    ['+', '-'. '*', '/', '**'].
+
+    This always returns a nonseparable output.
+
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+    # models have the same number of inputs and outputs
+    def _n_inputs_outputs(input):
+        if isinstance(input, Model):
+            n_outputs, n_inputs = input.n_outputs, input.n_inputs
+        else:
+            n_outputs, n_inputs = input.shape
+        return n_inputs, n_outputs
+
+    left_inputs, left_outputs = _n_inputs_outputs(left)
+    right_inputs, right_outputs = _n_inputs_outputs(right)
+
+    if left_inputs != right_inputs or left_outputs != right_outputs:
+        raise ModelDefinitionError(
+            "Unsupported operands for arithmetic operator: left (n_inputs={}, "
+            "n_outputs={}) and right (n_inputs={}, n_outputs={}); "
+            "models must have the same n_inputs and the same "
+            "n_outputs for this operator.".format(
+                left_inputs, left_outputs, right_inputs, right_outputs))
+
+    result = np.ones((left_outputs, left_inputs))
+    return result
+
+
+def _coord_matrix(model, pos, noutp):
+    """
+    Create an array representing inputs and outputs of a simple model.
+
+    The array has a shape (noutp, model.n_inputs).
+
+    Parameters
+    ----------
+    model : `astropy.modeling.Model`
+        model
+    pos : str
+        Position of this model in the expression tree.
+        One of ['left', 'right'].
+    noutp : int
+        Number of outputs of the compound model of which the input model
+        is a left or right child.
+
+    """
+    if isinstance(model, Mapping):
+        axes = []
+        for i in model.mapping:
+            axis = np.zeros((model.n_inputs,))
+            axis[i] = 1
+            axes.append(axis)
+        m = np.vstack(axes)
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[: model.n_outputs, :model.n_inputs] = m
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = m
+        return mat
+    if not model.separable:
+        # this does not work for more than 2 coordinates
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[:model.n_outputs, : model.n_inputs] = 1
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = 1
+    else:
+        mat = np.zeros((noutp, model.n_inputs))
+
+        for i in range(model.n_inputs):
+            mat[i, i] = 1
+        if pos == 'right':
+            mat = np.roll(mat, (noutp - model.n_outputs))
+    return mat
+
+
+def _cstack(left, right):
+    """
+
+
+$exec_command sed -n '220,420p' astropy/modeling/separable.py
+     """
+    Function corresponding to '&' operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+
+    """
+    noutp = _compute_n_outputs(left, right)
+
+    if isinstance(left, Model):
+        cleft = _coord_matrix(left, 'left', noutp)
+    else:
+        cleft = np.zeros((noutp, left.shape[1]))
+        cleft[: left.shape[0], : left.shape[1]] = left
+    if isinstance(right, Model):
+        cright = _coord_matrix(right, 'right', noutp)
+    else:
+        cright = np.zeros((noutp, right.shape[1]))
+        cright[-right.shape[0]:, -right.shape[1]:] = 1
+
+    return np.hstack([cleft, cright])
+
+
+def _cdot(left, right):
+    """
+    Function corresponding to "|" operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+
+    left, right = right, left
+
+    def _n_inputs_outputs(input, position):
+        """
+        Return ``n_inputs``, ``n_outputs`` for a model or coord_matrix.
+        """
+        if isinstance(input, Model):
+            coords = _coord_matrix(input, position, input.n_outputs)
+        else:
+            coords = input
+        return coords
+
+    cleft = _n_inputs_outputs(left, 'left')
+    cright = _n_inputs_outputs(right, 'right')
+
+    try:
+        result = np.dot(cleft, cright)
+    except ValueError:
+        raise ModelDefinitionError(
+            'Models cannot be combined with the "|" operator; '
+            'left coord_matrix is {}, right coord_matrix is {}'.format(
+                cright, cleft))
+    return result
+
+
+def _separable(transform):
+    """
+    Calculate the separability of outputs.
+
+    Parameters
+    ----------
+    transform : `astropy.modeling.Model`
+        A transform (usually a compound model).
+
+    Returns :
+    is_separable : ndarray of dtype np.bool
+        An array of shape (transform.n_outputs,) of boolean type
+        Each element represents the separablity of the corresponding output.
+    """
+    if (transform_matrix := transform._calculate_separability_matrix()) is not NotImplemented:
+        return transform_matrix
+    elif isinstance(transform, CompoundModel):
+        sepleft = _separable(transform.left)
+        sepright = _separable(transform.right)
+        return _operators[transform.op](sepleft, sepright)
+    elif isinstance(transform, Model):
+        return _coord_matrix(transform, 'left', transform.n_outputs)
+
+
+# Maps modeling operators to a function computing and represents the
+# relationship of axes as an array of 0-es and 1-s
+_operators = {'&': _cstack, '|': _cdot, '+': _arith_oper, '-': _arith_oper,
+              '*': _arith_oper, '/': _arith_oper, '**': _arith_oper}
+
+
+$exec_command grep -rn "separability_matrix\|_cstack" astropy/modeling/tests/ --include="*.py" | head -50
+ astropy/modeling/tests/test_separable.py:14:                                        _cstack, _arith_oper, separability_matrix)
+astropy/modeling/tests/test_separable.py:98:def test_cstack():
+astropy/modeling/tests/test_separable.py:99:    result = _cstack(sh1, scl1)
+astropy/modeling/tests/test_separable.py:102:    result = _cstack(sh1, rot)
+astropy/modeling/tests/test_separable.py:108:    result = _cstack(rot, sh1)
+astropy/modeling/tests/test_separable.py:135:    assert_allclose(separability_matrix(compound_model), result[1])
+astropy/modeling/tests/test_separable.py:150:    assert np.all(separability_matrix(model_c()) == [True, True])
+astropy/modeling/tests/test_core.py:19:from astropy.modeling.separable import separability_matrix
+astropy/modeling/tests/test_core.py:214:    assert (separability_matrix(m) == [[True, True],
+astropy/modeling/tests/test_core.py:226:    assert (separability_matrix(m) == [[True, True, True],
+astropy/modeling/tests/test_models.py:24:from astropy.modeling.separable import separability_matrix
+astropy/modeling/tests/test_models.py:1072:    def _calculate_separability_matrix(self):
+astropy/modeling/tests/test_models.py:1076:def test_custom_separability_matrix():
+astropy/modeling/tests/test_models.py:1077:    original = separability_matrix(ModelDefault(slope=1, intercept=2))
+astropy/modeling/tests/test_models.py:1080:    custom = separability_matrix(ModelCustom(slope=1, intercept=2))
+
+
+$exec_command grep -n "separable" astropy/modeling/core.py | head -30
+ 655:    _separable = None
+656:    """ A boolean flag to indicate whether a model is separable."""
+810:        This is a hook which customises the behavior of modeling.separable.
+1532:    def separable(self):
+1533:        """ A flag indicating whether a model is separable."""
+1535:        if self._separable is not None:
+1536:            return self._separable
+1538:            'The "separable" property is not defined for '
+2826:    _separable = True
+4173:    The model is separable only if there is a single input.
+4353:    cls._separable = True if (len(inputs) == 1) else False
+
+
+$exec_command python -c "p='astropy/modeling/separable.py'; s=open(p).read(); s=s.replace('cright[-right.shape[0]:, -right.shape[1]:] = 1','cright[-right.shape[0]:, -right.shape[1]:] = right'); open(p,'w').write(s)"
+ (no output)
+
+$exec_command python -c "from astropy.modeling import models as m; from astropy.modeling.separable import separability_matrix; cm = m.Linear1D(10) & m.Linear1D(5); print(separability_matrix(m.Pix2Sky_TAN() & cm))"
+ [[ True  True False False]
+ [ True  True False False]
+ [False False  True False]
+ [False False False  True]]
+
+
+$exec_command git diff -- astropy/modeling/separable.py
+ diff --git a/astropy/modeling/separable.py b/astropy/modeling/separable.py
+index a308e2729..45bea3608 100755
+--- a/astropy/modeling/separable.py
++++ b/astropy/modeling/separable.py
+@@ -242,7 +242,7 @@ def _cstack(left, right):
+         cright = _coord_matrix(right, 'right', noutp)
+     else:
+         cright = np.zeros((noutp, right.shape[1]))
+-        cright[-right.shape[0]:, -right.shape[1]:] = 1
++        cright[-right.shape[0]:, -right.shape[1]:] = right
+ 
+     return np.hstack([cleft, cright])
+ 
+
+
+$exec_command python -m pytest astropy/modeling/tests/test_separable.py -q
+ Internet access disabled
+...........                                                              [100%]
+11 passed in 0.19s
+
+[stderr]
+<frozen importlib._bootstrap>:228: RuntimeWarning: numpy.ndarray size changed, may indicate binary incompatibility. Expected 80 from C header, got 96 from PyObject
+
+
+
+[model reply, complete and unedited] (4467 tokens in, 2419 tokens out)
+exec_command python -m pytest astropy/modeling/tests/test_separable.py astropy/modeling/tests/test_core.py astropy/modeling/tests/test_models.py -q
+
+[command executed: exec_command]
+python -m pytest astropy/modeling/tests/test_separable.py astropy/modeling/tests/test_core.py astropy/modeling/tests/test_models.py -q
+
+[result]
+Internet access disabled
+..............................s..............Fs.......................s. [ 21%]
+..F..............s..........................s..........................s [ 43%]
+...............F...FF..F.F...F.F.......sssssssssssssssssssssssssssssssss [ 65%]
+ssssssssssssssssssssss........s..s........s..s........s...F.FF...F.F.sss [ 86%]
+sssssssssssssssssssss....sss.ssssssss...s...                             [100%]
+=================================== FAILURES ===================================
+___________________ test_prepare_outputs_single_entry_vector ___________________
+
+    def test_prepare_outputs_single_entry_vector():
+        """
+        jwst and gwcs both require that single entry vectors produce single entry output vectors, not scalars. This
+        tests for that behavior.
+        """
+    
+        model = models.Gaussian2D(1, 2, 3, 4, 5)
+    
+        output = model(np.array([1]), np.array([2]))
+        assert output.shape == (1,)
+>       np.testing.assert_array_equal(output, [0.9500411305585278])
+
+astropy/modeling/tests/test_core.py:724: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = (<built-in function eq>, array([0.95004113]), [0.9500411305585278])
+kwds = {'err_msg': '', 'header': 'Arrays are not equal', 'strict': False, 'verbose': True}
+
+    @wraps(func)
+    def inner(*args, **kwds):
+        with self._recreate_cm():
+>           return func(*args, **kwds)
+E           AssertionError: 
+E           Arrays are not equal
+E           
+E           Mismatched elements: 1 / 1 (100%)
+E           Max absolute difference: 1.11022302e-16
+E           Max relative difference: 1.16860522e-16
+E            x: array([0.950041])
+E            y: array([0.950041])
+
+/opt/miniconda3/envs/testbed/lib/python3.9/contextlib.py:79: AssertionError
+________________________ test_custom_model_bounding_box ________________________
+
+    def test_custom_model_bounding_box():
+        """Test bounding box evaluation for a 3D model"""
+    
+        def ellipsoid(x, y, z, x0=13, y0=10, z0=8, a=4, b=3, c=2, amp=1):
+            rsq = ((x - x0) / a) ** 2 + ((y - y0) / b) ** 2 + ((z - z0) / c) ** 2
+            val = (rsq < 1) * amp
+            return val
+    
+        class Ellipsoid3D(models.custom_model(ellipsoid)):
+            @property
+            def bounding_box(self):
+                return ((self.z0 - self.c, self.z0 + self.c),
+                        (self.y0 - self.b, self.y0 + self.b),
+                        (self.x0 - self.a, self.x0 + self.a))
+    
+        model = Ellipsoid3D()
+        bbox = model.bounding_box
+    
+        zlim, ylim, xlim = bbox.bounding_box()
+        dz, dy, dx = np.diff(bbox) / 2
+        z1, y1, x1 = np.mgrid[slice(zlim[0], zlim[1] + 1),
+                              slice(ylim[0], ylim[1] + 1),
+                              slice(xlim[0], xlim[1] + 1)]
+>       z2, y2, x2 = np.mgrid[slice(zlim[0] - dz, zlim[1] + dz + 1),
+                              slice(ylim[0] - dy, ylim[1] + dy + 1),
+                              slice(xlim[0] - dx, xlim[1] + dx + 1)]
+
+astropy/modeling/tests/test_models.py:128: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <numpy.lib.index_tricks.MGridClass object at 0x7641735484c0>
+key = (slice(array([2.]), array([15.]), None), slice(array([4.]), array([17.]), None), slice(array([7.]), array([20.]), None))
+
+    def __getitem__(self, key):
+        try:
+            size = []
+            # Mimic the behavior of `np.arange` and use a data type
+            # which is at least as large as `np.int_`
+            num_list = [0]
+            for k in range(len(key)):
+                step = key[k].step
+                start = key[k].start
+                stop = key[k].stop
+                if start is None:
+                    start = 0
+                if step is None:
+                    step = 1
+                if isinstance(step, (_nx.complexfloating, complex)):
+                    step = abs(step)
+                    size.append(int(step))
+                else:
+                    size.append(
+>                       int(math.ceil((stop - start) / (step*1.0))))
+E                       DeprecationWarning: Conversion of an array with ndim > 0 to a scalar is deprecated, and will error in future. Ensure you extract a single element from your array before performing this operation. (Deprecated NumPy 1.25.)
+
+/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/numpy/lib/index_tricks.py:166: DeprecationWarning
+____ TestFittable1DModels.test_bounding_box1D_peak[Box1D-test_parameters3] _____
+
+self = <numpy.lib.index_tricks.MGridClass object at 0x7641735484c0>
+key = slice(array([-10.]), array([11.]), 1)
+
+    def __getitem__(self, key):
+        try:
+            size = []
+            # Mimic the behavior of `np.arange` and use a data type
+            # which is at least as large as `np.int_`
+            num_list = [0]
+>           for k in range(len(key)):
+E           TypeError: object of type 'slice' has no
+...[43428 characters truncated]...
+               if isinstance(step, (_nx.complexfloating, complex)):
+                    step = abs(step)
+                    size.append(int(step))
+                else:
+                    size.append(
+>                       int(math.ceil((stop - start) / (step*1.0))))
+E                       DeprecationWarning: Conversion of an array with ndim > 0 to a scalar is deprecated, and will error in future. Ensure you extract a single element from your array before performing this operation. (Deprecated NumPy 1.25.)
+
+/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/numpy/lib/index_tricks.py:166: DeprecationWarning
+_ TestFittable2DModels.test_bounding_box2D_peak[TrapezoidDisk2D-test_parameters10] _
+
+self = <astropy.modeling.tests.test_models.TestFittable2DModels object at 0x76417290ca90>
+model_class = <class 'astropy.modeling.functional_models.TrapezoidDisk2D'>
+Name: TrapezoidDisk2D
+N_inputs: 2
+N_outputs: 1
+Fittable parameters: ('amplitude', 'x_0', 'y_0', 'R_0', 'slope')
+test_parameters = {'parameters': [1, 0, 0, 1, 1], 'x_lim': [-3, 3], 'x_values': [0, 0.5, 0, 1.5], 'y_lim': [-3, 3], ...}
+
+    def test_bounding_box2D_peak(self, model_class, test_parameters):
+        if not test_parameters.pop('bbox_peak', False):
+            return
+    
+        model = create_model(model_class, test_parameters)
+        bbox = model.bounding_box
+    
+        ylim, xlim = bbox
+        dy, dx = np.diff(bbox)/2
+        y1, x1 = np.mgrid[slice(ylim[0], ylim[1] + 1),
+                          slice(xlim[0], xlim[1] + 1)]
+>       y2, x2 = np.mgrid[slice(ylim[0] - dy, ylim[1] + dy + 1),
+                          slice(xlim[0] - dx, xlim[1] + dx + 1)]
+
+astropy/modeling/tests/test_models.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <numpy.lib.index_tricks.MGridClass object at 0x7641735484c0>
+key = (slice(array([-4.]), array([5.]), None), slice(array([-4.]), array([5.]), None))
+
+    def __getitem__(self, key):
+        try:
+            size = []
+            # Mimic the behavior of `np.arange` and use a data type
+            # which is at least as large as `np.int_`
+            num_list = [0]
+            for k in range(len(key)):
+                step = key[k].step
+                start = key[k].start
+                stop = key[k].stop
+                if start is None:
+                    start = 0
+                if step is None:
+                    step = 1
+                if isinstance(step, (_nx.complexfloating, complex)):
+                    step = abs(step)
+                    size.append(int(step))
+                else:
+                    size.append(
+>                       int(math.ceil((stop - start) / (step*1.0))))
+E                       DeprecationWarning: Conversion of an array with ndim > 0 to a scalar is deprecated, and will error in future. Ensure you extract a single element from your array before performing this operation. (Deprecated NumPy 1.25.)
+
+/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/numpy/lib/index_tricks.py:166: DeprecationWarning
+=========================== short test summary info ============================
+FAILED astropy/modeling/tests/test_core.py::test_prepare_outputs_single_entry_vector
+FAILED astropy/modeling/tests/test_models.py::test_custom_model_bounding_box
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[Box1D-test_parameters3]
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[Gaussian1D-test_parameters7]
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[KingProjectedAnalytic1D-test_parameters8]
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[Lorentz1D-test_parameters11]
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[RickerWavelet1D-test_parameters13]
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[Trapezoid1D-test_parameters17]
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[Drude1D-test_parameters19]
+FAILED astropy/modeling/tests/test_models.py::TestFittable2DModels::test_bounding_box2D_peak[Box2D-test_parameters1]
+FAILED astropy/modeling/tests/test_models.py::TestFittable2DModels::test_bounding_box2D_peak[Disk2D-test_parameters3]
+FAILED astropy/modeling/tests/test_models.py::TestFittable2DModels::test_bounding_box2D_peak[Gaussian2D-test_parameters4]
+FAILED astropy/modeling/tests/test_models.py::TestFittable2DModels::test_bounding_box2D_peak[Ring2D-test_parameters8]
+FAILED astropy/modeling/tests/test_models.py::TestFittable2DModels::test_bounding_box2D_peak[TrapezoidDisk2D-test_parameters10]
+14 failed, 216 passed, 102 skipped in 2.21s
+
+[stderr]
+<frozen importlib._bootstrap>:228: RuntimeWarning: numpy.ndarray size changed, may indicate binary incompatibility. Expected 80 from C header, got 96 from PyObject
+
+[exit code: 1]
+
+------------------------------------------------------------------------------
+TURN 11
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 26684 characters, the same as turn 1 plus the history below]
+$exec_command grep -n "def separability_matrix" -r astropy/modeling/separable.py astropy/modeling --include="*.py" | head -20
+ astropy/modeling/separable.py:66:def separability_matrix(transform):
+astropy/modeling/separable.py:66:def separability_matrix(transform):
+
+
+$exec_command sed -n '1,220p' astropy/modeling/separable.py
+ # Licensed under a 3-clause BSD style license - see LICENSE.rst
+
+"""
+Functions to determine if a model is separable, i.e.
+if the model outputs are independent.
+
+It analyzes ``n_inputs``, ``n_outputs`` and the operators
+in a compound model by stepping through the transforms
+and creating a ``coord_matrix`` of shape (``n_outputs``, ``n_inputs``).
+
+
+Each modeling operator is represented by a function which
+takes two simple models (or two ``coord_matrix`` arrays) and
+returns an array of shape (``n_outputs``, ``n_inputs``).
+
+"""
+
+import numpy as np
+
+from .core import Model, ModelDefinitionError, CompoundModel
+from .mappings import Mapping
+
+
+__all__ = ["is_separable", "separability_matrix"]
+
+
+def is_separable(transform):
+    """
+    A separability test for the outputs of a transform.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    is_separable : ndarray
+        A boolean array with size ``transform.n_outputs`` where
+        each element indicates whether the output is independent
+        and the result of a separable transform.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> is_separable(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([ True,  True]...)
+    >>> is_separable(Shift(1) & Shift(2) | Rotation2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([ True,  True,  True,  True]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        is_separable = np.array([False] * transform.n_outputs).T
+        return is_separable
+    separable_matrix = _separable(transform)
+    is_separable = separable_matrix.sum(1)
+    is_separable = np.where(is_separable != 1, False, True)
+    return is_separable
+
+
+def separability_matrix(transform):
+    """
+    Compute the correlation between outputs and inputs.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    separable_matrix : ndarray
+        A boolean correlation matrix of shape (n_outputs, n_inputs).
+        Indicates the dependence of outputs on inputs. For completely
+        independent outputs, the diagonal elements are True and
+        off-diagonal elements are False.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> separability_matrix(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([[ True, False], [False,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Rotation2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([[ True, False], [False,  True], [ True, False], [False,  True]]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        return np.ones((transform.n_outputs, transform.n_inputs),
+                       dtype=np.bool_)
+    separable_matrix = _separable(transform)
+    separable_matrix = np.where(separable_matrix != 0, True, False)
+    return separable_matrix
+
+
+def _compute_n_outputs(left, right):
+    """
+    Compute the number of outputs of two models.
+
+    The two models are the left and right model to an operation in
+    the expression tree of a compound model.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    """
+    if isinstance(left, Model):
+        lnout = left.n_outputs
+    else:
+        lnout = left.shape[0]
+    if isinstance(right, Model):
+        rnout = right.n_outputs
+    else:
+        rnout = right.shape[0]
+    noutp = lnout + rnout
+    return noutp
+
+
+def _arith_oper(left, right):
+    """
+    Function corresponding to one of the arithmetic operators
+    ['+', '-'. '*', '/', '**'].
+
+    This always returns a nonseparable output.
+
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+    # models have the same number of inputs and outputs
+    def _n_inputs_outputs(input):
+        if isinstance(input, Model):
+            n_outputs, n_inputs = input.n_outputs, input.n_inputs
+        else:
+            n_outputs, n_inputs = input.shape
+        return n_inputs, n_outputs
+
+    left_inputs, left_outputs = _n_inputs_outputs(left)
+    right_inputs, right_outputs = _n_inputs_outputs(right)
+
+    if left_inputs != right_inputs or left_outputs != right_outputs:
+        raise ModelDefinitionError(
+            "Unsupported operands for arithmetic operator: left (n_inputs={}, "
+            "n_outputs={}) and right (n_inputs={}, n_outputs={}); "
+            "models must have the same n_inputs and the same "
+            "n_outputs for this operator.".format(
+                left_inputs, left_outputs, right_inputs, right_outputs))
+
+    result = np.ones((left_outputs, left_inputs))
+    return result
+
+
+def _coord_matrix(model, pos, noutp):
+    """
+    Create an array representing inputs and outputs of a simple model.
+
+    The array has a shape (noutp, model.n_inputs).
+
+    Parameters
+    ----------
+    model : `astropy.modeling.Model`
+        model
+    pos : str
+        Position of this model in the expression tree.
+        One of ['left', 'right'].
+    noutp : int
+        Number of outputs of the compound model of which the input model
+        is a left or right child.
+
+    """
+    if isinstance(model, Mapping):
+        axes = []
+        for i in model.mapping:
+            axis = np.zeros((model.n_inputs,))
+            axis[i] = 1
+            axes.append(axis)
+        m = np.vstack(axes)
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[: model.n_outputs, :model.n_inputs] = m
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = m
+        return mat
+    if not model.separable:
+        # this does not work for more than 2 coordinates
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[:model.n_outputs, : model.n_inputs] = 1
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = 1
+    else:
+        mat = np.zeros((noutp, model.n_inputs))
+
+        for i in range(model.n_inputs):
+            mat[i, i] = 1
+        if pos == 'right':
+            mat = np.roll(mat, (noutp - model.n_outputs))
+    return mat
+
+
+def _cstack(left, right):
+    """
+
+
+$exec_command sed -n '220,420p' astropy/modeling/separable.py
+     """
+    Function corresponding to '&' operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+
+    """
+    noutp = _compute_n_outputs(left, right)
+
+    if isinstance(left, Model):
+        cleft = _coord_matrix(left, 'left', noutp)
+    else:
+        cleft = np.zeros((noutp, left.shape[1]))
+        cleft[: left.shape[0], : left.shape[1]] = left
+    if isinstance(right, Model):
+        cright = _coord_matrix(right, 'right', noutp)
+    else:
+        cright = np.zeros((noutp, right.shape[1]))
+        cright[-right.shape[0]:, -right.shape[1]:] = 1
+
+    return np.hstack([cleft, cright])
+
+
+def _cdot(left, right):
+    """
+    Function corresponding to "|" operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+
+    left, right = right, left
+
+    def _n_inputs_outputs(input, position):
+        """
+        Return ``n_inputs``, ``n_outputs`` for a model or coord_matrix.
+        """
+        if isinstance(input, Model):
+            coords = _coord_matrix(input, position, input.n_outputs)
+        else:
+            coords = input
+        return coords
+
+    cleft = _n_inputs_outputs(left, 'left')
+    cright = _n_inputs_outputs(right, 'right')
+
+    try:
+        result = np.dot(cleft, cright)
+    except ValueError:
+        raise ModelDefinitionError(
+            'Models cannot be combined with the "|" operator; '
+            'left coord_matrix is {}, right coord_matrix is {}'.format(
+                cright, cleft))
+    return result
+
+
+def _separable(transform):
+    """
+    Calculate the separability of outputs.
+
+    Parameters
+    ----------
+    transform : `astropy.modeling.Model`
+        A transform (usually a compound model).
+
+    Returns :
+    is_separable : ndarray of dtype np.bool
+        An array of shape (transform.n_outputs,) of boolean type
+        Each element represents the separablity of the corresponding output.
+    """
+    if (transform_matrix := transform._calculate_separability_matrix()) is not NotImplemented:
+        return transform_matrix
+    elif isinstance(transform, CompoundModel):
+        sepleft = _separable(transform.left)
+        sepright = _separable(transform.right)
+        return _operators[transform.op](sepleft, sepright)
+    elif isinstance(transform, Model):
+        return _coord_matrix(transform, 'left', transform.n_outputs)
+
+
+# Maps modeling operators to a function computing and represents the
+# relationship of axes as an array of 0-es and 1-s
+_operators = {'&': _cstack, '|': _cdot, '+': _arith_oper, '-': _arith_oper,
+              '*': _arith_oper, '/': _arith_oper, '**': _arith_oper}
+
+
+$exec_command grep -rn "separability_matrix\|_cstack" astropy/modeling/tests/ --include="*.py" | head -50
+ astropy/modeling/tests/test_separable.py:14:                                        _cstack, _arith_oper, separability_matrix)
+astropy/modeling/tests/test_separable.py:98:def test_cstack():
+astropy/modeling/tests/test_separable.py:99:    result = _cstack(sh1, scl1)
+astropy/modeling/tests/test_separable.py:102:    result = _cstack(sh1, rot)
+astropy/modeling/tests/test_separable.py:108:    result = _cstack(rot, sh1)
+astropy/modeling/tests/test_separable.py:135:    assert_allclose(separability_matrix(compound_model), result[1])
+astropy/modeling/tests/test_separable.py:150:    assert np.all(separability_matrix(model_c()) == [True, True])
+astropy/modeling/tests/test_core.py:19:from astropy.modeling.separable import separability_matrix
+astropy/modeling/tests/test_core.py:214:    assert (separability_matrix(m) == [[True, True],
+astropy/modeling/tests/test_core.py:226:    assert (separability_matrix(m) == [[True, True, True],
+astropy/modeling/tests/test_models.py:24:from astropy.modeling.separable import separability_matrix
+astropy/modeling/tests/test_models.py:1072:    def _calculate_separability_matrix(self):
+astropy/modeling/tests/test_models.py:1076:def test_custom_separability_matrix():
+astropy/modeling/tests/test_models.py:1077:    original = separability_matrix(ModelDefault(slope=1, intercept=2))
+astropy/modeling/tests/test_models.py:1080:    custom = separability_matrix(ModelCustom(slope=1, intercept=2))
+
+
+$exec_command grep -n "separable" astropy/modeling/core.py | head -30
+ 655:    _separable = None
+656:    """ A boolean flag to indicate whether a model is separable."""
+810:        This is a hook which customises the behavior of modeling.separable.
+1532:    def separable(self):
+1533:        """ A flag indicating whether a model is separable."""
+1535:        if self._separable is not None:
+1536:            return self._separable
+1538:            'The "separable" property is not defined for '
+2826:    _separable = True
+4173:    The model is separable only if there is a single input.
+4353:    cls._separable = True if (len(inputs) == 1) else False
+
+
+$exec_command python -c "p='astropy/modeling/separable.py'; s=open(p).read(); s=s.replace('cright[-right.shape[0]:, -right.shape[1]:] = 1','cright[-right.shape[0]:, -right.shape[1]:] = right'); open(p,'w').write(s)"
+ (no output)
+
+$exec_command python -c "from astropy.modeling import models as m; from astropy.modeling.separable import separability_matrix; cm = m.Linear1D(10) & m.Linear1D(5); print(separability_matrix(m.Pix2Sky_TAN() & cm))"
+ [[ True  True False False]
+ [ True  True False False]
+ [False False  True False]
+ [False False False  True]]
+
+
+$exec_command git diff -- astropy/modeling/separable.py
+ diff --git a/astropy/modeling/separable.py b/astropy/modeling/separable.py
+index a308e2729..45bea3608 100755
+--- a/astropy/modeling/separable.py
++++ b/astropy/modeling/separable.py
+@@ -242,7 +242,7 @@ def _cstack(left, right):
+         cright = _coord_matrix(right, 'right', noutp)
+     else:
+         cright = np.zeros((noutp, right.shape[1]))
+-        cright[-right.shape[0]:, -right.shape[1]:] = 1
++        cright[-right.shape[0]:, -right.shape[1]:] = right
+ 
+     return np.hstack([cleft, cright])
+ 
+
+
+$exec_command python -m pytest astropy/modeling/tests/test_separable.py -q
+ Internet access disabled
+...........                                                              [100%]
+11 passed in 0.19s
+
+[stderr]
+<frozen importlib._bootstrap>:228: RuntimeWarning: numpy.ndarray size changed, may indicate binary incompatibility. Expected 80 from C header, got 96 from PyObject
+
+
+$exec_command python -m pytest astropy/modeling/tests/test_separable.py astropy/modeling/tests/test_core.py astropy/modeling/tests/test_models.py -q
+ Internet access disabled
+..............................s..............Fs.......................s. [ 21%]
+..F..............s..........................s..........................s [ 43%]
+...............F...FF..F.F...F.F.......sssssssssssssssssssssssssssssssss [ 65%]
+ssssssssssssssssssssss........s..s........s..s........s...F.FF...F.F.sss [ 86%]
+sssssssssssssssssssss....sss.ssssssss...s...                             [100%]
+=================================== FAILURES ===================================
+___________________ test_prepare_outputs_single_entry_vector ___________________
+
+    def test_prepare_outputs_single_entry_vector():
+        """
+        jwst and gwcs both require that single entry vectors produce single entry output vectors, not scalars. This
+        tests for that behavior.
+        """
+    
+        model = models.Gaussian2D(1, 2, 3, 4, 5)
+    
+        output = model(np.array([1]), np.array([2]))
+        assert output.shape == (1,)
+>       np.testing.assert_array_equal(output, [0.9500411305585278])
+
+astropy/modeling/tests/test_core.py:724: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = (<built-in function eq>, array([0.95004113]), [0.9500411305585278])
+kwds = {'err_msg': '', 'header': 'Arrays are not equal', 'strict': False, 'verbose': True}
+
+    @wraps(func)
+    def inner(*args, **kwds):
+        with self._recreate_cm():
+>           return func(*args, **kwds)
+E           AssertionError: 
+E           Arrays are not equal
+E           
+E           Mismatched elements: 1 / 1 (100%)
+E           Max absolute difference: 1.11022302e-16
+E           Max relative difference: 1.16860522e-16
+E            x: array([0.950041])
+E            y: array([0.950041])
+
+/opt/miniconda3/envs/testbed/lib/python3.9/contextlib.py:79: AssertionError
+________________________ test_custom_model_bounding_box ________________________
+
+    def test_custom_model_bounding_box():
+        """Test bounding box evaluation for a 3D model"""
+    
+        def ellipsoid(x, y, z, x0=13, y0=10, z0=8, a=4, b=3, c=2, amp=1):
+            rsq = ((x - x0) / a) ** 2 + ((y - y0) / b) ** 2 + ((z - z0) / c) ** 2
+            val = (rsq < 1) * amp
+            return val
+    
+        class Ellipsoid3D(models.custom_model(ellipsoid)):
+            @property
+            def bounding_box(self):
+                return ((self.z0 - self.c, self.z0 + self.c),
+                        (self.y0 - self.b, self.y0 + self.b),
+                        (self.x0 - self.a, self.x0 + self.a))
+    
+        model = Ellipsoid3D()
+        bbox = model.bounding_box
+    
+        zlim, ylim, xlim = bbox.bounding_box()
+        dz, dy, dx = np.diff(bbox) / 2
+        z1, y1, x1 = np.mgrid[slice(zlim[0], zlim[1] + 1),
+                              slice(ylim[0], ylim[1] + 1),
+                              slice(xlim[0], xlim[1] + 1)]
+>       z2, y2, x2 = np.mgrid[slice(zlim[0] - dz, zlim[1] + dz + 1),
+                              slice(ylim[0] - dy, ylim[1] + dy + 1),
+                              slice(xlim[0] - dx, xlim[1] + dx + 1)]
+
+astropy/modeling/tests/test_models.py:128: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <numpy.lib.index_tricks.MGridClass object at 0x7641735484c0>
+key = (slice(array([2.]), array([15.]), None), slice(array([4.]), array([17.]), None), slice(array([7.]), array([20.]), None))
+
+    def __getitem__(self, key):
+        try:
+            size = []
+            # Mimic the behavior of `np.arange` and use a data type
+            # which is at least as large as `np.int_`
+            num_list = [0]
+            for k in range(len(key)):
+                step = key[k].step
+                start = key[k].start
+                stop = key[k].stop
+                if start is None:
+                    start = 0
+                if step is None:
+                    step = 1
+                if isinstance(step, (_nx.complexfloating, complex)):
+                    step = abs(step)
+                    size.append(int(step))
+                else:
+                    size.append(
+>                       int(math.ceil((stop - start) / (step*1.0))))
+E                       DeprecationWarning: Conversion of an array with ndim > 0 to a scalar is deprecated, and will error in future. Ensure you extract a single element from your array before performing this operation. (Deprecated NumPy 1.25.)
+
+/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/numpy/lib/index_tricks.py:166: DeprecationWarning
+____ TestFittable1DModels.test_bounding_box1D_peak[Box1D-test_parameters3] _____
+
+self = <numpy.lib.index_tricks.MGridClass object at 0x7641735484c0>
+key = slice(array([-10.]), array([11.]), 1)
+
+    def __getitem__(self, key):
+        try:
+            size = []
+            # Mimic the behavior of `np.arange` and use a data type
+            # which is at least as large as `np.int_`
+            num_list = [0]
+>           for k in range(len(key)):
+E           TypeError: object of type 'slice' has no
+...[43428 characters truncated]...
+               if isinstance(step, (_nx.complexfloating, complex)):
+                    step = abs(step)
+                    size.append(int(step))
+                else:
+                    size.append(
+>                       int(math.ceil((stop - start) / (step*1.0))))
+E                       DeprecationWarning: Conversion of an array with ndim > 0 to a scalar is deprecated, and will error in future. Ensure you extract a single element from your array before performing this operation. (Deprecated NumPy 1.25.)
+
+/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/numpy/lib/index_tricks.py:166: DeprecationWarning
+_ TestFittable2DModels.test_bounding_box2D_peak[TrapezoidDisk2D-test_parameters10] _
+
+self = <astropy.modeling.tests.test_models.TestFittable2DModels object at 0x76417290ca90>
+model_class = <class 'astropy.modeling.functional_models.TrapezoidDisk2D'>
+Name: TrapezoidDisk2D
+N_inputs: 2
+N_outputs: 1
+Fittable parameters: ('amplitude', 'x_0', 'y_0', 'R_0', 'slope')
+test_parameters = {'parameters': [1, 0, 0, 1, 1], 'x_lim': [-3, 3], 'x_values': [0, 0.5, 0, 1.5], 'y_lim': [-3, 3], ...}
+
+    def test_bounding_box2D_peak(self, model_class, test_parameters):
+        if not test_parameters.pop('bbox_peak', False):
+            return
+    
+        model = create_model(model_class, test_parameters)
+        bbox = model.bounding_box
+    
+        ylim, xlim = bbox
+        dy, dx = np.diff(bbox)/2
+        y1, x1 = np.mgrid[slice(ylim[0], ylim[1] + 1),
+                          slice(xlim[0], xlim[1] + 1)]
+>       y2, x2 = np.mgrid[slice(ylim[0] - dy, ylim[1] + dy + 1),
+                          slice(xlim[0] - dx, xlim[1] + dx + 1)]
+
+astropy/modeling/tests/test_models.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <numpy.lib.index_tricks.MGridClass object at 0x7641735484c0>
+key = (slice(array([-4.]), array([5.]), None), slice(array([-4.]), array([5.]), None))
+
+    def __getitem__(self, key):
+        try:
+            size = []
+            # Mimic the behavior of `np.arange` and use a data type
+            # which is at least as large as `np.int_`
+            num_list = [0]
+            for k in range(len(key)):
+                step = key[k].step
+                start = key[k].start
+                stop = key[k].stop
+                if start is None:
+                    start = 0
+                if step is None:
+                    step = 1
+                if isinstance(step, (_nx.complexfloating, complex)):
+                    step = abs(step)
+                    size.append(int(step))
+                else:
+                    size.append(
+>                       int(math.ceil((stop - start) / (step*1.0))))
+E                       DeprecationWarning: Conversion of an array with ndim > 0 to a scalar is deprecated, and will error in future. Ensure you extract a single element from your array before performing this operation. (Deprecated NumPy 1.25.)
+
+/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/numpy/lib/index_tricks.py:166: DeprecationWarning
+=========================== short test summary info ============================
+FAILED astropy/modeling/tests/test_core.py::test_prepare_outputs_single_entry_vector
+FAILED astropy/modeling/tests/test_models.py::test_custom_model_bounding_box
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[Box1D-test_parameters3]
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[Gaussian1D-test_parameters7]
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[KingProjectedAnalytic1D-test_parameters8]
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[Lorentz1D-test_parameters11]
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[RickerWavelet1D-test_parameters13]
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[Trapezoid1D-test_parameters17]
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[Drude1D-test_parameters19]
+FAILED astropy/modeling/tests/test_models.py::TestFittable2DModels::test_bounding_box2D_peak[Box2D-test_parameters1]
+FAILED astropy/modeling/tests/test_models.py::TestFittable2DModels::test_bounding_box2D_peak[Disk2D-test_parameters3]
+FAILED astropy/modeling/tests/test_models.py::TestFittable2DModels::test_bounding_box2D_peak[Gaussian2D-test_parameters4]
+FAILED astropy/modeling/tests/test_models.py::TestFittable2DModels::test_bounding_box2D_peak[Ring2D-test_parameters8]
+FAILED astropy/modeling/tests/test_models.py::TestFittable2DModels::test_bounding_box2D_peak[TrapezoidDisk2D-test_parameters10]
+14 failed, 216 passed, 102 skipped in 2.21s
+
+[stderr]
+<frozen importlib._bootstrap>:228: RuntimeWarning: numpy.ndarray size changed, may indicate binary incompatibility. Expected 80 from C header, got 96 from PyObject
+
+[exit code: 1]
+
+
+[model reply, complete and unedited] (7432 tokens in, 2907 tokens out)
+exec_command sed -n '90,160p' astropy/modeling/tests/test_separable.py
+
+[command executed: exec_command]
+sed -n '90,160p' astropy/modeling/tests/test_separable.py
+
+[result]
+    result = _cdot(Mapping((0, 0)), rot)
+    assert_allclose(result, np.array([[2], [2]]))
+
+    with pytest.raises(ModelDefinitionError,
+                       match=r"Models cannot be combined with the \"|\" operator; .*"):
+        _cdot(sh1, map1)
+
+
+def test_cstack():
+    result = _cstack(sh1, scl1)
+    assert_allclose(result, np.array([[1, 0], [0, 1]]))
+
+    result = _cstack(sh1, rot)
+    assert_allclose(result,
+                    np.array([[1, 0, 0],
+                              [0, 1, 1],
+                              [0, 1, 1]])
+                    )
+    result = _cstack(rot, sh1)
+    assert_allclose(result,
+                    np.array([[1, 1, 0],
+                              [1, 1, 0],
+                              [0, 0, 1]])
+                    )
+
+
+def test_arith_oper():
+    # Models as inputs
+    result = _arith_oper(sh1, scl1)
+    assert_allclose(result, np.array([[1]]))
+    result = _arith_oper(rot, rot)
+    assert_allclose(result, np.array([[1, 1], [1, 1]]))
+
+    # ndarray
+    result = _arith_oper(np.array([[1, 2], [3, 4]]), np.array([[1, 2], [3, 4]]))
+    assert_allclose(result, np.array([[1, 1], [1, 1]]))
+
+    # Error
+    with pytest.raises(ModelDefinitionError, match=r"Unsupported operands for arithmetic operator: .*"):
+        _arith_oper(sh1, map1)
+
+
+@pytest.mark.parametrize(('compound_model', 'result'), compound_models.values())
+def test_separable(compound_model, result):
+    assert_allclose(is_separable(compound_model), result[0])
+    assert_allclose(separability_matrix(compound_model), result[1])
+
+
+def test_custom_model_separable():
+    @custom_model
+    def model_a(x):
+        return x
+
+    assert model_a().separable
+
+    @custom_model
+    def model_c(x, y):
+        return x + y
+
+    assert not model_c().separable
+    assert np.all(separability_matrix(model_c()) == [True, True])
+
+
+------------------------------------------------------------------------------
+TURN 12
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 28595 characters, the same as turn 1 plus the history below]
+$exec_command grep -n "def separability_matrix" -r astropy/modeling/separable.py astropy/modeling --include="*.py" | head -20
+ astropy/modeling/separable.py:66:def separability_matrix(transform):
+astropy/modeling/separable.py:66:def separability_matrix(transform):
+
+
+$exec_command sed -n '1,220p' astropy/modeling/separable.py
+ # Licensed under a 3-clause BSD style license - see LICENSE.rst
+
+"""
+Functions to determine if a model is separable, i.e.
+if the model outputs are independent.
+
+It analyzes ``n_inputs``, ``n_outputs`` and the operators
+in a compound model by stepping through the transforms
+and creating a ``coord_matrix`` of shape (``n_outputs``, ``n_inputs``).
+
+
+Each modeling operator is represented by a function which
+takes two simple models (or two ``coord_matrix`` arrays) and
+returns an array of shape (``n_outputs``, ``n_inputs``).
+
+"""
+
+import numpy as np
+
+from .core import Model, ModelDefinitionError, CompoundModel
+from .mappings import Mapping
+
+
+__all__ = ["is_separable", "separability_matrix"]
+
+
+def is_separable(transform):
+    """
+    A separability test for the outputs of a transform.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    is_separable : ndarray
+        A boolean array with size ``transform.n_outputs`` where
+        each element indicates whether the output is independent
+        and the result of a separable transform.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> is_separable(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([ True,  True]...)
+    >>> is_separable(Shift(1) & Shift(2) | Rotation2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([False, False]...)
+    >>> is_separable(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([ True,  True,  True,  True]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        is_separable = np.array([False] * transform.n_outputs).T
+        return is_separable
+    separable_matrix = _separable(transform)
+    is_separable = separable_matrix.sum(1)
+    is_separable = np.where(is_separable != 1, False, True)
+    return is_separable
+
+
+def separability_matrix(transform):
+    """
+    Compute the correlation between outputs and inputs.
+
+    Parameters
+    ----------
+    transform : `~astropy.modeling.core.Model`
+        A (compound) model.
+
+    Returns
+    -------
+    separable_matrix : ndarray
+        A boolean correlation matrix of shape (n_outputs, n_inputs).
+        Indicates the dependence of outputs on inputs. For completely
+        independent outputs, the diagonal elements are True and
+        off-diagonal elements are False.
+
+    Examples
+    --------
+    >>> from astropy.modeling.models import Shift, Scale, Rotation2D, Polynomial2D
+    >>> separability_matrix(Shift(1) & Shift(2) | Scale(1) & Scale(2))
+        array([[ True, False], [False,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Rotation2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]) | \
+        Polynomial2D(1) & Polynomial2D(2))
+        array([[ True,  True], [ True,  True]]...)
+    >>> separability_matrix(Shift(1) & Shift(2) | Mapping([0, 1, 0, 1]))
+        array([[ True, False], [False,  True], [ True, False], [False,  True]]...)
+
+    """
+    if transform.n_inputs == 1 and transform.n_outputs > 1:
+        return np.ones((transform.n_outputs, transform.n_inputs),
+                       dtype=np.bool_)
+    separable_matrix = _separable(transform)
+    separable_matrix = np.where(separable_matrix != 0, True, False)
+    return separable_matrix
+
+
+def _compute_n_outputs(left, right):
+    """
+    Compute the number of outputs of two models.
+
+    The two models are the left and right model to an operation in
+    the expression tree of a compound model.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    """
+    if isinstance(left, Model):
+        lnout = left.n_outputs
+    else:
+        lnout = left.shape[0]
+    if isinstance(right, Model):
+        rnout = right.n_outputs
+    else:
+        rnout = right.shape[0]
+    noutp = lnout + rnout
+    return noutp
+
+
+def _arith_oper(left, right):
+    """
+    Function corresponding to one of the arithmetic operators
+    ['+', '-'. '*', '/', '**'].
+
+    This always returns a nonseparable output.
+
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+    # models have the same number of inputs and outputs
+    def _n_inputs_outputs(input):
+        if isinstance(input, Model):
+            n_outputs, n_inputs = input.n_outputs, input.n_inputs
+        else:
+            n_outputs, n_inputs = input.shape
+        return n_inputs, n_outputs
+
+    left_inputs, left_outputs = _n_inputs_outputs(left)
+    right_inputs, right_outputs = _n_inputs_outputs(right)
+
+    if left_inputs != right_inputs or left_outputs != right_outputs:
+        raise ModelDefinitionError(
+            "Unsupported operands for arithmetic operator: left (n_inputs={}, "
+            "n_outputs={}) and right (n_inputs={}, n_outputs={}); "
+            "models must have the same n_inputs and the same "
+            "n_outputs for this operator.".format(
+                left_inputs, left_outputs, right_inputs, right_outputs))
+
+    result = np.ones((left_outputs, left_inputs))
+    return result
+
+
+def _coord_matrix(model, pos, noutp):
+    """
+    Create an array representing inputs and outputs of a simple model.
+
+    The array has a shape (noutp, model.n_inputs).
+
+    Parameters
+    ----------
+    model : `astropy.modeling.Model`
+        model
+    pos : str
+        Position of this model in the expression tree.
+        One of ['left', 'right'].
+    noutp : int
+        Number of outputs of the compound model of which the input model
+        is a left or right child.
+
+    """
+    if isinstance(model, Mapping):
+        axes = []
+        for i in model.mapping:
+            axis = np.zeros((model.n_inputs,))
+            axis[i] = 1
+            axes.append(axis)
+        m = np.vstack(axes)
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[: model.n_outputs, :model.n_inputs] = m
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = m
+        return mat
+    if not model.separable:
+        # this does not work for more than 2 coordinates
+        mat = np.zeros((noutp, model.n_inputs))
+        if pos == 'left':
+            mat[:model.n_outputs, : model.n_inputs] = 1
+        else:
+            mat[-model.n_outputs:, -model.n_inputs:] = 1
+    else:
+        mat = np.zeros((noutp, model.n_inputs))
+
+        for i in range(model.n_inputs):
+            mat[i, i] = 1
+        if pos == 'right':
+            mat = np.roll(mat, (noutp - model.n_outputs))
+    return mat
+
+
+def _cstack(left, right):
+    """
+
+
+$exec_command sed -n '220,420p' astropy/modeling/separable.py
+     """
+    Function corresponding to '&' operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+
+    """
+    noutp = _compute_n_outputs(left, right)
+
+    if isinstance(left, Model):
+        cleft = _coord_matrix(left, 'left', noutp)
+    else:
+        cleft = np.zeros((noutp, left.shape[1]))
+        cleft[: left.shape[0], : left.shape[1]] = left
+    if isinstance(right, Model):
+        cright = _coord_matrix(right, 'right', noutp)
+    else:
+        cright = np.zeros((noutp, right.shape[1]))
+        cright[-right.shape[0]:, -right.shape[1]:] = 1
+
+    return np.hstack([cleft, cright])
+
+
+def _cdot(left, right):
+    """
+    Function corresponding to "|" operation.
+
+    Parameters
+    ----------
+    left, right : `astropy.modeling.Model` or ndarray
+        If input is of an array, it is the output of `coord_matrix`.
+
+    Returns
+    -------
+    result : ndarray
+        Result from this operation.
+    """
+
+    left, right = right, left
+
+    def _n_inputs_outputs(input, position):
+        """
+        Return ``n_inputs``, ``n_outputs`` for a model or coord_matrix.
+        """
+        if isinstance(input, Model):
+            coords = _coord_matrix(input, position, input.n_outputs)
+        else:
+            coords = input
+        return coords
+
+    cleft = _n_inputs_outputs(left, 'left')
+    cright = _n_inputs_outputs(right, 'right')
+
+    try:
+        result = np.dot(cleft, cright)
+    except ValueError:
+        raise ModelDefinitionError(
+            'Models cannot be combined with the "|" operator; '
+            'left coord_matrix is {}, right coord_matrix is {}'.format(
+                cright, cleft))
+    return result
+
+
+def _separable(transform):
+    """
+    Calculate the separability of outputs.
+
+    Parameters
+    ----------
+    transform : `astropy.modeling.Model`
+        A transform (usually a compound model).
+
+    Returns :
+    is_separable : ndarray of dtype np.bool
+        An array of shape (transform.n_outputs,) of boolean type
+        Each element represents the separablity of the corresponding output.
+    """
+    if (transform_matrix := transform._calculate_separability_matrix()) is not NotImplemented:
+        return transform_matrix
+    elif isinstance(transform, CompoundModel):
+        sepleft = _separable(transform.left)
+        sepright = _separable(transform.right)
+        return _operators[transform.op](sepleft, sepright)
+    elif isinstance(transform, Model):
+        return _coord_matrix(transform, 'left', transform.n_outputs)
+
+
+# Maps modeling operators to a function computing and represents the
+# relationship of axes as an array of 0-es and 1-s
+_operators = {'&': _cstack, '|': _cdot, '+': _arith_oper, '-': _arith_oper,
+              '*': _arith_oper, '/': _arith_oper, '**': _arith_oper}
+
+
+$exec_command grep -rn "separability_matrix\|_cstack" astropy/modeling/tests/ --include="*.py" | head -50
+ astropy/modeling/tests/test_separable.py:14:                                        _cstack, _arith_oper, separability_matrix)
+astropy/modeling/tests/test_separable.py:98:def test_cstack():
+astropy/modeling/tests/test_separable.py:99:    result = _cstack(sh1, scl1)
+astropy/modeling/tests/test_separable.py:102:    result = _cstack(sh1, rot)
+astropy/modeling/tests/test_separable.py:108:    result = _cstack(rot, sh1)
+astropy/modeling/tests/test_separable.py:135:    assert_allclose(separability_matrix(compound_model), result[1])
+astropy/modeling/tests/test_separable.py:150:    assert np.all(separability_matrix(model_c()) == [True, True])
+astropy/modeling/tests/test_core.py:19:from astropy.modeling.separable import separability_matrix
+astropy/modeling/tests/test_core.py:214:    assert (separability_matrix(m) == [[True, True],
+astropy/modeling/tests/test_core.py:226:    assert (separability_matrix(m) == [[True, True, True],
+astropy/modeling/tests/test_models.py:24:from astropy.modeling.separable import separability_matrix
+astropy/modeling/tests/test_models.py:1072:    def _calculate_separability_matrix(self):
+astropy/modeling/tests/test_models.py:1076:def test_custom_separability_matrix():
+astropy/modeling/tests/test_models.py:1077:    original = separability_matrix(ModelDefault(slope=1, intercept=2))
+astropy/modeling/tests/test_models.py:1080:    custom = separability_matrix(ModelCustom(slope=1, intercept=2))
+
+
+$exec_command grep -n "separable" astropy/modeling/core.py | head -30
+ 655:    _separable = None
+656:    """ A boolean flag to indicate whether a model is separable."""
+810:        This is a hook which customises the behavior of modeling.separable.
+1532:    def separable(self):
+1533:        """ A flag indicating whether a model is separable."""
+1535:        if self._separable is not None:
+1536:            return self._separable
+1538:            'The "separable" property is not defined for '
+2826:    _separable = True
+4173:    The model is separable only if there is a single input.
+4353:    cls._separable = True if (len(inputs) == 1) else False
+
+
+$exec_command python -c "p='astropy/modeling/separable.py'; s=open(p).read(); s=s.replace('cright[-right.shape[0]:, -right.shape[1]:] = 1','cright[-right.shape[0]:, -right.shape[1]:] = right'); open(p,'w').write(s)"
+ (no output)
+
+$exec_command python -c "from astropy.modeling import models as m; from astropy.modeling.separable import separability_matrix; cm = m.Linear1D(10) & m.Linear1D(5); print(separability_matrix(m.Pix2Sky_TAN() & cm))"
+ [[ True  True False False]
+ [ True  True False False]
+ [False False  True False]
+ [False False False  True]]
+
+
+$exec_command git diff -- astropy/modeling/separable.py
+ diff --git a/astropy/modeling/separable.py b/astropy/modeling/separable.py
+index a308e2729..45bea3608 100755
+--- a/astropy/modeling/separable.py
++++ b/astropy/modeling/separable.py
+@@ -242,7 +242,7 @@ def _cstack(left, right):
+         cright = _coord_matrix(right, 'right', noutp)
+     else:
+         cright = np.zeros((noutp, right.shape[1]))
+-        cright[-right.shape[0]:, -right.shape[1]:] = 1
++        cright[-right.shape[0]:, -right.shape[1]:] = right
+ 
+     return np.hstack([cleft, cright])
+ 
+
+
+$exec_command python -m pytest astropy/modeling/tests/test_separable.py -q
+ Internet access disabled
+...........                                                              [100%]
+11 passed in 0.19s
+
+[stderr]
+<frozen importlib._bootstrap>:228: RuntimeWarning: numpy.ndarray size changed, may indicate binary incompatibility. Expected 80 from C header, got 96 from PyObject
+
+
+$exec_command python -m pytest astropy/modeling/tests/test_separable.py astropy/modeling/tests/test_core.py astropy/modeling/tests/test_models.py -q
+ Internet access disabled
+..............................s..............Fs.......................s. [ 21%]
+..F..............s..........................s..........................s [ 43%]
+...............F...FF..F.F...F.F.......sssssssssssssssssssssssssssssssss [ 65%]
+ssssssssssssssssssssss........s..s........s..s........s...F.FF...F.F.sss [ 86%]
+sssssssssssssssssssss....sss.ssssssss...s...                             [100%]
+=================================== FAILURES ===================================
+___________________ test_prepare_outputs_single_entry_vector ___________________
+
+    def test_prepare_outputs_single_entry_vector():
+        """
+        jwst and gwcs both require that single entry vectors produce single entry output vectors, not scalars. This
+        tests for that behavior.
+        """
+    
+        model = models.Gaussian2D(1, 2, 3, 4, 5)
+    
+        output = model(np.array([1]), np.array([2]))
+        assert output.shape == (1,)
+>       np.testing.assert_array_equal(output, [0.9500411305585278])
+
+astropy/modeling/tests/test_core.py:724: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = (<built-in function eq>, array([0.95004113]), [0.9500411305585278])
+kwds = {'err_msg': '', 'header': 'Arrays are not equal', 'strict': False, 'verbose': True}
+
+    @wraps(func)
+    def inner(*args, **kwds):
+        with self._recreate_cm():
+>           return func(*args, **kwds)
+E           AssertionError: 
+E           Arrays are not equal
+E           
+E           Mismatched elements: 1 / 1 (100%)
+E           Max absolute difference: 1.11022302e-16
+E           Max relative difference: 1.16860522e-16
+E            x: array([0.950041])
+E            y: array([0.950041])
+
+/opt/miniconda3/envs/testbed/lib/python3.9/contextlib.py:79: AssertionError
+________________________ test_custom_model_bounding_box ________________________
+
+    def test_custom_model_bounding_box():
+        """Test bounding box evaluation for a 3D model"""
+    
+        def ellipsoid(x, y, z, x0=13, y0=10, z0=8, a=4, b=3, c=2, amp=1):
+            rsq = ((x - x0) / a) ** 2 + ((y - y0) / b) ** 2 + ((z - z0) / c) ** 2
+            val = (rsq < 1) * amp
+            return val
+    
+        class Ellipsoid3D(models.custom_model(ellipsoid)):
+            @property
+            def bounding_box(self):
+                return ((self.z0 - self.c, self.z0 + self.c),
+                        (self.y0 - self.b, self.y0 + self.b),
+                        (self.x0 - self.a, self.x0 + self.a))
+    
+        model = Ellipsoid3D()
+        bbox = model.bounding_box
+    
+        zlim, ylim, xlim = bbox.bounding_box()
+        dz, dy, dx = np.diff(bbox) / 2
+        z1, y1, x1 = np.mgrid[slice(zlim[0], zlim[1] + 1),
+                              slice(ylim[0], ylim[1] + 1),
+                              slice(xlim[0], xlim[1] + 1)]
+>       z2, y2, x2 = np.mgrid[slice(zlim[0] - dz, zlim[1] + dz + 1),
+                              slice(ylim[0] - dy, ylim[1] + dy + 1),
+                              slice(xlim[0] - dx, xlim[1] + dx + 1)]
+
+astropy/modeling/tests/test_models.py:128: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <numpy.lib.index_tricks.MGridClass object at 0x7641735484c0>
+key = (slice(array([2.]), array([15.]), None), slice(array([4.]), array([17.]), None), slice(array([7.]), array([20.]), None))
+
+    def __getitem__(self, key):
+        try:
+            size = []
+            # Mimic the behavior of `np.arange` and use a data type
+            # which is at least as large as `np.int_`
+            num_list = [0]
+            for k in range(len(key)):
+                step = key[k].step
+                start = key[k].start
+                stop = key[k].stop
+                if start is None:
+                    start = 0
+                if step is None:
+                    step = 1
+                if isinstance(step, (_nx.complexfloating, complex)):
+                    step = abs(step)
+                    size.append(int(step))
+                else:
+                    size.append(
+>                       int(math.ceil((stop - start) / (step*1.0))))
+E                       DeprecationWarning: Conversion of an array with ndim > 0 to a scalar is deprecated, and will error in future. Ensure you extract a single element from your array before performing this operation. (Deprecated NumPy 1.25.)
+
+/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/numpy/lib/index_tricks.py:166: DeprecationWarning
+____ TestFittable1DModels.test_bounding_box1D_peak[Box1D-test_parameters3] _____
+
+self = <numpy.lib.index_tricks.MGridClass object at 0x7641735484c0>
+key = slice(array([-10.]), array([11.]), 1)
+
+    def __getitem__(self, key):
+        try:
+            size = []
+            # Mimic the behavior of `np.arange` and use a data type
+            # which is at least as large as `np.int_`
+            num_list = [0]
+>           for k in range(len(key)):
+E           TypeError: object of type 'slice' has no
+...[43428 characters truncated]...
+               if isinstance(step, (_nx.complexfloating, complex)):
+                    step = abs(step)
+                    size.append(int(step))
+                else:
+                    size.append(
+>                       int(math.ceil((stop - start) / (step*1.0))))
+E                       DeprecationWarning: Conversion of an array with ndim > 0 to a scalar is deprecated, and will error in future. Ensure you extract a single element from your array before performing this operation. (Deprecated NumPy 1.25.)
+
+/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/numpy/lib/index_tricks.py:166: DeprecationWarning
+_ TestFittable2DModels.test_bounding_box2D_peak[TrapezoidDisk2D-test_parameters10] _
+
+self = <astropy.modeling.tests.test_models.TestFittable2DModels object at 0x76417290ca90>
+model_class = <class 'astropy.modeling.functional_models.TrapezoidDisk2D'>
+Name: TrapezoidDisk2D
+N_inputs: 2
+N_outputs: 1
+Fittable parameters: ('amplitude', 'x_0', 'y_0', 'R_0', 'slope')
+test_parameters = {'parameters': [1, 0, 0, 1, 1], 'x_lim': [-3, 3], 'x_values': [0, 0.5, 0, 1.5], 'y_lim': [-3, 3], ...}
+
+    def test_bounding_box2D_peak(self, model_class, test_parameters):
+        if not test_parameters.pop('bbox_peak', False):
+            return
+    
+        model = create_model(model_class, test_parameters)
+        bbox = model.bounding_box
+    
+        ylim, xlim = bbox
+        dy, dx = np.diff(bbox)/2
+        y1, x1 = np.mgrid[slice(ylim[0], ylim[1] + 1),
+                          slice(xlim[0], xlim[1] + 1)]
+>       y2, x2 = np.mgrid[slice(ylim[0] - dy, ylim[1] + dy + 1),
+                          slice(xlim[0] - dx, xlim[1] + dx + 1)]
+
+astropy/modeling/tests/test_models.py:232: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <numpy.lib.index_tricks.MGridClass object at 0x7641735484c0>
+key = (slice(array([-4.]), array([5.]), None), slice(array([-4.]), array([5.]), None))
+
+    def __getitem__(self, key):
+        try:
+            size = []
+            # Mimic the behavior of `np.arange` and use a data type
+            # which is at least as large as `np.int_`
+            num_list = [0]
+            for k in range(len(key)):
+                step = key[k].step
+                start = key[k].start
+                stop = key[k].stop
+                if start is None:
+                    start = 0
+                if step is None:
+                    step = 1
+                if isinstance(step, (_nx.complexfloating, complex)):
+                    step = abs(step)
+                    size.append(int(step))
+                else:
+                    size.append(
+>                       int(math.ceil((stop - start) / (step*1.0))))
+E                       DeprecationWarning: Conversion of an array with ndim > 0 to a scalar is deprecated, and will error in future. Ensure you extract a single element from your array before performing this operation. (Deprecated NumPy 1.25.)
+
+/opt/miniconda3/envs/testbed/lib/python3.9/site-packages/numpy/lib/index_tricks.py:166: DeprecationWarning
+=========================== short test summary info ============================
+FAILED astropy/modeling/tests/test_core.py::test_prepare_outputs_single_entry_vector
+FAILED astropy/modeling/tests/test_models.py::test_custom_model_bounding_box
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[Box1D-test_parameters3]
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[Gaussian1D-test_parameters7]
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[KingProjectedAnalytic1D-test_parameters8]
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[Lorentz1D-test_parameters11]
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[RickerWavelet1D-test_parameters13]
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[Trapezoid1D-test_parameters17]
+FAILED astropy/modeling/tests/test_models.py::TestFittable1DModels::test_bounding_box1D_peak[Drude1D-test_parameters19]
+FAILED astropy/modeling/tests/test_models.py::TestFittable2DModels::test_bounding_box2D_peak[Box2D-test_parameters1]
+FAILED astropy/modeling/tests/test_models.py::TestFittable2DModels::test_bounding_box2D_peak[Disk2D-test_parameters3]
+FAILED astropy/modeling/tests/test_models.py::TestFittable2DModels::test_bounding_box2D_peak[Gaussian2D-test_parameters4]
+FAILED astropy/modeling/tests/test_models.py::TestFittable2DModels::test_bounding_box2D_peak[Ring2D-test_parameters8]
+FAILED astropy/modeling/tests/test_models.py::TestFittable2DModels::test_bounding_box2D_peak[TrapezoidDisk2D-test_parameters10]
+14 failed, 216 passed, 102 skipped in 2.21s
+
+[stderr]
+<frozen importlib._bootstrap>:228: RuntimeWarning: numpy.ndarray size changed, may indicate binary incompatibility. Expected 80 from C header, got 96 from PyObject
+
+[exit code: 1]
+
+$exec_command sed -n '90,160p' astropy/modeling/tests/test_separable.py
+     result = _cdot(Mapping((0, 0)), rot)
+    assert_allclose(result, np.array([[2], [2]]))
+
+    with pytest.raises(ModelDefinitionError,
+                       match=r"Models cannot be combined with the \"|\" operator; .*"):
+        _cdot(sh1, map1)
+
+
+def test_cstack():
+    result = _cstack(sh1, scl1)
+    assert_allclose(result, np.array([[1, 0], [0, 1]]))
+
+    result = _cstack(sh1, rot)
+    assert_allclose(result,
+                    np.array([[1, 0, 0],
+                              [0, 1, 1],
+                              [0, 1, 1]])
+                    )
+    result = _cstack(rot, sh1)
+    assert_allclose(result,
+                    np.array([[1, 1, 0],
+                              [1, 1, 0],
+                              [0, 0, 1]])
+                    )
+
+
+def test_arith_oper():
+    # Models as inputs
+    result = _arith_oper(sh1, scl1)
+    assert_allclose(result, np.array([[1]]))
+    result = _arith_oper(rot, rot)
+    assert_allclose(result, np.array([[1, 1], [1, 1]]))
+
+    # ndarray
+    result = _arith_oper(np.array([[1, 2], [3, 4]]), np.array([[1, 2], [3, 4]]))
+    assert_allclose(result, np.array([[1, 1], [1, 1]]))
+
+    # Error
+    with pytest.raises(ModelDefinitionError, match=r"Unsupported operands for arithmetic operator: .*"):
+        _arith_oper(sh1, map1)
+
+
+@pytest.mark.parametrize(('compound_model', 'result'), compound_models.values())
+def test_separable(compound_model, result):
+    assert_allclose(is_separable(compound_model), result[0])
+    assert_allclose(separability_matrix(compound_model), result[1])
+
+
+def test_custom_model_separable():
+    @custom_model
+    def model_a(x):
+        return x
+
+    assert model_a().separable
+
+    @custom_model
+    def model_c(x, y):
+        return x + y
+
+    assert not model_c().separable
+    assert np.all(separability_matrix(model_c()) == [True, True])
+
+
+
+[model reply, complete and unedited] (7983 tokens in, 14722 tokens out)
+submit_patch Fix _cstack to use the right separability matrix instead of ones when stacking nested compound models
+
+[command executed: submit_patch]
+Fix _cstack to use the right separability matrix instead of ones when stacking nested compound models
+
+[result]
+TESTS_PASSED
+
+------------------------------------------------------------------------------
+STATUS: Run finished successfully

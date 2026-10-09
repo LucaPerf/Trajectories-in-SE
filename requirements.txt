@@ -1,0 +1,21 @@
+# Verified minimal dependency set for SE-task (ATLAS methodology transfer pilot).
+# Versions pinned to match what src/hackingBuddyGPT/ (the original repo) was written
+# against, where applicable (see ../pyproject.toml) -- openai in particular breaks on
+# newer releases (ChatCompletionToolParam moved).
+
+Mako==1.3.2
+requests==2.32.5
+rich==13.7.1
+tiktoken==0.8.0
+instructor==1.7.2
+python-dotenv==1.0.1
+pydantic==2.8.2
+openai==1.65.2
+dataclasses_json==0.6.7
+websockets==13.1
+aalpy
+networkx
+pydot
+
+# Used by main.py to load SWE-bench Lite instances
+datasets

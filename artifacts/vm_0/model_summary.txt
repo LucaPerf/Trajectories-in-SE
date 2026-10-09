@@ -1,0 +1,180 @@
+40 states, 138 transitions
+
+[q0] init
+      0.40 -> [q6] search codebase,DISCOVERY_SOURCE
+      0.25 -> [q7] search codebase,ERROR_NONE
+      0.10 -> [q8] search codebase,INFO_SOURCE
+      0.05 -> [q4] run reproduction script,DISCOVERY_ISSUE
+      0.05 -> [q1] inspect repository structure,ERROR_NONE
+      0.05 -> [q3] read source file,INFO_SOURCE
+      0.05 -> [q5] run script,INFO_SOURCE
+      0.05 -> [q2] inspect repository structure,INFO_REPO
+[q1] inspect repository structure,ERROR_NONE
+      1.00 -> [q3] read source file,INFO_SOURCE
+[q2] inspect repository structure,INFO_REPO
+      1.00 -> [q3] read source file,INFO_SOURCE
+[q3] read source file,INFO_SOURCE
+      0.35 -> [q3] read source file,INFO_SOURCE
+      0.11 -> [q8] search codebase,INFO_SOURCE
+      0.09 -> [q14] search codebase,DISCOVERY_TEST
+      0.07 -> [q9] edit source file,EMPTY_NONE
+      0.06 -> [q6] search codebase,DISCOVERY_SOURCE
+      0.04 -> [q4] run reproduction script,DISCOVERY_ISSUE
+      0.04 -> [q10] search codebase,INFO_TEST
+      0.04 -> [q15] read source file,INFO_TEST
+      0.04 -> [q13] run reproduction script,INFO_TEST
+      0.04 -> [q17] run script,ERROR_NONE
+      0.04 -> [q19] run script,PROGRESS_TEST
+      0.02 -> [q11] edit source file and run reproduction script,PROGRESS_PATCH
+      0.02 -> [q30] edit source file and run reproduction script,PROGRESS_TEST
+      0.02 -> [q12] run reproduction script,PROGRESS_TEST
+      0.02 -> [q33] edit source file and run reproduction script,PROGRESS_TEST__success
+      0.02 -> [q36] inspect repository structure,INFO_SOURCE
+[q4] run reproduction script,DISCOVERY_ISSUE
+      0.20 -> [q3] read source file,INFO_SOURCE
+      0.20 -> [q9] edit source file,EMPTY_NONE
+      0.20 -> [q6] search codebase,DISCOVERY_SOURCE
+      0.20 -> [q30] edit source file and run reproduction script,PROGRESS_TEST
+      0.20 -> [q8] search codebase,INFO_SOURCE
+[q5] run script,INFO_SOURCE
+      0.50 -> [q3] read source file,INFO_SOURCE
+      0.50 -> [q17] run script,ERROR_NONE
+[q6] search codebase,DISCOVERY_SOURCE
+      0.50 -> [q3] read source file,INFO_SOURCE
+      0.14 -> [q14] search codebase,DISCOVERY_TEST
+      0.09 -> [q15] read source file,INFO_TEST
+      0.05 -> [q21] edit source file and run reproduction script,INFO_TEST
+      0.05 -> [q9] edit source file,EMPTY_NONE
+      0.05 -> [q4] run reproduction script,DISCOVERY_ISSUE
+      0.05 -> [q6] search codebase,DISCOVERY_SOURCE
+      0.05 -> [q19] run script,PROGRESS_TEST
+      0.05 -> [q25] inspect repository structure,PROGRESS_PATCH
+[q7] search codebase,ERROR_NONE
+      0.40 -> [q8] search codebase,INFO_SOURCE
+      0.40 -> [q6] search codebase,DISCOVERY_SOURCE
+      0.20 -> [q3] read source file,INFO_SOURCE
+[q8] search codebase,INFO_SOURCE
+      0.64 -> [q3] read source file,INFO_SOURCE
+      0.14 -> [q9] edit source file,EMPTY_NONE
+      0.07 -> [q19] run script,PROGRESS_TEST
+      0.07 -> [q12] run reproduction script,PROGRESS_TEST
+      0.07 -> [q17] run script,ERROR_NONE
+[q9] edit source file,EMPTY_NONE
+      0.21 -> [q13] run reproduction script,INFO_TEST
+      0.21 -> [q19] run script,PROGRESS_TEST
+      0.14 -> [q12] run reproduction script,PROGRESS_TEST
+      0.14 -> [q16] run reproduction script,PROGRESS_PATCH
+      0.07 -> [q18] run reproduction script,PROGRESS_ISSUE
+      0.07 -> [q8] search codebase,INFO_SOURCE
+      0.07 -> [q6] search codebase,DISCOVERY_SOURCE
+      0.07 -> [q3] read source file,INFO_SOURCE
+[q10] search codebase,INFO_TEST
+      1.00 -> [q15] read source file,INFO_TEST
+[q11] edit source file and run reproduction script,PROGRESS_PATCH
+      0.50 -> [q17] run script,ERROR_NONE
+      0.50 -> [q19] run script,PROGRESS_TEST
+[q12] run reproduction script,PROGRESS_TEST
+      0.14 -> [q12] run reproduction script,PROGRESS_TEST
+      0.14 -> [q3] read source file,INFO_SOURCE
+      0.14 -> [q25] inspect repository structure,PROGRESS_PATCH
+      0.14 -> [q8] search codebase,INFO_SOURCE
+      0.14 -> [q22] edit source file,PROGRESS_TEST__success
+      0.14 -> [q31] run reproduction script,ERROR_NONE
+      0.14 -> [q24] run script,INFO_NONE
+[q13] run reproduction script,INFO_TEST
+      0.33 -> [q22] edit source file,PROGRESS_TEST__success
+      0.17 -> [q6] search codebase,DISCOVERY_SOURCE
+      0.17 -> [q9] edit source file,EMPTY_NONE
+      0.17 -> [q19] run script,PROGRESS_TEST
+      0.17 -> [q8] search codebase,INFO_SOURCE
+[q14] search codebase,DISCOVERY_TEST
+      0.50 -> [q15] read source file,INFO_TEST
+      0.38 -> [q6] search codebase,DISCOVERY_SOURCE
+      0.12 -> [q23] run script,EMPTY_NONE
+[q15] read source file,INFO_TEST
+      0.21 -> [q17] run script,ERROR_NONE
+      0.21 -> [q9] edit source file,EMPTY_NONE
+      0.21 -> [q3] read source file,INFO_SOURCE
+      0.07 -> [q4] run reproduction script,DISCOVERY_ISSUE
+      0.07 -> [q18] run reproduction script,PROGRESS_ISSUE
+      0.07 -> [q26] run script,ERROR_TEST
+      0.07 -> [q11] edit source file and run reproduction script,PROGRESS_PATCH
+      0.07 -> [q22] edit source file,PROGRESS_TEST__success
+[q16] run reproduction script,PROGRESS_PATCH
+      0.22 -> [q19] run script,PROGRESS_TEST
+      0.22 -> [q16] run reproduction script,PROGRESS_PATCH
+      0.11 -> [q29] edit source file,INFO_TEST__success
+      0.11 -> [q26] run script,ERROR_TEST
+      0.11 -> [q28] edit source file,PROGRESS_PATCH__success
+      0.11 -> [q3] read source file,INFO_SOURCE
+      0.11 -> [q37] read source file,PROGRESS_PATCH
+[q17] run script,ERROR_NONE
+      0.10 -> [q20] run script,INFO_TEST
+      0.10 -> [q10] search codebase,INFO_TEST
+      0.10 -> [q24] run script,INFO_NONE
+      0.10 -> [q6] search codebase,DISCOVERY_SOURCE
+      0.10 -> [q9] edit source file,EMPTY_NONE
+      0.10 -> [q28] edit source file,PROGRESS_PATCH__success
+      0.10 -> [q5] run script,INFO_SOURCE
+      0.10 -> [q34] run reproduction script,INFO_NONE
+      0.10 -> [q32] run reproduction script,ERROR_TEST
+      0.10 -> [q16] run reproduction script,PROGRESS_PATCH
+[q18] run reproduction script,PROGRESS_ISSUE
+      0.33 -> [q19] run script,PROGRESS_TEST
+      0.33 -> [q9] edit source file,EMPTY_NONE
+      0.33 -> [q32] run reproduction script,ERROR_TEST
+[q19] run script,PROGRESS_TEST
+      0.33 -> [q26] run script,ERROR_TEST
+      0.13 -> [q15] read source file,INFO_TEST
+      0.13 -> [q16] run reproduction script,PROGRESS_PATCH
+      0.13 -> [q34] run reproduction script,INFO_NONE
+      0.07 -> [q25] inspect repository structure,PROGRESS_PATCH
+      0.07 -> [q22] edit source file,PROGRESS_TEST__success
+      0.07 -> [q12] run reproduction script,PROGRESS_TEST
+      0.07 -> [q3] read source file,INFO_SOURCE
+[q20] run script,INFO_TEST
+      1.00 -> [q26] run script,ERROR_TEST
+[q21] edit source file and run reproduction script,INFO_TEST
+      1.00 -> [q19] run script,PROGRESS_TEST
+[q22] edit source file,PROGRESS_TEST__success
+[q23] run script,EMPTY_NONE
+      1.00 -> [q3] read source file,INFO_SOURCE
+[q24] run script,INFO_NONE
+      0.50 -> [q27] edit source file,PROGRESS_PATCH
+      0.50 -> [q32] run reproduction script,ERROR_TEST
+[q25] inspect repository structure,PROGRESS_PATCH
+      0.50 -> [q33] edit source file and run reproduction script,PROGRESS_TEST__success
+      0.25 -> [q17] run script,ERROR_NONE
+      0.25 -> [q19] run script,PROGRESS_TEST
+[q26] run script,ERROR_TEST
+      0.38 -> [q28] edit source file,PROGRESS_PATCH__success
+      0.25 -> [q16] run reproduction script,PROGRESS_PATCH
+      0.12 -> [q17] run script,ERROR_NONE
+      0.12 -> [q13] run reproduction script,INFO_TEST
+      0.12 -> [q15] read source file,INFO_TEST
+[q27] edit source file,PROGRESS_PATCH
+      1.00 -> [q12] run reproduction script,PROGRESS_TEST
+[q28] edit source file,PROGRESS_PATCH__success
+[q29] edit source file,INFO_TEST__success
+[q30] edit source file and run reproduction script,PROGRESS_TEST
+      0.50 -> [q18] run reproduction script,PROGRESS_ISSUE
+      0.50 -> [q22] edit source file,PROGRESS_TEST__success
+[q31] run reproduction script,ERROR_NONE
+      1.00 -> [q25] inspect repository structure,PROGRESS_PATCH
+[q32] run reproduction script,ERROR_TEST
+      0.33 -> [q6] search codebase,DISCOVERY_SOURCE
+      0.33 -> [q35] edit source file and run reproduction script,PROGRESS_PATCH__success
+      0.33 -> [q28] edit source file,PROGRESS_PATCH__success
+[q33] edit source file and run reproduction script,PROGRESS_TEST__success
+[q34] run reproduction script,INFO_NONE
+      0.33 -> [q19] run script,PROGRESS_TEST
+      0.33 -> [q3] read source file,INFO_SOURCE
+      0.33 -> [q28] edit source file,PROGRESS_PATCH__success
+[q35] edit source file and run reproduction script,PROGRESS_PATCH__success
+[q36] inspect repository structure,INFO_SOURCE
+      1.00 -> [q33] edit source file and run reproduction script,PROGRESS_TEST__success
+[q37] read source file,PROGRESS_PATCH
+      1.00 -> [q38] run script,ERROR_TEST__fail
+[q38] run script,ERROR_TEST__fail
+[__start0] 
+      0.00 -> [q0] init

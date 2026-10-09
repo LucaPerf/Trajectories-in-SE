@@ -1,0 +1,1090 @@
+{
+  "act_categories": [
+    "edit source file",
+    "edit source file and run reproduction script",
+    "inspect repository structure",
+    "read source file",
+    "run reproduction script",
+    "run script",
+    "search codebase"
+  ],
+  "out_categories": [
+    "DISCOVERY_ISSUE",
+    "DISCOVERY_SOURCE",
+    "DISCOVERY_TEST",
+    "EMPTY_NONE",
+    "ERROR_NONE",
+    "ERROR_TEST",
+    "INFO_NONE",
+    "INFO_REPO",
+    "INFO_SOURCE",
+    "INFO_TEST",
+    "PROGRESS_ISSUE",
+    "PROGRESS_PATCH",
+    "PROGRESS_TEST"
+  ],
+  "traces": [
+    {
+      "0": [
+        "run reproduction script",
+        "DISCOVERY_ISSUE"
+      ],
+      "1": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "edit source file",
+        "EMPTY_NONE"
+      ],
+      "4": [
+        "run reproduction script",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "run script",
+        "PROGRESS_TEST"
+      ],
+      "6": [
+        "inspect repository structure",
+        "PROGRESS_PATCH"
+      ],
+      "7": [
+        "run script",
+        "ERROR_NONE"
+      ],
+      "8": [
+        "edit source file",
+        "PROGRESS_PATCH"
+      ],
+      "9": "success"
+    },
+    {
+      "0": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "4": [
+        "search codebase",
+        "DISCOVERY_TEST"
+      ],
+      "5": [
+        "read source file",
+        "INFO_TEST"
+      ],
+      "6": [
+        "run script",
+        "ERROR_NONE"
+      ],
+      "7": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "8": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "9": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "edit source file and run reproduction script",
+        "PROGRESS_TEST"
+      ],
+      "11": [
+        "edit source file",
+        "PROGRESS_TEST"
+      ],
+      "12": "success"
+    },
+    {
+      "0": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "run reproduction script",
+        "DISCOVERY_ISSUE"
+      ],
+      "3": [
+        "edit source file",
+        "EMPTY_NONE"
+      ],
+      "4": [
+        "run reproduction script",
+        "PROGRESS_ISSUE"
+      ],
+      "5": [
+        "run script",
+        "PROGRESS_TEST"
+      ],
+      "6": [
+        "read source file",
+        "INFO_TEST"
+      ],
+      "7": [
+        "run script",
+        "ERROR_TEST"
+      ],
+      "8": [
+        "edit source file",
+        "PROGRESS_PATCH"
+      ],
+      "9": "success"
+    },
+    {
+      "0": [
+        "search codebase",
+        "ERROR_NONE"
+      ],
+      "1": [
+        "search codebase",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "search codebase",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "search codebase",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "edit source file",
+        "EMPTY_NONE"
+      ],
+      "8": [
+        "run reproduction script",
+        "INFO_TEST"
+      ],
+      "9": [
+        "search codebase",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "11": [
+        "run script",
+        "PROGRESS_TEST"
+      ],
+      "12": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "13": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "14": [
+        "inspect repository structure",
+        "INFO_SOURCE"
+      ],
+      "15": [
+        "edit source file and run reproduction script",
+        "PROGRESS_TEST"
+      ],
+      "16": "success"
+    },
+    {
+      "0": [
+        "inspect repository structure",
+        "ERROR_NONE"
+      ],
+      "1": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "run reproduction script",
+        "DISCOVERY_ISSUE"
+      ],
+      "4": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "5": [
+        "search codebase",
+        "DISCOVERY_TEST"
+      ],
+      "6": [
+        "run script",
+        "EMPTY_NONE"
+      ],
+      "7": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "read source file",
+        "INFO_TEST"
+      ],
+      "9": [
+        "edit source file and run reproduction script",
+        "PROGRESS_PATCH"
+      ],
+      "10": [
+        "run script",
+        "PROGRESS_TEST"
+      ],
+      "11": [
+        "run script",
+        "ERROR_TEST"
+      ],
+      "12": [
+        "edit source file",
+        "PROGRESS_PATCH"
+      ],
+      "13": "success"
+    },
+    {
+      "0": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "edit source file",
+        "EMPTY_NONE"
+      ],
+      "3": [
+        "run reproduction script",
+        "PROGRESS_TEST"
+      ],
+      "4": [
+        "run reproduction script",
+        "PROGRESS_TEST"
+      ],
+      "5": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "search codebase",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "run script",
+        "PROGRESS_TEST"
+      ],
+      "8": [
+        "run reproduction script",
+        "PROGRESS_TEST"
+      ],
+      "9": [
+        "run reproduction script",
+        "ERROR_NONE"
+      ],
+      "10": [
+        "inspect repository structure",
+        "PROGRESS_PATCH"
+      ],
+      "11": [
+        "edit source file and run reproduction script",
+        "PROGRESS_TEST"
+      ],
+      "12": "success"
+    },
+    {
+      "0": [
+        "search codebase",
+        "ERROR_NONE"
+      ],
+      "1": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "5": [
+        "search codebase",
+        "DISCOVERY_TEST"
+      ],
+      "6": [
+        "read source file",
+        "INFO_TEST"
+      ],
+      "7": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "edit source file",
+        "EMPTY_NONE"
+      ],
+      "9": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "10": [
+        "run script",
+        "PROGRESS_TEST"
+      ],
+      "11": [
+        "run reproduction script",
+        "INFO_NONE"
+      ],
+      "12": [
+        "run script",
+        "PROGRESS_TEST"
+      ],
+      "13": [
+        "read source file",
+        "INFO_TEST"
+      ],
+      "14": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "15": [
+        "edit source file and run reproduction script",
+        "PROGRESS_TEST"
+      ],
+      "16": "success"
+    },
+    {
+      "0": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "search codebase",
+        "DISCOVERY_TEST"
+      ],
+      "4": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "5": [
+        "edit source file",
+        "EMPTY_NONE"
+      ],
+      "6": [
+        "run reproduction script",
+        "PROGRESS_TEST"
+      ],
+      "7": [
+        "inspect repository structure",
+        "PROGRESS_PATCH"
+      ],
+      "8": [
+        "run script",
+        "PROGRESS_TEST"
+      ],
+      "9": [
+        "run script",
+        "ERROR_TEST"
+      ],
+      "10": [
+        "read source file",
+        "INFO_TEST"
+      ],
+      "11": [
+        "edit source file",
+        "PROGRESS_TEST"
+      ],
+      "12": "success"
+    },
+    {
+      "0": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "search codebase",
+        "DISCOVERY_TEST"
+      ],
+      "4": [
+        "read source file",
+        "INFO_TEST"
+      ],
+      "5": [
+        "edit source file",
+        "EMPTY_NONE"
+      ],
+      "6": [
+        "run script",
+        "PROGRESS_TEST"
+      ],
+      "7": [
+        "run reproduction script",
+        "PROGRESS_PATCH"
+      ],
+      "8": [
+        "run script",
+        "ERROR_TEST"
+      ],
+      "9": [
+        "edit source file",
+        "PROGRESS_PATCH"
+      ],
+      "10": "success"
+    },
+    {
+      "0": [
+        "search codebase",
+        "ERROR_NONE"
+      ],
+      "1": [
+        "search codebase",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "run script",
+        "ERROR_NONE"
+      ],
+      "5": [
+        "search codebase",
+        "INFO_TEST"
+      ],
+      "6": [
+        "read source file",
+        "INFO_TEST"
+      ],
+      "7": [
+        "run reproduction script",
+        "PROGRESS_ISSUE"
+      ],
+      "8": [
+        "edit source file",
+        "EMPTY_NONE"
+      ],
+      "9": [
+        "run reproduction script",
+        "PROGRESS_PATCH"
+      ],
+      "10": [
+        "run script",
+        "PROGRESS_TEST"
+      ],
+      "11": [
+        "run script",
+        "ERROR_TEST"
+      ],
+      "12": [
+        "run reproduction script",
+        "PROGRESS_PATCH"
+      ],
+      "13": [
+        "run reproduction script",
+        "PROGRESS_PATCH"
+      ],
+      "14": [
+        "run reproduction script",
+        "PROGRESS_PATCH"
+      ],
+      "15": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "16": [
+        "run script",
+        "ERROR_NONE"
+      ],
+      "17": [
+        "run reproduction script",
+        "PROGRESS_PATCH"
+      ],
+      "18": [
+        "read source file",
+        "PROGRESS_PATCH"
+      ],
+      "19": [
+        "run script",
+        "ERROR_TEST"
+      ],
+      "20": "fail"
+    },
+    {
+      "0": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "1": [
+        "search codebase",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "search codebase",
+        "INFO_TEST"
+      ],
+      "4": [
+        "read source file",
+        "INFO_TEST"
+      ],
+      "5": [
+        "run script",
+        "ERROR_NONE"
+      ],
+      "6": [
+        "run script",
+        "INFO_NONE"
+      ],
+      "7": [
+        "edit source file",
+        "PROGRESS_PATCH"
+      ],
+      "8": [
+        "run reproduction script",
+        "PROGRESS_TEST"
+      ],
+      "9": [
+        "edit source file",
+        "PROGRESS_TEST"
+      ],
+      "10": "success"
+    },
+    {
+      "0": [
+        "search codebase",
+        "ERROR_NONE"
+      ],
+      "1": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "search codebase",
+        "DISCOVERY_TEST"
+      ],
+      "5": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "6": [
+        "read source file",
+        "INFO_TEST"
+      ],
+      "7": [
+        "edit source file",
+        "EMPTY_NONE"
+      ],
+      "8": [
+        "run script",
+        "PROGRESS_TEST"
+      ],
+      "9": [
+        "run script",
+        "ERROR_TEST"
+      ],
+      "10": [
+        "run script",
+        "ERROR_NONE"
+      ],
+      "11": [
+        "run reproduction script",
+        "INFO_NONE"
+      ],
+      "12": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "13": [
+        "run script",
+        "PROGRESS_TEST"
+      ],
+      "14": [
+        "run reproduction script",
+        "INFO_NONE"
+      ],
+      "15": [
+        "edit source file",
+        "PROGRESS_PATCH"
+      ],
+      "16": "success"
+    },
+    {
+      "0": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "search codebase",
+        "DISCOVERY_TEST"
+      ],
+      "4": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "5": [
+        "read source file",
+        "INFO_TEST"
+      ],
+      "6": [
+        "run script",
+        "ERROR_NONE"
+      ],
+      "7": [
+        "edit source file",
+        "EMPTY_NONE"
+      ],
+      "8": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "9": [
+        "run reproduction script",
+        "PROGRESS_TEST"
+      ],
+      "10": [
+        "run script",
+        "INFO_NONE"
+      ],
+      "11": [
+        "run reproduction script",
+        "ERROR_TEST"
+      ],
+      "12": [
+        "edit source file and run reproduction script",
+        "PROGRESS_PATCH"
+      ],
+      "13": "success"
+    },
+    {
+      "0": [
+        "run script",
+        "INFO_SOURCE"
+      ],
+      "1": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "edit source file and run reproduction script",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "run script",
+        "ERROR_NONE"
+      ],
+      "5": [
+        "run script",
+        "INFO_TEST"
+      ],
+      "6": [
+        "run script",
+        "ERROR_TEST"
+      ],
+      "7": [
+        "run reproduction script",
+        "PROGRESS_PATCH"
+      ],
+      "8": [
+        "edit source file",
+        "INFO_TEST"
+      ],
+      "9": "success"
+    },
+    {
+      "0": [
+        "search codebase",
+        "ERROR_NONE"
+      ],
+      "1": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "run reproduction script",
+        "INFO_TEST"
+      ],
+      "4": [
+        "edit source file",
+        "EMPTY_NONE"
+      ],
+      "5": [
+        "run reproduction script",
+        "INFO_TEST"
+      ],
+      "6": [
+        "run script",
+        "PROGRESS_TEST"
+      ],
+      "7": [
+        "run script",
+        "ERROR_TEST"
+      ],
+      "8": [
+        "run reproduction script",
+        "INFO_TEST"
+      ],
+      "9": [
+        "edit source file",
+        "PROGRESS_TEST"
+      ],
+      "10": "success"
+    },
+    {
+      "0": [
+        "search codebase",
+        "INFO_SOURCE"
+      ],
+      "1": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "edit source file",
+        "EMPTY_NONE"
+      ],
+      "4": [
+        "run reproduction script",
+        "INFO_TEST"
+      ],
+      "5": [
+        "edit source file",
+        "PROGRESS_TEST"
+      ],
+      "6": "success"
+    },
+    {
+      "0": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "run reproduction script",
+        "INFO_TEST"
+      ],
+      "4": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "5": [
+        "edit source file and run reproduction script",
+        "INFO_TEST"
+      ],
+      "6": [
+        "run script",
+        "PROGRESS_TEST"
+      ],
+      "7": [
+        "edit source file",
+        "PROGRESS_TEST"
+      ],
+      "8": "success"
+    },
+    {
+      "0": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "search codebase",
+        "DISCOVERY_TEST"
+      ],
+      "4": [
+        "read source file",
+        "INFO_TEST"
+      ],
+      "5": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "7": [
+        "run reproduction script",
+        "DISCOVERY_ISSUE"
+      ],
+      "8": [
+        "edit source file and run reproduction script",
+        "PROGRESS_TEST"
+      ],
+      "9": [
+        "run reproduction script",
+        "PROGRESS_ISSUE"
+      ],
+      "10": [
+        "run reproduction script",
+        "ERROR_TEST"
+      ],
+      "11": [
+        "search codebase",
+        "DISCOVERY_SOURCE"
+      ],
+      "12": [
+        "inspect repository structure",
+        "PROGRESS_PATCH"
+      ],
+      "13": [
+        "edit source file and run reproduction script",
+        "PROGRESS_TEST"
+      ],
+      "14": "success"
+    },
+    {
+      "0": [
+        "search codebase",
+        "INFO_SOURCE"
+      ],
+      "1": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "search codebase",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "search codebase",
+        "INFO_TEST"
+      ],
+      "7": [
+        "read source file",
+        "INFO_TEST"
+      ],
+      "8": [
+        "run reproduction script",
+        "DISCOVERY_ISSUE"
+      ],
+      "9": [
+        "search codebase",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "edit source file",
+        "EMPTY_NONE"
+      ],
+      "11": [
+        "run script",
+        "PROGRESS_TEST"
+      ],
+      "12": [
+        "run reproduction script",
+        "PROGRESS_PATCH"
+      ],
+      "13": [
+        "edit source file",
+        "PROGRESS_PATCH"
+      ],
+      "14": "success"
+    },
+    {
+      "0": [
+        "inspect repository structure",
+        "INFO_REPO"
+      ],
+      "1": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "search codebase",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "read source file",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "read source file",
+        "INFO_TEST"
+      ],
+      "6": [
+        "edit source file",
+        "EMPTY_NONE"
+      ],
+      "7": [
+        "search codebase",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "run reproduction script",
+        "PROGRESS_TEST"
+      ],
+      "9": [
+        "search codebase",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "run script",
+        "ERROR_NONE"
+      ],
+      "11": [
+        "run script",
+        "INFO_SOURCE"
+      ],
+      "12": [
+        "run script",
+        "ERROR_NONE"
+      ],
+      "13": [
+        "run reproduction script",
+        "ERROR_TEST"
+      ],
+      "14": [
+        "edit source file",
+        "PROGRESS_PATCH"
+      ],
+      "15": "success"
+    }
+  ],
+  "run_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "source": {
+    "db": "job_logs\\astropy__astropy-12907.sqlite3",
+    "tag": "vm_0_iter_0"
+  }
+}
