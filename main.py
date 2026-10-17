@@ -61,7 +61,9 @@ def ensure_image(image: str) -> None:
     if "error during connect" in check.stderr or "Cannot connect" in check.stderr:
         sys.exit("Docker engine is not reachable. Start Docker Desktop and wait for 'Engine running'.")
     print(f"Image {image} not found locally, pulling it (about 1 GB)...")
-    if subprocess.run(["docker", "pull", image]).returncode != 0:
+    # SWE-bench images are published for linux/amd64 only; on Apple Silicon (arm64) Docker
+    # must be told explicitly to pull/run that platform (it then emulates it via Rosetta).
+    if subprocess.run(["docker", "pull", "--platform", "linux/amd64", image]).returncode != 0:
         sys.exit(f"docker pull {image} failed")
 
 
