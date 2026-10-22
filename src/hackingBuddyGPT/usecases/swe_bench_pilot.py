@@ -37,20 +37,28 @@ ${history}
 
 Do not repeat commands that already told you what you need to know.
 %endif
+                        
+Do not modify the files in the `tests/` directory: they will be replaced by the official tests.
+ 
+The official tests are not in the repository: do not search for them.
 
 Decide your next single action. Use exec_command to read/search/edit files or run commands, and
 submit_patch only once you believe the fix is complete and want it verified against the test
 suite.
 
-Your entire reply must be exactly one line, in one of these two forms, and nothing else:
-exec_command <shell command on one line>
+Your entire reply must be a single action, in one of these two forms, and nothing else:
+exec_command <shell command>
 submit_patch <short note>
-Do not explain your reasoning, do not add markup, and do not continue the conversation after that line.
+The command may span several lines (for example a heredoc to write a script). 
+Do not explain your reasoning, do not add markup, and do not continue the conversation after that line.       
 """)
 
 # The hosted model tends to answer with markdown reasoning around (and after) the command, sometimes
 # ending with stray tool-call tags. Keep only the first command line and drop those tags.
-_COMMAND_LINE_RE = re.compile(r"^[ \t]*((?:exec_command|submit_patch)\b.*)$", re.MULTILINE)
+_ACTION_RE = re.compile(r"[ \t]*(?:exec_command|submit_patch)\b")
+_JUNK_RE = re.compile(
+    r"[ \t]*</?(?:think|thinking|anth|antml\w*|parameter|output|command|invoke|function_calls|tool_call)\b[^>]*>"
+)
 _STRAY_TAGS_RE = re.compile(r"(?:</?(?:parameter|output|command|invoke|function_calls)[^>]*>\s*)+$")
 
 
@@ -88,12 +96,21 @@ class SWEBenchPilotUseCase(CommandStrategy):
         })
 
     def postprocess_commands(self, cmd: str) -> list[str]:
-        # Only the extracted command is executed and stored in the history, so a rambling
-        # reply does not pollute the next prompts.
-        match = _COMMAND_LINE_RE.search(cmd)
-        if match is None:
+        lines = cmd.strip().splitlines()
+        start = next((i for i, l in enumerate(lines) if _ACTION_RE.match(l)), None)
+        if start is None:
             return [cmd]
-        return [_STRAY_TAGS_RE.sub("", match.group(1)).strip()]
+        out = [lines[start]]
+        for l in lines[start + 1:]:
+            if _ACTION_RE.match(l) or _JUNK_RE.match(l):
+                break          # a new action or a reasoning tag ends the command
+            out.append(l)
+        text = "\n".join(out).strip()
+        text = _STRAY_TAGS_RE.sub("", text).strip()
+        text = re.split(r"\n[ \t]*```", text, maxsplit=1)[0].rstrip()
+        if text.startswith("submit_patch"):
+            text = text.splitlines()[0]
+        return [text]
 
     def get_token_overhead(self) -> int:
         # CommandStrategy only budgets history against the raw template source; the
