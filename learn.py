@@ -52,6 +52,26 @@ def executed_commands(interactions: list[dict], keep_empty: bool) -> tuple[list[
         kept.append({**interaction, "output": command})
     return kept, dropped
 
+def is_submit(interaction: dict) -> bool:
+    return (interaction.get("action") or "").strip() == "submit_patch"
+
+
+def fix_tool_groups(trace: dict, interactions: list[dict], act_exec: set, act_sub: set, run_id) -> int:
+    """Make sure a submit_patch step gets a submit category and an exec_command step an exec category."""
+    fixed = 0
+    for idx, value in trace.items():
+        if not isinstance(value, tuple) or idx >= len(interactions):
+            continue
+        allowed = act_sub if is_submit(interactions[idx]) else act_exec
+        if not allowed or value[0] in allowed:
+            continue
+        if len(allowed) == 1:
+            trace[idx] = (next(iter(allowed)), value[1])
+            fixed += 1
+        else:
+            print(f"WARNING run {run_id} step {idx}: '{value[0]}' is outside the expected group")
+    return fixed
+
 
 def cmd_abstract(args) -> None:
     from hackingBuddyGPT.automata.abstraction import abstract_sequence, categorize_interactions, normalize_categories
@@ -79,6 +99,7 @@ def cmd_abstract(args) -> None:
     if not runs:
         sys.exit("No usable runs found. Check --db and --tag (the tag looks like vm_0_iter_0).")
 
+
     prepared = {}
     total_dropped = 0
     for run_id, run_data in runs.items():
@@ -91,28 +112,57 @@ def cmd_abstract(args) -> None:
         f"skipped {len(crashed)} crashed run(s) and {total_dropped} empty interaction(s)."
     )
 
+    out_dir = Path(args.out)
+    if (out_dir / "abstractions.json").exists() and not args.force:
+        sys.exit(f"{out_dir} contains already an abstractions.json: use another --out or --force")
+
     llm = OpenAIConnection(api_key=api_key, model=MODEL, api_url=API_URL, max_tokens=MAX_TOKENS, api_timeout=600)
 
-    act_categories: set[str] = set()
-    out_categories: set[str] = set()
+    act_exec: set[str] = set()
+    out_exec: set[str] = set()
+    act_sub: set[str] = set()
+    out_sub: set[str] = set()
     for run_data in prepared.values():
-        if run_data["interactions"]:
-            categorize_interactions(run_data["interactions"], act_categories, out_categories, llm)
-    print(f"\nAction categories: {sorted(act_categories)}\nOutput categories: {sorted(out_categories)}")
+        exec_part = [i for i in run_data["interactions"] if not is_submit(i)]
+        sub_part = [i for i in run_data["interactions"] if is_submit(i)]
+        if exec_part:
+            categorize_interactions(exec_part, act_exec, out_exec, llm)
+        if sub_part:
+            categorize_interactions(sub_part, act_sub, out_sub, llm)
+    print(f"\nExec actions: {sorted(act_exec)}\nSubmit actions: {sorted(act_sub)}")
+    print(f"Output categories: {sorted(out_exec | out_sub)}")
+
+    # each tool is normalized on its own, so a submit step can never be merged with an exec step
+    if act_exec or out_exec:
+        act_exec, out_exec = normalize_categories(act_exec, out_exec, llm)
+    if act_sub or out_sub:
+        act_sub, out_sub = normalize_categories(act_sub, out_sub, llm)
+    print(f"\nNormalized exec actions: {sorted(act_exec)}\nNormalized submit actions: {sorted(act_sub)}")
+    print(f"Normalized output categories: {sorted(out_exec | out_sub)}")
+
+    act_categories = act_exec | act_sub
+    out_categories = out_exec | out_sub
 
     act_categories, out_categories = normalize_categories(act_categories, out_categories, llm)
     print(f"\nNormalized action categories: {sorted(act_categories)}")
     print(f"Normalized output categories: {sorted(out_categories)}")
 
     traces = []
+    total_fixed = 0
     for run_id, run_data in prepared.items():
         print(f"\nAbstracting run {run_id} ({len(run_data['interactions'])} interactions)...")
-        traces.append(
-            abstract_sequence(run_data["interactions"], act_categories, out_categories, not run_data["success"], llm)
+        trace = abstract_sequence(
+            run_data["interactions"], act_categories, out_categories, not run_data["success"], llm
         )
+        total_fixed += fix_tool_groups(trace, run_data["interactions"], act_exec, act_sub, run_id)
+        traces.append(trace)
 
-    out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "vocabulary.json").write_text(
+        json.dumps({"exec_actions": sorted(act_exec), "submit_actions": sorted(act_sub),
+                    "outputs": sorted(out_categories)}, indent=2),
+        encoding="utf-8",
+    )
     abstractions_data = {
         "act_categories": sorted(act_categories),
         "out_categories": sorted(out_categories),

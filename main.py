@@ -19,6 +19,8 @@ import sqlite3
 import subprocess
 import sys
 from pathlib import Path
+import json
+import re
 
 # ---------------------------------------------------------------------------
 # The three things to set
@@ -42,6 +44,40 @@ SHELL_PREFIX = "source /opt/miniconda3/bin/activate && conda activate testbed"
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC_DIR = os.path.join(HERE, "src")
 LOG_DIR = os.path.join(HERE, "job_logs")
+
+def _test_files(instance) -> list[str]:
+    """Files touched by the instance's test_patch."""
+    return re.findall(r"^diff --git a/(\S+) b/", instance["test_patch"], re.M)
+
+
+def _fail_to_pass(instance) -> list[str]:
+    f2p = instance["FAIL_TO_PASS"]
+    return json.loads(f2p) if isinstance(f2p, str) else f2p
+
+
+def _pytest_targets(instance) -> str:
+    # exact test ids, so pre-existing failures in the same files don't matter
+    return " ".join(shlex.quote(t) for t in _fail_to_pass(instance))
+
+
+def _django_targets(instance) -> str:
+    # tests/model_fields/test_filepathfield.py -> model_fields.test_filepathfield
+    modules = []
+    for f in _test_files(instance):
+        if not f.endswith(".py"):
+            continue
+        m = f.removeprefix("tests/")[:-3].replace("/", ".")
+        if m not in modules:
+            modules.append(m)
+    return " ".join(modules)
+
+
+# repo -> (command prefix, function that builds the test targets).
+# Add a repo here only after checking it with the gold-patch preflight.
+TEST_RUNNERS = {
+    "django/django": ("python tests/runtests.py", _django_targets),
+}
+DEFAULT_RUNNER = ("python -m pytest -rA", _pytest_targets)
 
 
 def image_ref(instance_id: str) -> str:
@@ -80,13 +116,8 @@ def load_instance(index: int, instance_id: str):
 
 
 def build_test_cmd(instance) -> str:
-    import json
-
-    fail_to_pass = instance["FAIL_TO_PASS"]
-    if isinstance(fail_to_pass, str):
-        fail_to_pass = json.loads(fail_to_pass)
-    tests = " ".join(shlex.quote(t) for t in fail_to_pass)
-    return f"python -m pytest {tests} -rA"
+    prefix, targets = TEST_RUNNERS.get(instance["repo"], DEFAULT_RUNNER)
+    return f"{prefix} {targets(instance)}"
 
 
 def latest_run(db_path: str):
@@ -188,6 +219,10 @@ def main():
     print(f"{successes} successful out of {len(outcomes)} completed run(s). Database: {db_path}")
     if crashed:
         sys.exit(1)
+
+    import json
+    with open(os.path.join(LOG_DIR, "last_summary.json"), "w") as f:
+        json.dump({"successes": successes, "completed": len(outcomes)}, f)
 
 
 if __name__ == "__main__":
