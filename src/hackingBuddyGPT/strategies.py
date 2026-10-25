@@ -126,19 +126,13 @@ class CommandStrategy(UseCase, abc.ABC):
         # first line — the rest are ignored.  If the whole thing looks like
         # leaked chain-of-thought (multi-line and very long), reject it outright.
         cleaned = cmd.strip()
-        if "\n" in cleaned:
-            if len(cleaned) > 200:
-                error_msg = (
-                    "The LLM produced a multi-line response with internal reasoning "
-                    "instead of a single command. This usually means thinking/reasoning "
-                    "mode is leaking into the output. Ensure --llm.thinking=false."
-                )
-                self.log.add_tool_call(message_id, tool_call_id=0, function_name="",
-                                       arguments=cmd[:200], result_text=error_msg, duration=datetime.timedelta(0))
-                return error_msg
-            # Short multi-line: cmd_output_fixer already scans for the first
-            # valid command line (exec_command|test_credential|wait), so just
-            # let it pass through.
+        # Multi-line commands (e.g. heredocs) are allowed; the capability parser decides what to run.
+        # Safety net only for runaway output (e.g. leaked reasoning), far above any real script.
+        if len(cleaned) > 8000:
+            error_msg = "Your reply is too long. Reply with a single short action and no explanation."
+            self.log.add_tool_call(message_id, tool_call_id=0, function_name="",
+                                arguments=cmd[:200], result_text=error_msg, duration=datetime.timedelta(0))
+            return error_msg
 
         _capability_descriptions, parser = capabilities_to_simple_text_handler(self._capabilities._capabilities, default_capability=self._capabilities._default_capability)
         start_time = datetime.datetime.now()

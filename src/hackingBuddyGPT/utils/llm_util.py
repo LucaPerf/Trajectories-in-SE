@@ -76,7 +76,7 @@ def remove_wrapping_characters(cmd: str, wrappers: str) -> str:
 
 # Valid command prefixes that the agent supports
 _VALID_COMMAND_RE = re.compile(
-    r"^\s*(exec_command|test_credential|wait)\s", re.MULTILINE
+    r"^[ \t]*(exec_command|submit_patch|test_credential|wait)\s", re.MULTILINE
 )
 
 # often the LLM produces a wrapped command
@@ -85,19 +85,13 @@ def cmd_output_fixer(cmd: str) -> str:
     if len(cmd) < 2:
         return cmd
 
-    # If the LLM produced a multi-line response, scan for the LAST line
-    # that looks like a valid command. Using the last instead of the first
-    # allows models that output step-by-step command lists to naturally
-    # progress through the sequence (e.g. hints with "id → sudo -l → find").
     if "\n" in cmd:
-        last_match = None
-        for match in _VALID_COMMAND_RE.finditer(cmd):
-            last_match = match
-        if last_match is not None:
-            line_start = last_match.start()
-            line = cmd[line_start:].split("\n")[0].strip()
-            print(f"Multi-line response — extracted (last) command: {line}")
-            cmd = line
+        # Keep the FIRST action and everything after it, so multi-line commands
+        # (heredocs, scripts) are not cut down to their first line.
+        first = _VALID_COMMAND_RE.search(cmd)
+        if first is not None:
+            cmd = cmd[first.start():].strip()
+            print("Multi-line response — extracted command starting at first action")
 
     stupidity = re.compile(r"^[ \n\r]*```.*\n(.*)\n```$", re.MULTILINE)
     result = stupidity.search(cmd)

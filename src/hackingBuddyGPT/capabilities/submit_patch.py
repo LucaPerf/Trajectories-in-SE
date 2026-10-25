@@ -34,7 +34,9 @@ class SubmitPatch(Capability):
         if self.test_patch:
             script = (
                 "cat > /tmp/swe_test.patch && "
-                "git apply /tmp/swe_test.patch && "
+                "for f in $(grep '^+++ b/' /tmp/swe_test.patch | sed 's|^+++ b/||'); do "
+                "git checkout -- \"$f\" 2>/dev/null || rm -f \"$f\"; done; "
+                "git apply /tmp/swe_test.patch || { rm -f /tmp/swe_test.patch; exit 97; }; "
                 f"({self.test_cmd}); rc=$?; "
                 "git apply -R /tmp/swe_test.patch; rm -f /tmp/swe_test.patch; exit $rc"
             )
@@ -45,4 +47,6 @@ class SubmitPatch(Capability):
         if returncode == 0:
             return "TESTS_PASSED"
         tail = (stdout + "\n" + stderr).strip()[-2000:]
+        if returncode == 97:
+            return f"PATCH_APPLY_ERROR\n{tail}"
         return f"TESTS_FAILED\n{tail}"
