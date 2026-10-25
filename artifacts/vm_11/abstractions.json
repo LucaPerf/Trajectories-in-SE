@@ -1,0 +1,530 @@
+{
+  "act_categories": [
+    "Edit (replace string in file)",
+    "Read (view code section in file)",
+    "Read (view test code in file)",
+    "Search (find pattern in file)",
+    "Search (find pattern in repository)",
+    "Submit (submit patch to repository)",
+    "Verify (check modification in file)"
+  ],
+  "out_categories": [
+    "DISCOVERY_SOURCE",
+    "DISCOVERY_TEST",
+    "EMPTY_NONE",
+    "ERROR_NONE",
+    "INFO_SOURCE",
+    "INFO_TEST",
+    "PROGRESS_PATCH",
+    "PROGRESS_TEST",
+    "REPEATED_SOURCE"
+  ],
+  "traces": [
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view code section in file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Read (view code section in file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (view code section in file)",
+        "EMPTY_NONE"
+      ],
+      "4": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Verify (check modification in file)",
+        "PROGRESS_PATCH"
+      ],
+      "6": [
+        "Read (view test code in file)",
+        "INFO_TEST"
+      ],
+      "7": [
+        "Search (find pattern in file)",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "Search (find pattern in file)",
+        "INFO_SOURCE"
+      ],
+      "9": [
+        "Search (find pattern in file)",
+        "REPEATED_SOURCE"
+      ],
+      "10": [
+        "Search (find pattern in repository)",
+        "EMPTY_NONE"
+      ],
+      "11": [
+        "Search (find pattern in file)",
+        "REPEATED_SOURCE"
+      ],
+      "12": [
+        "Search (find pattern in file)",
+        "REPEATED_SOURCE"
+      ],
+      "13": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_TEST"
+      ],
+      "14": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "15": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "2": [
+        "Verify (check modification in file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "2": [
+        "Search (find pattern in file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find pattern in file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Search (find pattern in file)",
+        "EMPTY_NONE"
+      ],
+      "4": [
+        "Search (find pattern in file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Verify (check modification in file)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "7": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view code section in file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "2": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "3": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "2": [
+        "Verify (check modification in file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find pattern in file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Search (find pattern in file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Read (view code section in file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "6": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (view code section in file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Verify (check modification in file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Read (view code section in file)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "7": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view code section in file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Search (find pattern in repository)",
+        "INFO_TEST"
+      ],
+      "4": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "EMPTY_NONE"
+      ],
+      "1": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "2": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "3": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "2": [
+        "Search (find pattern in file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE#!#"
+      ],
+      "1": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH#!#"
+      ],
+      "2": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST#!#"
+      ],
+      "3": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find pattern in file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Edit (replace string in file)",
+        "ERROR_NONE"
+      ],
+      "3": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find pattern in file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (view code section in file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Verify (check modification in file)",
+        "EMPTY_NONE"
+      ],
+      "5": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "6": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "2": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "3": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "2": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "3": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find pattern in file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Edit (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "2": [
+        "Search (find pattern in file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Edit (replace string in file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Search (find pattern in file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Search (find pattern in file)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Search (find pattern in file)",
+        "EMPTY_NONE"
+      ],
+      "7": [
+        "Search (find pattern in file)",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "Read (view code section in file)",
+        "INFO_SOURCE"
+      ],
+      "9": [
+        "Read (view code section in file)",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "Submit (submit patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "11": "success"
+    }
+  ],
+  "run_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "source": {
+    "db": "job_logs/django__django-11049.sqlite3",
+    "tag": "vm_11_iter_0"
+  }
+}

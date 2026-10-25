@@ -1,0 +1,1118 @@
+{
+  "act_categories": [
+    "Edit (replace text in single file)",
+    "Read (read directory listing)",
+    "Read (read line range)",
+    "Read (read whole file contents)",
+    "Run (execute diagnostic command)",
+    "Run (execute test suite)",
+    "Search (find class definition in repository)",
+    "Search (find class definition in single file)",
+    "Search (find method definition in single file)",
+    "Search (find pattern in repository)",
+    "Search (find pattern in single file)",
+    "Search (find source file in repository)",
+    "Submit (apply repository patch)",
+    "Write (rewrite whole file contents)"
+  ],
+  "out_categories": [
+    "DISCOVERY_SOURCE",
+    "EMPTY_SOURCE",
+    "ERROR_NONE",
+    "ERROR_SOURCE",
+    "ERROR_TEST",
+    "INFO_REPO",
+    "INFO_SOURCE",
+    "PROGRESS_PATCH",
+    "PROGRESS_TEST",
+    "REPEATED_SOURCE"
+  ],
+  "traces": [
+    {
+      "0": [
+        "Read (read whole file contents)",
+        "ERROR_SOURCE"
+      ],
+      "1": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_SOURCE"
+      ],
+      "4": [
+        "Submit (apply repository patch)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Read (read directory listing)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Read (read whole file contents)",
+        "ERROR_SOURCE"
+      ],
+      "2": [
+        "Search (find class definition in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Run (execute diagnostic command)",
+        "ERROR_SOURCE"
+      ],
+      "4": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "6": [
+        "Submit (apply repository patch)",
+        "PROGRESS_TEST"
+      ],
+      "7": "success"
+    },
+    {
+      "0": [
+        "Read (read directory listing)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Read (read whole file contents)",
+        "ERROR_SOURCE"
+      ],
+      "2": [
+        "Search (find pattern in repository)",
+        "ERROR_SOURCE"
+      ],
+      "3": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Read (read whole file contents)",
+        "REPEATED_SOURCE"
+      ],
+      "6": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "7": [
+        "Submit (apply repository patch)",
+        "PROGRESS_TEST"
+      ],
+      "8": "success"
+    },
+    {
+      "0": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Submit (apply repository patch)",
+        "ERROR_TEST"
+      ],
+      "4": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_SOURCE"
+      ],
+      "5": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_SOURCE"
+      ],
+      "7": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_SOURCE"
+      ],
+      "8": [
+        "Submit (apply repository patch)",
+        "PROGRESS_TEST"
+      ],
+      "9": "success"
+    },
+    {
+      "0": [
+        "Search (find class definition in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Search (find pattern in single file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Search (find class definition in single file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "6": [
+        "Read (read whole file contents)",
+        "REPEATED_SOURCE"
+      ],
+      "7": [
+        "Submit (apply repository patch)",
+        "PROGRESS_TEST"
+      ],
+      "8": "success"
+    },
+    {
+      "0": [
+        "Read (read whole file contents)",
+        "ERROR_SOURCE"
+      ],
+      "1": [
+        "Search (find class definition in repository)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Search (find pattern in repository)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Submit (apply repository patch)",
+        "ERROR_TEST"
+      ],
+      "6": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "8": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "9": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "10": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "11": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "12": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "13": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "14": [
+        "Submit (apply repository patch)",
+        "PROGRESS_TEST"
+      ],
+      "15": "success"
+    },
+    {
+      "0": [
+        "Read (read whole file contents)",
+        "ERROR_SOURCE"
+      ],
+      "1": [
+        "Search (find class definition in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Submit (apply repository patch)",
+        "ERROR_TEST"
+      ],
+      "6": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "7": [
+        "Write (rewrite whole file contents)",
+        "REPEATED_SOURCE"
+      ],
+      "8": [
+        "Submit (apply repository patch)",
+        "PROGRESS_TEST"
+      ],
+      "9": "success"
+    },
+    {
+      "0": [
+        "Read (read directory listing)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Search (find pattern in repository)",
+        "ERROR_SOURCE"
+      ],
+      "3": [
+        "Search (find class definition in single file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "4": [
+        "Search (find class definition in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "5": [
+        "Read (read whole file contents)",
+        "DISCOVERY_SOURCE"
+      ],
+      "6": [
+        "Search (find method definition in single file)",
+        "EMPTY_SOURCE"
+      ],
+      "7": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "8": [
+        "Submit (apply repository patch)",
+        "PROGRESS_TEST"
+      ],
+      "9": "success"
+    },
+    {
+      "0": [
+        "Read (read directory listing)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Read (read whole file contents)",
+        "ERROR_SOURCE"
+      ],
+      "2": [
+        "Search (find pattern in repository)",
+        "INFO_REPO"
+      ],
+      "3": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Submit (apply repository patch)",
+        "PROGRESS_TEST"
+      ],
+      "7": "success"
+    },
+    {
+      "0": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "1": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "2": [
+        "Submit (apply repository patch)",
+        "PROGRESS_TEST"
+      ],
+      "3": "success"
+    },
+    {
+      "0": [
+        "Read (read directory listing)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (find pattern in single file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Search (find pattern in repository)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Search (find pattern in single file)",
+        "ERROR_NONE"
+      ],
+      "4": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Search (find pattern in single file)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Search (find pattern in single file)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Search (find pattern in single file)",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "Read (read line range)",
+        "INFO_SOURCE"
+      ],
+      "9": [
+        "Read (read line range)",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "Search (find pattern in single file)",
+        "ERROR_NONE"
+      ],
+      "11": [
+        "Read (read line range)",
+        "INFO_SOURCE"
+      ],
+      "12": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "13": [
+        "Run (execute diagnostic command)",
+        "ERROR_SOURCE"
+      ],
+      "14": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "15": [
+        "Submit (apply repository patch)",
+        "PROGRESS_PATCH"
+      ],
+      "16": "success"
+    },
+    {
+      "0": [
+        "Search (find source file in repository)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (find source file in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (read whole file contents)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (read whole file contents)",
+        "REPEATED_SOURCE"
+      ],
+      "4": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "5": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "6": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "7": [
+        "Submit (apply repository patch)",
+        "PROGRESS_TEST"
+      ],
+      "8": "success"
+    },
+    {
+      "0": [
+        "Read (read directory listing)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Read (read whole file contents)",
+        "ERROR_SOURCE"
+      ],
+      "2": [
+        "Read (read whole file contents)",
+        "ERROR_SOURCE"
+      ],
+      "3": [
+        "Search (find pattern in repository)",
+        "ERROR_SOURCE"
+      ],
+      "4": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Search (find pattern in single file)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "7": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "8": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "9": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "10": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "11": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "12": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "13": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "14": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "15": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "16": [
+        "Submit (apply repository patch)",
+        "PROGRESS_TEST"
+      ],
+      "17": "success"
+    },
+    {
+      "0": [
+        "Search (find source file in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Submit (apply repository patch)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Read (read directory listing)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (find pattern in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Read (read whole file contents)",
+        "REPEATED_SOURCE"
+      ],
+      "4": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Read (read whole file contents)",
+        "REPEATED_SOURCE"
+      ],
+      "6": [
+        "Submit (apply repository patch)",
+        "PROGRESS_TEST"
+      ],
+      "7": "success"
+    },
+    {
+      "0": [
+        "Read (read directory listing)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (find class definition in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Search (find method definition in single file)",
+        "EMPTY_SOURCE"
+      ],
+      "4": [
+        "Search (find class definition in single file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "6": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "7": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "9": [
+        "Read (read whole file contents)",
+        "REPEATED_SOURCE"
+      ],
+      "10": [
+        "Submit (apply repository patch)",
+        "PROGRESS_TEST"
+      ],
+      "11": "success"
+    },
+    {
+      "0": [
+        "Search (find class definition in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Submit (apply repository patch)",
+        "ERROR_TEST"
+      ],
+      "3": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "6": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "8": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "9": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "10": [
+        "Read (read line range)",
+        "INFO_SOURCE"
+      ],
+      "11": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "12": [
+        "Read (read line range)",
+        "INFO_SOURCE"
+      ],
+      "13": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "14": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "15": [
+        "Read (read line range)",
+        "INFO_SOURCE"
+      ],
+      "16": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "17": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "18": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "19": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "20": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "21": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "22": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "23": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "24": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "25": [
+        "Read (read line range)",
+        "INFO_SOURCE"
+      ],
+      "26": [
+        "Search (find pattern in single file)",
+        "EMPTY_SOURCE"
+      ],
+      "27": [
+        "Search (find pattern in single file)",
+        "EMPTY_SOURCE"
+      ],
+      "28": [
+        "Search (find pattern in single file)",
+        "EMPTY_SOURCE"
+      ],
+      "29": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "30": [
+        "Search (find pattern in single file)",
+        "EMPTY_SOURCE"
+      ],
+      "31": [
+        "Read (read line range)",
+        "INFO_SOURCE"
+      ],
+      "32": [
+        "Read (read line range)",
+        "INFO_SOURCE"
+      ],
+      "33": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "34": [
+        "Search (find pattern in repository)",
+        "EMPTY_SOURCE"
+      ],
+      "35": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "36": [
+        "Read (read line range)",
+        "INFO_SOURCE"
+      ],
+      "37": [
+        "Run (execute test suite)",
+        "ERROR_TEST"
+      ],
+      "38": [
+        "Read (read line range)",
+        "INFO_SOURCE"
+      ],
+      "39": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "40": "fail"
+    },
+    {
+      "0": [
+        "Read (read directory listing)",
+        "ERROR_NONE"
+      ],
+      "1": [
+        "Search (find source file in repository)",
+        "INFO_REPO"
+      ],
+      "2": [
+        "Search (find class definition in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Read (read whole file contents)",
+        "REPEATED_SOURCE"
+      ],
+      "5": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "6": [
+        "Submit (apply repository patch)",
+        "ERROR_TEST"
+      ],
+      "7": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "8": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "9": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "10": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "11": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "12": [
+        "Run (execute diagnostic command)",
+        "ERROR_NONE"
+      ],
+      "13": [
+        "Submit (apply repository patch)",
+        "PROGRESS_TEST"
+      ],
+      "14": "success"
+    },
+    {
+      "0": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "1": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "2": [
+        "Read (read whole file contents)",
+        "REPEATED_SOURCE"
+      ],
+      "3": [
+        "Submit (apply repository patch)",
+        "ERROR_TEST"
+      ],
+      "4": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Read (read whole file contents)",
+        "REPEATED_SOURCE"
+      ],
+      "6": [
+        "Read (read line range)",
+        "DISCOVERY_SOURCE"
+      ],
+      "7": [
+        "Edit (replace text in single file)",
+        "PROGRESS_PATCH"
+      ],
+      "8": [
+        "Run (execute diagnostic command)",
+        "DISCOVERY_SOURCE"
+      ],
+      "9": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "10": [
+        "Write (rewrite whole file contents)",
+        "PROGRESS_PATCH"
+      ],
+      "11": [
+        "Read (read line range)",
+        "REPEATED_SOURCE"
+      ],
+      "12": [
+        "Submit (apply repository patch)",
+        "PROGRESS_TEST"
+      ],
+      "13": "success"
+    },
+    {
+      "0": [
+        "Search (find source file in repository)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (find class definition in repository)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Read (read whole file contents)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Search (find pattern in single file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Search (find pattern in single file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Read (read whole file contents)",
+        "REPEATED_SOURCE"
+      ],
+      "6": [
+        "Search (find method definition in single file)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Search (find class definition in single file)",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "Search (find method definition in single file)",
+        "INFO_SOURCE"
+      ],
+      "9": [
+        "Read (read line range)",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "Read (read line range)",
+        "INFO_SOURCE"
+      ],
+      "11": [
+        "Read (read line range)",
+        "INFO_SOURCE"
+      ],
+      "12": [
+        "Read (read line range)",
+        "INFO_SOURCE"
+      ],
+      "13": [
+        "Read (read line range)",
+        "INFO_SOURCE"
+      ],
+      "14": [
+        "Read (read line range)",
+        "EMPTY_SOURCE"
+      ],
+      "15": [
+        "Read (read line range)",
+        "REPEATED_SOURCE"
+      ],
+      "16": [
+        "Read (read line range)",
+        "REPEATED_SOURCE"
+      ],
+      "17": [
+        "Read (read line range)",
+        "REPEATED_SOURCE"
+      ],
+      "18": [
+        "Read (read line range)",
+        "REPEATED_SOURCE"
+      ],
+      "19": [
+        "Read (read line range)",
+        "REPEATED_SOURCE"
+      ],
+      "20": [
+        "Run (execute diagnostic command)",
+        "ERROR_SOURCE"
+      ],
+      "21": [
+        "Read (read line range)",
+        "REPEATED_SOURCE"
+      ],
+      "22": [
+        "Read (read line range)",
+        "REPEATED_SOURCE"
+      ],
+      "23": [
+        "Search (find pattern in single file)",
+        "EMPTY_SOURCE"
+      ],
+      "24": [
+        "Search (find class definition in single file)",
+        "REPEATED_SOURCE"
+      ],
+      "25": [
+        "Read (read line range)",
+        "REPEATED_SOURCE"
+      ],
+      "26": [
+        "Read (read line range)",
+        "REPEATED_SOURCE"
+      ],
+      "27": [
+        "Read (read line range)",
+        "REPEATED_SOURCE"
+      ],
+      "28": [
+        "Read (read line range)",
+        "REPEATED_SOURCE"
+      ],
+      "29": [
+        "Read (read line range)",
+        "INFO_SOURCE"
+      ],
+      "30": [
+        "Search (find pattern in single file)",
+        "INFO_SOURCE"
+      ],
+      "31": [
+        "Search (find pattern in single file)",
+        "INFO_SOURCE"
+      ],
+      "32": [
+        "Read (read line range)",
+        "REPEATED_SOURCE"
+      ],
+      "33": [
+        "Read (read line range)",
+        "REPEATED_SOURCE"
+      ],
+      "34": [
+        "Search (find pattern in single file)",
+        "EMPTY_SOURCE"
+      ],
+      "35": [
+        "Search (find pattern in single file)",
+        "EMPTY_SOURCE"
+      ],
+      "36": [
+        "Search (find pattern in single file)",
+        "EMPTY_SOURCE"
+      ],
+      "37": [
+        "Read (read line range)",
+        "REPEATED_SOURCE"
+      ],
+      "38": [
+        "Read (read line range)",
+        "REPEATED_SOURCE"
+      ],
+      "39": [
+        "Read (read line range)",
+        "REPEATED_SOURCE"
+      ],
+      "40": "fail"
+    }
+  ],
+  "run_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "source": {
+    "db": "job_logs/django__django-11964.sqlite3",
+    "tag": "vm_27_iter_0"
+  }
+}

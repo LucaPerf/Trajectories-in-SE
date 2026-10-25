@@ -1,0 +1,2340 @@
+{
+  "act_categories": [
+    "Edit (insert lines into source file)",
+    "Edit (replace line range in source file)",
+    "Read (view directory listing)",
+    "Read (view line range in source file)",
+    "Read (view whole source file)",
+    "Run (run verification script)",
+    "Search (find class definition in code)",
+    "Search (find method definitions in code)",
+    "Search (locate files in repository)",
+    "Search (locate keyword in source file)",
+    "Submit (apply patch to repository)"
+  ],
+  "out_categories": [
+    "DISCOVERY_REPO",
+    "DISCOVERY_SOURCE",
+    "DISCOVERY_TEST",
+    "EMPTY_SOURCE",
+    "ERROR_NONE",
+    "ERROR_TEST",
+    "INFO_REPO",
+    "INFO_SOURCE",
+    "PROGRESS_PATCH",
+    "PROGRESS_TEST",
+    "REPEATED_SOURCE"
+  ],
+  "traces": [
+    {
+      "0": [
+        "Search (locate files in repository)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Read (view whole source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Search (find method definitions in code)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "4": [
+        "Search (find class definition in code)",
+        "REPEATED_SOURCE"
+      ],
+      "5": [
+        "Search (find class definition in code)",
+        "REPEATED_SOURCE"
+      ],
+      "6": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "7": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "8": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "9": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "10": [
+        "Search (find method definitions in code)",
+        "REPEATED_SOURCE"
+      ],
+      "11": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "12": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "13": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "14": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "15": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "16": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "17": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "18": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "19": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "20": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "21": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "22": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "23": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "24": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "25": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "26": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "27": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "28": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "29": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "30": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "31": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "32": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "33": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "34": [
+        "Search (locate keyword in source file)",
+        "ERROR_NONE"
+      ],
+      "35": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "36": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "37": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "38": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "39": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "40": "fail"
+    },
+    {
+      "0": [
+        "Read (view directory listing)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (locate files in repository)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Read (view whole source file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Search (find class definition in code)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Search (find method definitions in code)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Edit (insert lines into source file)",
+        "PROGRESS_PATCH"
+      ],
+      "7": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "9": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "10": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "11": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "12": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "13": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "14": [
+        "Edit (replace line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "15": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "16": [
+        "Search (find method definitions in code)",
+        "INFO_SOURCE"
+      ],
+      "17": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "18": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "19": [
+        "Run (run verification script)",
+        "ERROR_NONE"
+      ],
+      "20": [
+        "Run (run verification script)",
+        "PROGRESS_TEST"
+      ],
+      "21": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "22": "success"
+    },
+    {
+      "0": [
+        "Read (view whole source file)",
+        "INFO_SOURCE"
+      ],
+      "1": [
+        "Search (find method definitions in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Edit (replace line range in source file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find method definitions in code)",
+        "ERROR_NONE"
+      ],
+      "1": [
+        "Search (locate files in repository)",
+        "DISCOVERY_REPO"
+      ],
+      "2": [
+        "Search (find method definitions in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "4": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "5": [
+        "Search (find method definitions in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "6": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "7": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "8": [
+        "Search (find method definitions in code)",
+        "REPEATED_SOURCE"
+      ],
+      "9": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "10": [
+        "Search (find method definitions in code)",
+        "REPEATED_SOURCE"
+      ],
+      "11": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "12": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "13": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "14": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "15": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "16": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "17": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "18": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "19": [
+        "Edit (replace line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "20": [
+        "Read (view line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "21": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "22": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "23": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "24": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "25": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "26": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "27": "success"
+    },
+    {
+      "0": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view whole source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Edit (replace line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "6": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "7": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "8": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "9": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "11": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "12": [
+        "Run (run verification script)",
+        "PROGRESS_TEST"
+      ],
+      "13": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "14": "success"
+    },
+    {
+      "0": [
+        "Search (locate files in repository)",
+        "DISCOVERY_REPO"
+      ],
+      "1": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Search (find method definitions in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Edit (insert lines into source file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Edit (replace line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "5": [
+        "Run (run verification script)",
+        "PROGRESS_TEST"
+      ],
+      "6": [
+        "Search (locate keyword in source file)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "Read (view whole source file)",
+        "REPEATED_SOURCE"
+      ],
+      "9": [
+        "Run (run verification script)",
+        "PROGRESS_TEST"
+      ],
+      "10": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "11": "success"
+    },
+    {
+      "0": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Edit (replace line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Search (find method definitions in code)",
+        "EMPTY_SOURCE"
+      ],
+      "4": [
+        "Search (find class definition in code)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Search (find method definitions in code)",
+        "EMPTY_SOURCE"
+      ],
+      "6": [
+        "Search (find method definitions in code)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Search (find class definition in code)",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "Run (run verification script)",
+        "ERROR_NONE"
+      ],
+      "9": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "Run (run verification script)",
+        "ERROR_NONE"
+      ],
+      "11": [
+        "Run (run verification script)",
+        "PROGRESS_TEST"
+      ],
+      "12": [
+        "Run (run verification script)",
+        "PROGRESS_TEST"
+      ],
+      "13": [
+        "Search (find method definitions in code)",
+        "EMPTY_SOURCE"
+      ],
+      "14": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "15": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "16": "success"
+    },
+    {
+      "0": [
+        "Search (locate files in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Search (find method definitions in code)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "9": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "10": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "11": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "12": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "13": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "14": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "15": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "16": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "17": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "18": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "19": [
+        "Search (locate keyword in source file)",
+        "EMPTY_SOURCE"
+      ],
+      "20": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "21": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "22": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "23": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "24": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "25": [
+        "Read (view line range in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "26": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "27": [
+        "Read (view line range in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "28": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "29": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "30": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "31": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "32": [
+        "Edit (replace line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "33": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "34": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "35": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "36": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "37": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "38": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "39": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "40": "fail"
+    },
+    {
+      "0": [
+        "Search (locate files in repository)",
+        "DISCOVERY_REPO"
+      ],
+      "1": [
+        "Read (view whole source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (view whole source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "4": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Read (view line range in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "6": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "7": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "9": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "10": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "11": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "12": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "13": [
+        "Edit (insert lines into source file)",
+        "PROGRESS_PATCH"
+      ],
+      "14": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "15": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "16": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "17": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "18": [
+        "Search (locate files in repository)",
+        "DISCOVERY_REPO"
+      ],
+      "19": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "20": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "21": [
+        "Edit (replace line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "22": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "23": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "24": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "25": [
+        "Edit (insert lines into source file)",
+        "PROGRESS_PATCH"
+      ],
+      "26": [
+        "Edit (insert lines into source file)",
+        "PROGRESS_PATCH"
+      ],
+      "27": [
+        "Edit (replace line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "28": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "29": [
+        "Edit (replace line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "30": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "31": [
+        "Edit (replace line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "32": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "33": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "34": [
+        "Run (run verification script)",
+        "PROGRESS_TEST"
+      ],
+      "35": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "36": "success"
+    },
+    {
+      "0": [
+        "Read (view directory listing)",
+        "DISCOVERY_REPO"
+      ],
+      "1": [
+        "Read (view whole source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Search (find class definition in code)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Search (find method definitions in code)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Search (find method definitions in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "5": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "9": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "11": [
+        "Search (find method definitions in code)",
+        "REPEATED_SOURCE"
+      ],
+      "12": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "13": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "14": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "15": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "16": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "17": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "18": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "19": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "20": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "21": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "22": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "23": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "24": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "25": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "26": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "27": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "28": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "29": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "30": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "31": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "32": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "33": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "34": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "35": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "36": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "37": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "38": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "39": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "40": "fail"
+    },
+    {
+      "0": [
+        "Read (view directory listing)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (find class definition in code)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Search (find method definitions in code)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Search (find class definition in code)",
+        "REPEATED_SOURCE"
+      ],
+      "4": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "5": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "6": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Read (view whole source file)",
+        "REPEATED_SOURCE"
+      ],
+      "8": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "9": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "10": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "11": [
+        "Edit (insert lines into source file)",
+        "PROGRESS_PATCH"
+      ],
+      "12": [
+        "Read (view line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "13": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "14": [
+        "Search (find method definitions in code)",
+        "DISCOVERY_TEST"
+      ],
+      "15": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "16": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "17": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "18": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "19": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "20": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "21": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "22": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "23": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "24": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "25": [
+        "Run (run verification script)",
+        "PROGRESS_TEST"
+      ],
+      "26": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "27": "success"
+    },
+    {
+      "0": [
+        "Search (locate files in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (view whole source file)",
+        "REPEATED_SOURCE"
+      ],
+      "3": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "4": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "5": [
+        "Search (find method definitions in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "6": [
+        "Search (locate keyword in source file)",
+        "ERROR_NONE"
+      ],
+      "7": [
+        "Search (locate keyword in source file)",
+        "ERROR_NONE"
+      ],
+      "8": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "9": [
+        "Search (find method definitions in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "10": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "11": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "12": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "13": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "14": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "15": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "16": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "17": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "18": [
+        "Edit (insert lines into source file)",
+        "PROGRESS_PATCH"
+      ],
+      "19": [
+        "Read (view line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "20": [
+        "Read (view line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "21": [
+        "Edit (replace line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "22": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "23": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "24": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "25": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "26": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "27": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "28": [
+        "Edit (insert lines into source file)",
+        "PROGRESS_PATCH"
+      ],
+      "29": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "30": [
+        "Read (view line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "31": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "32": "success"
+    },
+    {
+      "0": [
+        "Search (locate files in repository)",
+        "DISCOVERY_REPO"
+      ],
+      "1": [
+        "Search (locate files in repository)",
+        "DISCOVERY_REPO"
+      ],
+      "2": [
+        "Read (view whole source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "6": [
+        "Search (find method definitions in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "7": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "8": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "9": [
+        "Search (find method definitions in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "10": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "11": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "12": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "13": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "14": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "15": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "16": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "17": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "18": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "19": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "20": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "21": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "22": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "23": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "24": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "25": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "26": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "27": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "28": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "29": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "30": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "31": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "32": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "33": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "34": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "35": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "36": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "37": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "38": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "39": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "40": "fail"
+    },
+    {
+      "0": [
+        "Search (locate files in repository)",
+        "DISCOVERY_REPO"
+      ],
+      "1": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "5": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "6": [
+        "Search (find method definitions in code)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Read (view line range in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "8": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "9": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "Read (view line range in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "11": [
+        "Search (locate keyword in source file)",
+        "EMPTY_SOURCE"
+      ],
+      "12": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "13": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "14": [
+        "Search (find method definitions in code)",
+        "INFO_SOURCE"
+      ],
+      "15": [
+        "Edit (insert lines into source file)",
+        "PROGRESS_PATCH"
+      ],
+      "16": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "17": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "18": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "19": [
+        "Read (view whole source file)",
+        "INFO_SOURCE"
+      ],
+      "20": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "21": [
+        "Edit (replace line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "22": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "23": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "24": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "25": [
+        "Read (view line range in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "26": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "27": [
+        "Edit (replace line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "28": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "29": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "30": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "31": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "32": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "33": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "34": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "35": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "36": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "37": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "38": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "39": "success"
+    },
+    {
+      "0": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Search (locate keyword in source file)",
+        "EMPTY_SOURCE"
+      ],
+      "3": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "4": [
+        "Edit (insert lines into source file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "6": "success"
+    },
+    {
+      "0": [
+        "Search (locate files in repository)",
+        "DISCOVERY_REPO"
+      ],
+      "1": [
+        "Read (view whole source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Search (find method definitions in code)",
+        "ERROR_NONE"
+      ],
+      "3": [
+        "Search (find method definitions in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "4": [
+        "Search (find method definitions in code)",
+        "ERROR_NONE"
+      ],
+      "5": [
+        "Search (find class definition in code)",
+        "ERROR_NONE"
+      ],
+      "6": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "7": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "8": [
+        "Search (find method definitions in code)",
+        "ERROR_NONE"
+      ],
+      "9": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "10": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "11": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "12": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "13": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "14": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "15": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "16": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "17": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "18": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "19": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "20": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "21": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "22": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "23": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "24": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "25": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "26": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "27": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "28": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "29": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "30": [
+        "Edit (insert lines into source file)",
+        "PROGRESS_PATCH"
+      ],
+      "31": [
+        "Read (view line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "32": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "33": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "34": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "35": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "36": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_PATCH"
+      ],
+      "37": "success"
+    },
+    {
+      "0": [
+        "Search (locate files in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view whole source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "5": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "6": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "8": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "9": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "10": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "11": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "12": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "13": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "14": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "15": [
+        "Search (locate files in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "16": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "17": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "18": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "19": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "20": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "21": [
+        "Search (locate keyword in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "22": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "23": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "24": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "25": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "26": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "27": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "28": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "29": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "30": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "31": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "32": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "33": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "34": [
+        "Edit (replace line range in source file)",
+        "ERROR_NONE"
+      ],
+      "35": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "36": [
+        "Edit (replace line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "37": [
+        "Edit (replace line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "38": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "39": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "40": "fail"
+    },
+    {
+      "0": [
+        "Search (locate files in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "5": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Read (view line range in source file)",
+        "EMPTY_SOURCE"
+      ],
+      "8": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "9": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "11": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "12": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "13": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "14": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "15": [
+        "Search (locate keyword in source file)",
+        "EMPTY_SOURCE"
+      ],
+      "16": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "17": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "18": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "19": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "20": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "21": [
+        "Search (locate keyword in source file)",
+        "DISCOVERY_TEST"
+      ],
+      "22": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "23": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "24": [
+        "Search (find class definition in code)",
+        "REPEATED_SOURCE"
+      ],
+      "25": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "26": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "27": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "28": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "29": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "30": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "31": [
+        "Search (find method definitions in code)",
+        "EMPTY_SOURCE"
+      ],
+      "32": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "33": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "34": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "35": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "36": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "37": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "38": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "39": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "40": "fail"
+    },
+    {
+      "0": [
+        "Search (locate keyword in source file)",
+        "ERROR_NONE"
+      ],
+      "1": [
+        "Read (view directory listing)",
+        "INFO_REPO"
+      ],
+      "2": [
+        "Search (find method definitions in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "6": [
+        "Search (find class definition in code)",
+        "DISCOVERY_SOURCE"
+      ],
+      "7": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "9": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "10": [
+        "Search (locate keyword in source file)",
+        "ERROR_NONE"
+      ],
+      "11": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "12": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "13": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "14": [
+        "Read (view whole source file)",
+        "ERROR_NONE"
+      ],
+      "15": [
+        "Read (view whole source file)",
+        "ERROR_NONE"
+      ],
+      "16": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "17": [
+        "Edit (replace line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "18": [
+        "Read (view line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "19": [
+        "Run (run verification script)",
+        "ERROR_NONE"
+      ],
+      "20": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "21": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "22": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "23": [
+        "Run (run verification script)",
+        "ERROR_TEST"
+      ],
+      "24": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "25": [
+        "Read (view directory listing)",
+        "INFO_REPO"
+      ],
+      "26": [
+        "Run (run verification script)",
+        "ERROR_NONE"
+      ],
+      "27": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "28": [
+        "Read (view line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "29": [
+        "Run (run verification script)",
+        "ERROR_NONE"
+      ],
+      "30": [
+        "Search (locate files in repository)",
+        "ERROR_NONE"
+      ],
+      "31": [
+        "Run (run verification script)",
+        "ERROR_NONE"
+      ],
+      "32": [
+        "Read (view directory listing)",
+        "ERROR_NONE"
+      ],
+      "33": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "34": [
+        "Read (view directory listing)",
+        "ERROR_NONE"
+      ],
+      "35": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "36": [
+        "Run (run verification script)",
+        "ERROR_NONE"
+      ],
+      "37": [
+        "Run (run verification script)",
+        "ERROR_NONE"
+      ],
+      "38": [
+        "Read (view line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "39": [
+        "Run (run verification script)",
+        "ERROR_NONE"
+      ],
+      "40": "fail"
+    }
+  ],
+  "run_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "source": {
+    "db": "job_logs/django__django-16595.sqlite3",
+    "tag": "vm_113_iter_0"
+  }
+}

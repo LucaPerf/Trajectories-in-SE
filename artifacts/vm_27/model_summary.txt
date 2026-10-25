@@ -1,0 +1,176 @@
+42 states, 132 transitions
+
+[q0] init
+      0.40 -> [q2] Read (read directory listing),INFO_REPO
+      0.15 -> [q3] Read (read whole file contents),ERROR_SOURCE
+      0.10 -> [q5] Search (find class definition in repository),DISCOVERY_SOURCE
+      0.10 -> [q4] Read (read whole file contents),INFO_SOURCE
+      0.10 -> [q8] Search (find source file in repository),INFO_REPO
+      0.05 -> [q6] Search (find pattern in repository),DISCOVERY_SOURCE
+      0.05 -> [q7] Search (find source file in repository),DISCOVERY_SOURCE
+      0.05 -> [q1] Read (read directory listing),ERROR_NONE
+[q1] Read (read directory listing),ERROR_NONE
+      1.00 -> [q8] Search (find source file in repository),INFO_REPO
+[q2] Read (read directory listing),INFO_REPO
+      0.50 -> [q3] Read (read whole file contents),ERROR_SOURCE
+      0.12 -> [q4] Read (read whole file contents),INFO_SOURCE
+      0.12 -> [q9] Search (find pattern in single file),INFO_SOURCE
+      0.12 -> [q6] Search (find pattern in repository),DISCOVERY_SOURCE
+      0.12 -> [q5] Search (find class definition in repository),DISCOVERY_SOURCE
+[q3] Read (read whole file contents),ERROR_SOURCE
+      0.25 -> [q5] Search (find class definition in repository),DISCOVERY_SOURCE
+      0.25 -> [q13] Search (find pattern in repository),ERROR_SOURCE
+      0.12 -> [q6] Search (find pattern in repository),DISCOVERY_SOURCE
+      0.12 -> [q10] Search (find class definition in repository),INFO_SOURCE
+      0.12 -> [q14] Search (find pattern in repository),INFO_REPO
+      0.12 -> [q3] Read (read whole file contents),ERROR_SOURCE
+[q4] Read (read whole file contents),INFO_SOURCE
+      0.17 -> [q12] Write (rewrite whole file contents),PROGRESS_PATCH
+      0.17 -> [q11] Edit (replace text in single file),PROGRESS_PATCH
+      0.12 -> [q4] Read (read whole file contents),INFO_SOURCE
+      0.10 -> [q9] Search (find pattern in single file),INFO_SOURCE
+      0.10 -> [q29] Read (read line range),INFO_SOURCE
+      0.07 -> [q19] Write (rewrite whole file contents),PROGRESS_SOURCE
+      0.07 -> [q17] Submit (apply repository patch),PROGRESS_TEST__success
+      0.05 -> [q16] Read (read whole file contents),REPEATED_SOURCE
+      0.02 -> [q13] Search (find pattern in repository),ERROR_SOURCE
+      0.02 -> [q18] Submit (apply repository patch),ERROR_TEST
+      0.02 -> [q23] Search (find method definition in single file),EMPTY_SOURCE
+      0.02 -> [q15] Search (find pattern in repository),INFO_SOURCE
+      0.02 -> [q32] Run (execute diagnostic command),ERROR_NONE
+      0.02 -> [q34] Submit (apply repository patch),PROGRESS_PATCH__success
+      0.02 -> [q35] Search (find pattern in single file),EMPTY_SOURCE
+[q5] Search (find class definition in repository),DISCOVERY_SOURCE
+      0.71 -> [q4] Read (read whole file contents),INFO_SOURCE
+      0.14 -> [q21] Run (execute diagnostic command),ERROR_SOURCE
+      0.14 -> [q20] Read (read whole file contents),DISCOVERY_SOURCE
+[q6] Search (find pattern in repository),DISCOVERY_SOURCE
+      0.60 -> [q4] Read (read whole file contents),INFO_SOURCE
+      0.20 -> [q6] Search (find pattern in repository),DISCOVERY_SOURCE
+      0.20 -> [q12] Write (rewrite whole file contents),PROGRESS_PATCH
+[q7] Search (find source file in repository),DISCOVERY_SOURCE
+      0.50 -> [q4] Read (read whole file contents),INFO_SOURCE
+      0.50 -> [q20] Read (read whole file contents),DISCOVERY_SOURCE
+[q8] Search (find source file in repository),INFO_REPO
+      0.33 -> [q7] Search (find source file in repository),DISCOVERY_SOURCE
+      0.33 -> [q10] Search (find class definition in repository),INFO_SOURCE
+      0.33 -> [q5] Search (find class definition in repository),DISCOVERY_SOURCE
+[q9] Search (find pattern in single file),INFO_SOURCE
+      0.40 -> [q9] Search (find pattern in single file),INFO_SOURCE
+      0.10 -> [q15] Search (find pattern in repository),INFO_SOURCE
+      0.10 -> [q25] Search (find class definition in single file),INFO_SOURCE
+      0.10 -> [q11] Edit (replace text in single file),PROGRESS_PATCH
+      0.10 -> [q16] Read (read whole file contents),REPEATED_SOURCE
+      0.10 -> [q29] Read (read line range),INFO_SOURCE
+      0.10 -> [q31] Read (read line range),REPEATED_SOURCE
+[q10] Search (find class definition in repository),INFO_SOURCE
+      1.00 -> [q4] Read (read whole file contents),INFO_SOURCE
+[q11] Edit (replace text in single file),PROGRESS_PATCH
+      0.32 -> [q11] Edit (replace text in single file),PROGRESS_PATCH
+      0.23 -> [q4] Read (read whole file contents),INFO_SOURCE
+      0.18 -> [q16] Read (read whole file contents),REPEATED_SOURCE
+      0.09 -> [q17] Submit (apply repository patch),PROGRESS_TEST__success
+      0.09 -> [q12] Write (rewrite whole file contents),PROGRESS_PATCH
+      0.05 -> [q18] Submit (apply repository patch),ERROR_TEST
+      0.05 -> [q30] Run (execute diagnostic command),DISCOVERY_SOURCE
+[q12] Write (rewrite whole file contents),PROGRESS_PATCH
+      0.34 -> [q12] Write (rewrite whole file contents),PROGRESS_PATCH
+      0.21 -> [q4] Read (read whole file contents),INFO_SOURCE
+      0.14 -> [q17] Submit (apply repository patch),PROGRESS_TEST__success
+      0.07 -> [q16] Read (read whole file contents),REPEATED_SOURCE
+      0.07 -> [q18] Submit (apply repository patch),ERROR_TEST
+      0.03 -> [q28] Write (rewrite whole file contents),REPEATED_SOURCE
+      0.03 -> [q29] Read (read line range),INFO_SOURCE
+      0.03 -> [q31] Read (read line range),REPEATED_SOURCE
+      0.03 -> [q21] Run (execute diagnostic command),ERROR_SOURCE
+      0.03 -> [q37] Search (find pattern in repository),EMPTY_SOURCE
+[q13] Search (find pattern in repository),ERROR_SOURCE
+      0.67 -> [q4] Read (read whole file contents),INFO_SOURCE
+      0.33 -> [q22] Search (find class definition in single file),DISCOVERY_SOURCE
+[q14] Search (find pattern in repository),INFO_REPO
+      1.00 -> [q4] Read (read whole file contents),INFO_SOURCE
+[q15] Search (find pattern in repository),INFO_SOURCE
+      0.50 -> [q24] Search (find pattern in single file),ERROR_NONE
+      0.50 -> [q11] Edit (replace text in single file),PROGRESS_PATCH
+[q16] Read (read whole file contents),REPEATED_SOURCE
+      0.30 -> [q12] Write (rewrite whole file contents),PROGRESS_PATCH
+      0.30 -> [q17] Submit (apply repository patch),PROGRESS_TEST__success
+      0.10 -> [q18] Submit (apply repository patch),ERROR_TEST
+      0.10 -> [q26] Read (read line range),DISCOVERY_SOURCE
+      0.10 -> [q6] Search (find pattern in repository),DISCOVERY_SOURCE
+      0.10 -> [q27] Search (find method definition in single file),INFO_SOURCE
+[q17] Submit (apply repository patch),PROGRESS_TEST__success
+[q18] Submit (apply repository patch),ERROR_TEST
+      0.33 -> [q11] Edit (replace text in single file),PROGRESS_PATCH
+      0.33 -> [q12] Write (rewrite whole file contents),PROGRESS_PATCH
+      0.17 -> [q19] Write (rewrite whole file contents),PROGRESS_SOURCE
+      0.17 -> [q4] Read (read whole file contents),INFO_SOURCE
+[q19] Write (rewrite whole file contents),PROGRESS_SOURCE
+      0.40 -> [q17] Submit (apply repository patch),PROGRESS_TEST__success
+      0.20 -> [q18] Submit (apply repository patch),ERROR_TEST
+      0.20 -> [q4] Read (read whole file contents),INFO_SOURCE
+      0.20 -> [q19] Write (rewrite whole file contents),PROGRESS_SOURCE
+[q20] Read (read whole file contents),DISCOVERY_SOURCE
+      0.50 -> [q16] Read (read whole file contents),REPEATED_SOURCE
+      0.50 -> [q23] Search (find method definition in single file),EMPTY_SOURCE
+[q21] Run (execute diagnostic command),ERROR_SOURCE
+      0.67 -> [q4] Read (read whole file contents),INFO_SOURCE
+      0.33 -> [q31] Read (read line range),REPEATED_SOURCE
+[q22] Search (find class definition in single file),DISCOVERY_SOURCE
+      1.00 -> [q5] Search (find class definition in repository),DISCOVERY_SOURCE
+[q23] Search (find method definition in single file),EMPTY_SOURCE
+      0.50 -> [q25] Search (find class definition in single file),INFO_SOURCE
+      0.50 -> [q11] Edit (replace text in single file),PROGRESS_PATCH
+[q24] Search (find pattern in single file),ERROR_NONE
+      0.50 -> [q4] Read (read whole file contents),INFO_SOURCE
+      0.50 -> [q29] Read (read line range),INFO_SOURCE
+[q25] Search (find class definition in single file),INFO_SOURCE
+      0.67 -> [q11] Edit (replace text in single file),PROGRESS_PATCH
+      0.33 -> [q27] Search (find method definition in single file),INFO_SOURCE
+[q26] Read (read line range),DISCOVERY_SOURCE
+      1.00 -> [q11] Edit (replace text in single file),PROGRESS_PATCH
+[q27] Search (find method definition in single file),INFO_SOURCE
+      0.50 -> [q25] Search (find class definition in single file),INFO_SOURCE
+      0.50 -> [q29] Read (read line range),INFO_SOURCE
+[q28] Write (rewrite whole file contents),REPEATED_SOURCE
+      1.00 -> [q17] Submit (apply repository patch),PROGRESS_TEST__success
+[q29] Read (read line range),INFO_SOURCE
+      0.35 -> [q29] Read (read line range),INFO_SOURCE
+      0.18 -> [q12] Write (rewrite whole file contents),PROGRESS_PATCH
+      0.12 -> [q4] Read (read whole file contents),INFO_SOURCE
+      0.06 -> [q24] Search (find pattern in single file),ERROR_NONE
+      0.06 -> [q33] Read (read line range),EMPTY_SOURCE
+      0.06 -> [q35] Search (find pattern in single file),EMPTY_SOURCE
+      0.06 -> [q9] Search (find pattern in single file),INFO_SOURCE
+      0.06 -> [q38] Run (execute test suite),ERROR_TEST
+      0.06 -> [q39] Write (rewrite whole file contents),PROGRESS_PATCH__fail
+[q30] Run (execute diagnostic command),DISCOVERY_SOURCE
+      1.00 -> [q12] Write (rewrite whole file contents),PROGRESS_PATCH
+[q31] Read (read line range),REPEATED_SOURCE
+      0.62 -> [q31] Read (read line range),REPEATED_SOURCE
+      0.12 -> [q35] Search (find pattern in single file),EMPTY_SOURCE
+      0.06 -> [q17] Submit (apply repository patch),PROGRESS_TEST__success
+      0.06 -> [q21] Run (execute diagnostic command),ERROR_SOURCE
+      0.06 -> [q29] Read (read line range),INFO_SOURCE
+      0.06 -> [q40] Read (read line range),REPEATED_SOURCE__fail
+[q32] Run (execute diagnostic command),ERROR_NONE
+      1.00 -> [q17] Submit (apply repository patch),PROGRESS_TEST__success
+[q33] Read (read line range),EMPTY_SOURCE
+      1.00 -> [q31] Read (read line range),REPEATED_SOURCE
+[q34] Submit (apply repository patch),PROGRESS_PATCH__success
+[q35] Search (find pattern in single file),EMPTY_SOURCE
+      0.50 -> [q35] Search (find pattern in single file),EMPTY_SOURCE
+      0.12 -> [q36] Search (find class definition in single file),REPEATED_SOURCE
+      0.12 -> [q4] Read (read whole file contents),INFO_SOURCE
+      0.12 -> [q29] Read (read line range),INFO_SOURCE
+      0.12 -> [q31] Read (read line range),REPEATED_SOURCE
+[q36] Search (find class definition in single file),REPEATED_SOURCE
+      1.00 -> [q31] Read (read line range),REPEATED_SOURCE
+[q37] Search (find pattern in repository),EMPTY_SOURCE
+      1.00 -> [q4] Read (read whole file contents),INFO_SOURCE
+[q38] Run (execute test suite),ERROR_TEST
+      1.00 -> [q29] Read (read line range),INFO_SOURCE
+[q39] Write (rewrite whole file contents),PROGRESS_PATCH__fail
+[q40] Read (read line range),REPEATED_SOURCE__fail
+[__start0] 
+      0.00 -> [q0] init

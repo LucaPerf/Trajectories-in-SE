@@ -1,0 +1,24 @@
+{
+  "exec_actions": [
+    "Edit (replace string in file)",
+    "Read (view code section in file)",
+    "Read (view test code in file)",
+    "Search (find pattern in file)",
+    "Search (find pattern in repository)",
+    "Verify (check modification in file)"
+  ],
+  "submit_actions": [
+    "Submit (submit patch to repository)"
+  ],
+  "outputs": [
+    "DISCOVERY_SOURCE",
+    "DISCOVERY_TEST",
+    "EMPTY_NONE",
+    "ERROR_NONE",
+    "INFO_SOURCE",
+    "INFO_TEST",
+    "PROGRESS_PATCH",
+    "PROGRESS_TEST",
+    "REPEATED_SOURCE"
+  ]
+}

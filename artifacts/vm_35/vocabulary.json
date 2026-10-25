@@ -1,0 +1,31 @@
+{
+  "exec_actions": [
+    "Edit (replace line range in single file)",
+    "Edit (rewrite single file)",
+    "Execute (run command in shell)",
+    "Read (view line range in single file)",
+    "Read (view single file)",
+    "Search (look for code reference in single file)",
+    "Search (look for code reference in whole repository)",
+    "Search (look for test case in single file)",
+    "Search (look for test case in whole repository)",
+    "Verify (check diff of single file)",
+    "Verify (check syntax of single file)"
+  ],
+  "submit_actions": [
+    "Modify (wrap code block in context manager)",
+    "Submit (apply patch to repository)"
+  ],
+  "outputs": [
+    "DISCOVERY_SOURCE",
+    "DISCOVERY_TEST",
+    "EMPTY_NONE",
+    "ERROR_PATCH",
+    "ERROR_TEST",
+    "INFO_SOURCE",
+    "INFO_TEST",
+    "PROGRESS_PATCH",
+    "PROGRESS_TEST",
+    "REPEATED_SOURCE"
+  ]
+}

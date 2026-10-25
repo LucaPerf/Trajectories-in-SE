@@ -1,0 +1,437 @@
+=== run 1 (success) ===
+0: exec_command grep -r "AutoFieldMeta" /testbed --include="*.py"
+      action: Search (find symbol in repository)
+      output: DISCOVERY_SOURCE
+1: exec_command grep -n -A 30 "class AutoFieldMeta" /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+2: exec_command grep -n -B 5 -A 20 "def __subclasscheck__" /testbed/django/db/models/fields/__init__.py Let's mod...
+      action: Search (find symbol in source file)
+      output: DISCOVERY_SOURCE
+3: exec_command sed -i 's/return subclass in self._subclasses or super().__subclasscheck__(subclass)/return subcl...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+4: submit_patch Updated AutoFieldMeta.__subclasscheck__ to properly handle subclasses of BigAutoField and SmallAu...
+      action: Test (run test suite for repository)
+      output: PROGRESS_TEST
+5: <success>
+
+=== run 2 (success) ===
+0: exec_command grep -r "AutoFieldMeta" /testbed/django/db/models/fields/ --include="*.py" Let's do that first.
+      action: Search (find symbol in repository)
+      output: DISCOVERY_SOURCE
+1: exec_command sed -n '1,50p' /testbed/django/db/models/fields/__init__.py | grep -n "AutoFieldMeta\|_subclasses...
+      action: Search (find symbol in source file)
+      output: ERROR_NONE
+2: exec_command cat /testbed/django/db/models/fields/__init__.py | head -n 100
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+3: exec_command grep -n "class AutoFieldMeta\|def __subclasscheck__\|_subclasses" /testbed/django/db/models/field...
+      action: Search (find symbol in source file)
+      output: DISCOVERY_SOURCE
+4: exec_command sed -n '2500,2550p' /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: DISCOVERY_SOURCE
+5: exec_command sed -i "s/ return subclass in self._subclasses or super().__subclasscheck__(subclass)/ return (su...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+6: exec_command sed -n '2500,2540p' /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: PROGRESS_PATCH
+7: submit_patch Fixed AutoFieldMeta.__subclasscheck__ to allow subclasses of BigAutoField and SmallAutoField to p...
+      action: Submit (apply modification to repository)
+      output: PROGRESS_TEST
+8: <success>
+
+=== run 3 (success) ===
+0: exec_command grep -r "AutoFieldMeta" /testbed grep -r "AutoFieldMeta" /testbed
+      action: Search (find symbol in repository)
+      output: DISCOVERY_SOURCE
+1: exec_command grep -n -A 30 "class AutoFieldMeta" /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: DISCOVERY_SOURCE
+2: exec_command sed -i 's/return subclass in self._subclasses/return any(issubclass(subclass, cls) for cls in sel...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+3: submit_patch Modified AutoFieldMeta.__subclasscheck__ to use issubclass against BigAutoField and SmallAutoFiel...
+      action: Submit (apply modification to repository)
+      output: PROGRESS_TEST
+4: <success>
+
+=== run 4 (success) ===
+0: exec_command grep -rn "AutoFieldMeta" /testbed --include="*.py" | head -20
+      action: Search (find symbol in source file)
+      output: DISCOVERY_SOURCE
+1: exec_command grep -n -A 30 "class AutoFieldMeta" /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+2: exec_command grep -n -A 5 "class BigAutoField" /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+3: exec_command grep -n -B 5 -A 15 "def __subclasscheck__" /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+4: exec_command sed -i 's/return subclass in self._subclasses or super().__subclasscheck__(subclass)/return subcl...
+      action: Edit (replace line in source file)
+      output: PROGRESS_SOURCE
+5: submit_patch Modified AutoFieldMeta.__subclasscheck__ to use issubclass for checking subclasses of BigAutoFiel...
+      action: Submit (apply modification to repository)
+      output: PROGRESS_TEST
+6: <success>
+
+=== run 5 (success) ===
+0: exec_command grep -r "AutoFieldMeta" /testbed/django/ --include="*.py"
+      action: Search (find symbol in repository)
+      output: DISCOVERY_SOURCE
+1: exec_command grep -A 30 "class AutoFieldMeta" /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+2: exec_command sed -i 's/return subclass in self._subclasses or super().__subclasscheck__(subclass)/return subcl...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+3: exec_command grep -n -A 3 "def __subclasscheck__" /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+4: submit_patch Fixed AutoFieldMeta.__subclasscheck__ to allow subclasses of BigAutoField and SmallAutoField
+      action: Submit (apply modification to repository)
+      output: PROGRESS_TEST
+5: <success>
+
+=== run 6 (success) ===
+0: exec_command grep -r "AutoFieldMeta" /testbed/django/ --include="*.py"
+      action: Search (find symbol in repository)
+      output: DISCOVERY_SOURCE
+1: exec_command grep -n "AutoFieldMeta\|_subclasses\|__subclasscheck__" /testbed/django/db/models/fields/__init__...
+      action: Search (find symbol in source file)
+      output: INFO_SOURCE
+2: exec_command sed -n '2500,2550p' /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+3: exec_command sed -i "s/return subclass in self._subclasses or super().__subclasscheck__(subclass)/return issub...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+4: submit_patch Changed AutoFieldMeta.__subclasscheck__ to use issubclass(subclass, self._subclasses) instead of ...
+      action: Submit (apply modification to repository)
+      output: PROGRESS_TEST
+5: <success>
+
+=== run 7 (success) ===
+0: exec_command grep -r "class AutoFieldMeta" /testbed/django
+      action: Search (find symbol in repository)
+      output: DISCOVERY_SOURCE
+1: exec_command head -n 100 /testbed/django/db/models/fields/__init__.py | tail -n 50
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+2: exec_command grep -n "__subclasscheck__\|_subclasses\|class AutoFieldMeta" /testbed/django/db/models/fields/__...
+      action: Search (find symbol in source file)
+      output: DISCOVERY_SOURCE
+3: exec_command `exec_command head -n 2540 /testbed/django/db/models/fields/__init__.py | tail -n 50`
+      action: Execute (run shell command in repository)
+      output: ERROR_NONE
+4: exec_command head -n 2540 /testbed/django/db/models/fields/__init__.py | tail -n 60
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+5: exec_command sed -i 's/return subclass in self._subclasses or super().__subclasscheck__(subclass)/return any(i...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+6: exec_command python3 << 'EOF' with open('/testbed/django/db/models/fields/__init__.py', 'r') as f: lines = f.r...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+7: exec_command head -n 2530 /testbed/django/db/models/fields/__init__.py | tail -n 30
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+8: submit_patch Fixed AutoFieldMeta.__subclasscheck__ to allow subclasses of BigAutoField and SmallAutoField
+      action: Submit (apply modification to repository)
+      output: PROGRESS_TEST
+9: <success>
+
+=== run 8 (success) ===
+0: exec_command grep -r "AutoFieldMeta" /testbed/django/ The system wants me to find `AutoFieldMeta` and fix `__s...
+      action: Search (find symbol in repository)
+      output: DISCOVERY_SOURCE
+1: exec_command grep -n -A 20 "class AutoFieldMeta" /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: DISCOVERY_SOURCE
+2: exec_command grep -n -A 50 "class AutoFieldMeta" /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+3: exec_command sed -i 's/return subclass in self._subclasses or super().__subclasscheck__(subclass)/return issub...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+4: submit_patch Fixed AutoFieldMeta.__subclasscheck__ to use issubclass instead of identity check, allowing subcl...
+      action: Submit (apply modification to repository)
+      output: PROGRESS_TEST
+5: <success>
+
+=== run 9 (success) ===
+0: exec_command cd /testbed && grep -r "AutoFieldMeta" --include="*.py" -l The path to the repository is /testbed...
+      action: Search (find symbol in repository)
+      output: DISCOVERY_SOURCE
+1: exec_command cat /testbed/django/db/models/fields/__init__.py | head -200
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+2: exec_command grep -n "class AutoFieldMeta" /testbed/django/db/models/fields/__init__.py
+      action: Search (find symbol in source file)
+      output: DISCOVERY_SOURCE
+3: exec_command `exec_command sed -n '2490,2550p' /testbed/django/db/models/fields/__init__.py`
+      action: Execute (run shell command in repository)
+      output: ERROR_NONE
+4: exec_command `exec_command sed -n '2490,2560p' /testbed/django/db/models/fields/__init__.py`
+      action: Execute (run shell command in repository)
+      output: ERROR_NONE
+5: exec_command sed -n '2500,2560p' /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+6: exec_command sed -i 's/return subclass in self._subclasses or super().__subclasscheck__(subclass)/return issub...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+7: exec_command grep -n "_subclasses" /testbed/django/db/models/fields/__init__.py
+      action: Search (find symbol in source file)
+      output: PROGRESS_PATCH
+8: submit_patch Changed AutoFieldMeta.__subclasscheck__ to use issubclass(subclass, self._subclasses) instead of ...
+      action: Submit (apply modification to repository)
+      output: PROGRESS_TEST
+9: <success>
+
+=== run 10 (success) ===
+0: exec_command grep -rn "AutoFieldMeta" /testbed/django/db/models/fields/__init__.py Let's see the output. I'll ...
+      action: Search (find symbol in source file)
+      output: DISCOVERY_SOURCE
+1: exec_command sed -n '2500,2540p' /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+2: exec_command sed -i '2527s/.*/ return any(issubclass(subclass, cls) for cls in self._subclasses) or super().__...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+3: exec_command sed -n '2520,2535p' /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+4: submit_patch Fixed AutoFieldMeta.__subclasscheck__ to use issubclass check for _subclasses, allowing subclasse...
+      action: Submit (apply modification to repository)
+      output: PROGRESS_TEST
+5: <success>
+
+=== run 11 (success) ===
+0: exec_command grep -r "must subclass AutoField" /testbed
+      action: Search (find error message in repository)
+      output: DISCOVERY_SOURCE
+1: exec_command grep -r "AutoFieldMeta" /testbed --include="*.py" | head -30
+      action: Search (find symbol in repository)
+      output: INFO_SOURCE
+2: exec_command grep -n "AutoFieldMeta\|_subclasses\|must subclass AutoField" /testbed/django/db/models/fields/__...
+      action: Search (find symbol in source file)
+      output: INFO_SOURCE
+3: exec_command sed -n '2490,2540p' /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+4: exec_command sed -i 's/return subclass in self._subclasses or super().__subclasscheck__(subclass)/return issub...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+5: exec_command sed -n '2502,2540p' /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+6: submit_patch Modified AutoFieldMeta.__subclasscheck__ to use issubclass(subclass, self._subclasses) instead of...
+      action: Submit (apply modification to repository)
+      output: PROGRESS_TEST
+7: <success>
+
+=== run 12 (success) ===
+0: exec_command grep -rn "AutoFieldMeta" /testbed --include="*.py"
+      action: Search (find symbol in repository)
+      output: DISCOVERY_SOURCE
+1: exec_command grep -n -A 30 "class AutoFieldMeta" /testbed/django/db/models/fields/__init__.py
+      action: Search (find symbol in source file)
+      output: INFO_SOURCE
+2: exec_command sed -i '2527s/subclass in self._subclasses/any(issubclass(subclass, cls) for cls in self._subclas...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+3: exec_command sed -n '2525,2530p' /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+4: submit_patch Fixed AutoFieldMeta.__subclasscheck__ to allow subclasses of BigAutoField and SmallAutoField by u...
+      action: Submit (apply modification to repository)
+      output: PROGRESS_TEST
+5: <success>
+
+=== run 13 (success) ===
+0: exec_command find /testbed -type f -name "*.py" -exec grep -l "AutoFieldMeta" {} \;
+      action: Search (find symbol in repository)
+      output: DISCOVERY_SOURCE
+1: exec_command grep -n "class AutoFieldMeta" /testbed/django/db/models/fields/__init__.py
+      action: Search (find symbol in source file)
+      output: DISCOVERY_SOURCE
+2: exec_command grep -n -A 20 "class AutoFieldMeta" /testbed/django/db/models/fields/__init__.py
+      action: Search (find symbol in source file)
+      output: DISCOVERY_SOURCE
+3: exec_command sed -n '2502,2550p' /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: DISCOVERY_SOURCE
+4: exec_command sed -i 's/return subclass in self._subclasses or super().__subclasscheck__(subclass)/return subcl...
+      action: Edit (replace line in source file)
+      output: INFO_SOURCE
+5: exec_command grep -A 3 "__subclasscheck__" /testbed/django/db/models/fields/__init__.py
+      action: Search (find symbol in source file)
+      output: DISCOVERY_SOURCE
+6: submit_patch Modified AutoFieldMeta.__subclasscheck__ to check issubclass(subclass, self._subclasses) to allow...
+      action: Submit (apply modification to repository)
+      output: PROGRESS_TEST
+7: <success>
+
+=== run 14 (success) ===
+0: exec_command grep -rn "AutoFieldMeta" /testbed/django/ --include="*.py"
+      action: Search (find symbol in repository)
+      output: DISCOVERY_SOURCE
+1: exec_command head -n 100 /testbed/django/db/models/fields/__init__.py | tail -n 50
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+2: exec_command sed -n '2480,2550p' /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: DISCOVERY_SOURCE
+3: exec_command sed -n '2530,2545p' /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+4: exec_command sed -i '2527s/.*/ return subclass in self._subclasses or issubclass(subclass, self._subclasses) o...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+5: submit_patch Fixed AutoFieldMeta.__subclasscheck__ to allow subclasses of BigAutoField and SmallAutoField.
+      action: Test (run test suite for repository)
+      output: PROGRESS_TEST
+6: <success>
+
+=== run 15 (success) ===
+0: exec_command grep -n "class AutoFieldMeta" /testbed/django/db/models/fields/__init__.py
+      action: Search (find symbol in source file)
+      output: DISCOVERY_SOURCE
+1: exec_command grep -n -A 20 "class AutoFieldMeta" /testbed/django/db/models/fields/__init__.py
+      action: Search (find symbol in source file)
+      output: DISCOVERY_SOURCE
+2: exec_command grep -n "__subclasscheck__\|__instancecheck__" /testbed/django/db/models/fields/__init__.py
+      action: Search (find symbol in source file)
+      output: DISCOVERY_SOURCE
+3: exec_command sed -i '2528s/return subclass in self._subclasses or super().__subclasscheck__(subclass)/return a...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+4: exec_command `exec_command sed -n '2520,2540p' /testbed/django/db/models/fields/__init__.py`
+      action: Read (view line range in source file)
+      output: ERROR_NONE
+5: exec_command sed -n '2520,2535p' /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: REPEATED_SOURCE
+6: exec_command sed -i '2527s/return subclass in self._subclasses or super().__subclasscheck__(subclass)/return a...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+7: submit_patch Fixed AutoFieldMeta.__subclasscheck__ to use issubclass check for _subclasses, allowing custom su...
+      action: Submit (apply modification to repository)
+      output: PROGRESS_TEST
+8: <success>
+
+=== run 16 (success) ===
+0: exec_command grep -r "AutoFieldMeta" /testbed --include="*.py" | head -n 20
+      action: Search (find symbol in repository)
+      output: DISCOVERY_SOURCE
+1: exec_command grep -n "class AutoFieldMeta" /testbed/django/db/models/fields/__init__.py -A 40
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+2: exec_command sed -i 's/return subclass in self._subclasses or super().__subclasscheck__(subclass)/return issub...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+3: exec_command grep -n "return issubclass" /testbed/django/db/models/fields/__init__.py
+      action: Search (find symbol in source file)
+      output: PROGRESS_PATCH
+4: submit_patch Changed __subclasscheck__ in AutoFieldMeta to use issubclass(subclass, self._subclasses) to allow...
+      action: Submit (apply modification to repository)
+      output: PROGRESS_TEST
+5: <success>
+
+=== run 17 (success) ===
+0: exec_command grep -n "_subclasses\|AutoFieldMeta" /testbed/django/db/models/fields/__init__.py
+      action: Search (find symbol in source file)
+      output: DISCOVERY_SOURCE
+1: exec_command grep -n -B2 -A25 "class AutoFieldMeta" /testbed/django/db/models/fields/__init__.py
+      action: Search (find symbol in source file)
+      output: DISCOVERY_SOURCE
+2: exec_command grep -n -B5 -A5 "must subclass AutoField" /testbed/django/db/models/options.py
+      action: Search (find error message in repository)
+      output: EMPTY_SOURCE
+3: exec_command grep -n -B2 -A15 "class BigAutoField\|class SmallAutoField\|class AutoField\b" /testbed/django/db...
+      action: Search (find symbol in source file)
+      output: DISCOVERY_SOURCE
+4: exec_command sed -n '2500,2530p' /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+5: exec_command sed -i 's/return subclass in self._subclasses or super().__subclasscheck__(subclass)/return issub...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+6: exec_command sed -n '2525,2530p' /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+7: submit_patch Fixed AutoFieldMeta.__subclasscheck__ to allow subclasses of BigAutoField and SmallAutoField by u...
+      action: Submit (apply modification to repository)
+      output: PROGRESS_TEST
+8: <success>
+
+=== run 18 (success) ===
+0: exec_command grep -r "AutoFieldMeta" /testbed --include="*.py"
+      action: Search (find symbol in repository)
+      output: DISCOVERY_SOURCE
+1: exec_command `exec_command grep -n -A 30 "class AutoFieldMeta" /testbed/django/db/models/fields/__init__.py`
+      action: Execute (run shell command in repository)
+      output: ERROR_NONE
+2: exec_command `exec_command grep -n -A 50 "class AutoFieldMeta" /testbed/django/db/models/fields/__init__.py`
+      action: Execute (run shell command in repository)
+      output: ERROR_NONE
+3: exec_command grep -n -A 50 "class AutoFieldMeta" /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+4: exec_command sed -i 's/return subclass in self._subclasses or super().__subclasscheck__(subclass)/return subcl...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+5: exec_command python3 << 'EOF' with open('/testbed/django/db/models/fields/__init__.py', 'r') as f: lines = f.r...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+6: exec_command grep -n -A 5 "def __subclasscheck__" /testbed/django/db/models/fields/__init__.py
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+7: submit_patch Fix AutoFieldMeta.__subclasscheck__ to allow subclasses of BigAutoField and SmallAutoField
+      action: Submit (apply modification to repository)
+      output: PROGRESS_TEST
+8: <success>
+
+=== run 19 (success) ===
+0: exec_command grep -r "AutoFieldMeta" /testbed/django/db/models/fields/ ---
+      action: Search (find symbol in repository)
+      output: DISCOVERY_SOURCE
+1: exec_command grep -n -A 30 "class AutoFieldMeta" /testbed/django/db/models/fields/__init__.py
+      action: Search (find symbol in source file)
+      output: DISCOVERY_SOURCE
+2: exec_command python3 -c " with open('/testbed/django/db/models/fields/__init__.py', 'r') as f: lines = f.readl...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+3: exec_command head -n 2540 /testbed/django/db/models/fields/__init__.py | tail -n 30
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+4: submit_patch Fixed AutoFieldMeta.__subclasscheck__ to allow subclasses of BigAutoField and SmallAutoField
+      action: Submit (apply modification to repository)
+      output: PROGRESS_TEST
+5: <success>
+
+=== run 20 (success) ===
+0: exec_command grep -rn "AutoFieldMeta" /testbed/
+      action: Search (find symbol in repository)
+      output: DISCOVERY_SOURCE
+1: exec_command cat /testbed/django/db/models/fields/__init__.py | head -n 2560 | tail -n 100
+      action: Read (view line range in source file)
+      output: INFO_SOURCE
+2: exec_command sed -i 's/return subclass in self._subclasses or super().__subclasscheck__(subclass)/return issub...
+      action: Edit (replace line in source file)
+      output: PROGRESS_PATCH
+3: exec_command python3 << 'EOF' with open('/testbed/django/db/models/fields/__init__.py', 'r') as f: content = f...
+      action: Execute (run shell command in repository)
+      output: PROGRESS_PATCH
+4: exec_command cat /testbed/django/db/models/fields/__init__.py | grep -n -A 3 -B 3 "__subclasscheck__"
+      action: Search (find symbol in source file)
+      output: INFO_SOURCE
+5: submit_patch Fixed AutoFieldMeta.__subclasscheck__ to allow subclasses of BigAutoField and SmallAutoField by u...
+      action: Submit (apply modification to repository)
+      output: PROGRESS_TEST
+6: <success>

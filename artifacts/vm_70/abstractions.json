@@ -1,0 +1,614 @@
+{
+  "act_categories": [
+    "Edit (replace line in source file)",
+    "Execute (run shell command in repository)",
+    "Read (view line range in source file)",
+    "Search (find error message in repository)",
+    "Search (find symbol in repository)",
+    "Search (find symbol in source file)",
+    "Submit (apply modification to repository)",
+    "Test (run test suite for repository)"
+  ],
+  "out_categories": [
+    "DISCOVERY_SOURCE",
+    "EMPTY_SOURCE",
+    "ERROR_NONE",
+    "INFO_PATCH",
+    "INFO_SOURCE",
+    "PROGRESS_PATCH",
+    "PROGRESS_TEST",
+    "REPEATED_SOURCE"
+  ],
+  "traces": [
+    {
+      "0": [
+        "Search (find symbol in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Search (find symbol in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Test (run test suite for repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find symbol in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find symbol in source file)",
+        "ERROR_NONE"
+      ],
+      "2": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Search (find symbol in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "4": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "5": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "6": [
+        "Read (view line range in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "7": [
+        "Submit (apply modification to repository)",
+        "PROGRESS_TEST"
+      ],
+      "8": "success"
+    },
+    {
+      "0": [
+        "Search (find symbol in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Submit (apply modification to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find symbol in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Edit (replace line in source file)",
+        "PROGRESS_SOURCE"
+      ],
+      "5": [
+        "Submit (apply modification to repository)",
+        "PROGRESS_TEST"
+      ],
+      "6": "success"
+    },
+    {
+      "0": [
+        "Search (find symbol in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Submit (apply modification to repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find symbol in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find symbol in source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Submit (apply modification to repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find symbol in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Search (find symbol in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Execute (run shell command in repository)",
+        "ERROR_NONE"
+      ],
+      "4": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "6": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "7": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "Submit (apply modification to repository)",
+        "PROGRESS_TEST"
+      ],
+      "9": "success"
+    },
+    {
+      "0": [
+        "Search (find symbol in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Submit (apply modification to repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find symbol in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Search (find symbol in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Execute (run shell command in repository)",
+        "ERROR_NONE"
+      ],
+      "4": [
+        "Execute (run shell command in repository)",
+        "ERROR_NONE"
+      ],
+      "5": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "7": [
+        "Search (find symbol in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "8": [
+        "Submit (apply modification to repository)",
+        "PROGRESS_TEST"
+      ],
+      "9": "success"
+    },
+    {
+      "0": [
+        "Search (find symbol in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Submit (apply modification to repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find error message in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find symbol in repository)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Search (find symbol in source file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Submit (apply modification to repository)",
+        "PROGRESS_TEST"
+      ],
+      "7": "success"
+    },
+    {
+      "0": [
+        "Search (find symbol in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find symbol in source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Submit (apply modification to repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find symbol in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find symbol in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Search (find symbol in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "4": [
+        "Edit (replace line in source file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Search (find symbol in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "6": [
+        "Submit (apply modification to repository)",
+        "PROGRESS_TEST"
+      ],
+      "7": "success"
+    },
+    {
+      "0": [
+        "Search (find symbol in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Read (view line range in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Test (run test suite for repository)",
+        "PROGRESS_TEST"
+      ],
+      "6": "success"
+    },
+    {
+      "0": [
+        "Search (find symbol in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find symbol in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Search (find symbol in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Read (view line range in source file)",
+        "ERROR_NONE"
+      ],
+      "5": [
+        "Read (view line range in source file)",
+        "REPEATED_SOURCE"
+      ],
+      "6": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "7": [
+        "Submit (apply modification to repository)",
+        "PROGRESS_TEST"
+      ],
+      "8": "success"
+    },
+    {
+      "0": [
+        "Search (find symbol in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Search (find symbol in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Submit (apply modification to repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find symbol in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find symbol in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Search (find error message in repository)",
+        "EMPTY_SOURCE"
+      ],
+      "3": [
+        "Search (find symbol in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "4": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "6": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Submit (apply modification to repository)",
+        "PROGRESS_TEST"
+      ],
+      "8": "success"
+    },
+    {
+      "0": [
+        "Search (find symbol in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Execute (run shell command in repository)",
+        "ERROR_NONE"
+      ],
+      "2": [
+        "Execute (run shell command in repository)",
+        "ERROR_NONE"
+      ],
+      "3": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "6": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Submit (apply modification to repository)",
+        "PROGRESS_TEST"
+      ],
+      "8": "success"
+    },
+    {
+      "0": [
+        "Search (find symbol in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find symbol in source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Submit (apply modification to repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find symbol in repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (view line range in source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Edit (replace line in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Execute (run shell command in repository)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Search (find symbol in source file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Submit (apply modification to repository)",
+        "PROGRESS_TEST"
+      ],
+      "6": "success"
+    }
+  ],
+  "run_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "source": {
+    "db": "job_logs/django__django-14238.sqlite3",
+    "tag": "vm_70_iter_0"
+  }
+}

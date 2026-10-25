@@ -1,0 +1,74 @@
+22 states, 50 transitions
+
+[q0] init
+      0.75 -> [q2] Search (find symbol in repository),DISCOVERY_SOURCE
+      0.20 -> [q3] Search (find symbol in source file),DISCOVERY_SOURCE
+      0.05 -> [q1] Search (find error message in repository),DISCOVERY_SOURCE
+[q1] Search (find error message in repository),DISCOVERY_SOURCE
+      1.00 -> [q4] Search (find symbol in repository),INFO_SOURCE
+[q2] Search (find symbol in repository),DISCOVERY_SOURCE
+      0.47 -> [q7] Read (view line range in source file),INFO_SOURCE
+      0.13 -> [q6] Read (view line range in source file),DISCOVERY_SOURCE
+      0.13 -> [q9] Search (find symbol in source file),INFO_SOURCE
+      0.13 -> [q3] Search (find symbol in source file),DISCOVERY_SOURCE
+      0.07 -> [q8] Search (find symbol in source file),ERROR_NONE
+      0.07 -> [q5] Execute (run shell command in repository),ERROR_NONE
+[q3] Search (find symbol in source file),DISCOVERY_SOURCE
+      0.25 -> [q3] Search (find symbol in source file),DISCOVERY_SOURCE
+      0.19 -> [q7] Read (view line range in source file),INFO_SOURCE
+      0.19 -> [q10] Edit (replace line in source file),PROGRESS_PATCH
+      0.12 -> [q6] Read (view line range in source file),DISCOVERY_SOURCE
+      0.12 -> [q5] Execute (run shell command in repository),ERROR_NONE
+      0.06 -> [q11] Search (find error message in repository),EMPTY_SOURCE
+      0.06 -> [q12] Submit (apply modification to repository),PROGRESS_TEST__success
+[q4] Search (find symbol in repository),INFO_SOURCE
+      1.00 -> [q9] Search (find symbol in source file),INFO_SOURCE
+[q5] Execute (run shell command in repository),ERROR_NONE
+      0.60 -> [q7] Read (view line range in source file),INFO_SOURCE
+      0.40 -> [q5] Execute (run shell command in repository),ERROR_NONE
+[q6] Read (view line range in source file),DISCOVERY_SOURCE
+      0.40 -> [q10] Edit (replace line in source file),PROGRESS_PATCH
+      0.40 -> [q7] Read (view line range in source file),INFO_SOURCE
+      0.20 -> [q15] Edit (replace line in source file),INFO_SOURCE
+[q7] Read (view line range in source file),INFO_SOURCE
+      0.43 -> [q10] Edit (replace line in source file),PROGRESS_PATCH
+      0.29 -> [q12] Submit (apply modification to repository),PROGRESS_TEST__success
+      0.14 -> [q3] Search (find symbol in source file),DISCOVERY_SOURCE
+      0.07 -> [q7] Read (view line range in source file),INFO_SOURCE
+      0.04 -> [q6] Read (view line range in source file),DISCOVERY_SOURCE
+      0.04 -> [q16] Edit (replace line in source file),PROGRESS_SOURCE
+[q8] Search (find symbol in source file),ERROR_NONE
+      1.00 -> [q7] Read (view line range in source file),INFO_SOURCE
+[q9] Search (find symbol in source file),INFO_SOURCE
+      0.50 -> [q7] Read (view line range in source file),INFO_SOURCE
+      0.25 -> [q10] Edit (replace line in source file),PROGRESS_PATCH
+      0.25 -> [q12] Submit (apply modification to repository),PROGRESS_TEST__success
+[q10] Edit (replace line in source file),PROGRESS_PATCH
+      0.38 -> [q7] Read (view line range in source file),INFO_SOURCE
+      0.19 -> [q12] Submit (apply modification to repository),PROGRESS_TEST__success
+      0.10 -> [q14] Search (find symbol in source file),PROGRESS_PATCH
+      0.10 -> [q18] Test (run test suite for repository),PROGRESS_TEST__success
+      0.10 -> [q10] Edit (replace line in source file),PROGRESS_PATCH
+      0.05 -> [q13] Execute (run shell command in repository),PROGRESS_PATCH
+      0.05 -> [q17] Read (view line range in source file),ERROR_NONE
+      0.05 -> [q20] Read (view line range in source file),PROGRESS_PATCH
+[q11] Search (find error message in repository),EMPTY_SOURCE
+      1.00 -> [q3] Search (find symbol in source file),DISCOVERY_SOURCE
+[q12] Submit (apply modification to repository),PROGRESS_TEST__success
+[q13] Execute (run shell command in repository),PROGRESS_PATCH
+      1.00 -> [q9] Search (find symbol in source file),INFO_SOURCE
+[q14] Search (find symbol in source file),PROGRESS_PATCH
+      1.00 -> [q12] Submit (apply modification to repository),PROGRESS_TEST__success
+[q15] Edit (replace line in source file),INFO_SOURCE
+      1.00 -> [q3] Search (find symbol in source file),DISCOVERY_SOURCE
+[q16] Edit (replace line in source file),PROGRESS_SOURCE
+      1.00 -> [q12] Submit (apply modification to repository),PROGRESS_TEST__success
+[q17] Read (view line range in source file),ERROR_NONE
+      1.00 -> [q19] Read (view line range in source file),REPEATED_SOURCE
+[q18] Test (run test suite for repository),PROGRESS_TEST__success
+[q19] Read (view line range in source file),REPEATED_SOURCE
+      1.00 -> [q10] Edit (replace line in source file),PROGRESS_PATCH
+[q20] Read (view line range in source file),PROGRESS_PATCH
+      1.00 -> [q12] Submit (apply modification to repository),PROGRESS_TEST__success
+[__start0] 
+      0.00 -> [q0] init

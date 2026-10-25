@@ -1,0 +1,24 @@
+{
+  "exec_actions": [
+    "Edit (replace line in source file)",
+    "Execute (run shell command in repository)",
+    "Read (view line range in source file)",
+    "Search (find error message in repository)",
+    "Search (find symbol in repository)",
+    "Search (find symbol in source file)"
+  ],
+  "submit_actions": [
+    "Submit (apply modification to repository)",
+    "Test (run test suite for repository)"
+  ],
+  "outputs": [
+    "DISCOVERY_SOURCE",
+    "EMPTY_SOURCE",
+    "ERROR_NONE",
+    "INFO_PATCH",
+    "INFO_SOURCE",
+    "PROGRESS_PATCH",
+    "PROGRESS_TEST",
+    "REPEATED_SOURCE"
+  ]
+}
