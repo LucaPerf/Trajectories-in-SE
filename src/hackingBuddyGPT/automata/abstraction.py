@@ -41,8 +41,6 @@ def categorize_interactions(
     out_categories: set[str],
     llm: LLM,
     *,
-    input_precise: bool = True,
-    output_precise: bool = False,
     out_len_limit: int = DEFAULT_OUT_LEN_LIMIT,
 ) -> tuple[set[str], set[str]]:
     """Use an LLM to discover abstract categories for actions and outputs.
@@ -76,23 +74,52 @@ def categorize_interactions(
 
     prompt = f"""We are analyzing interactions of an autonomous software-engineering agent.
 The agent works inside a checked-out Python repository and tries to resolve a GitHub issue (fix a bug)
-by running shell commands: it searches and reads code, edits files, runs scripts and tests, and finally
-submits its patch for verification.
+by running shell commands: it can search and read code, edit files, run scripts and tests, and finally
+it submits its patch for verification.
 I will provide you with a list of actions performed by the agent
 and the corresponding output of the environment (truncated after {out_len_limit} characters).
-Match the actions performed by the agent with abstract categories.
+Match each action with an abstract action category and each output with an abstract output category.
 
-Typical action categories include:
-- search codebase
-- inspect repository structure
-- read source file
-- edit source file
-- run existing tests
-- run reproduction script
-- submit patch
+An action category describes what kind of step the agent performed, and has the form OPERATION (SLOT).
 
-Prefer reusing existing categories. Only introduce a new category if none fits semantically.
-Do not introduce categories that are minor variations of existing ones.
+- OPERATION is a single word, of your own choice, that names what kind of step the agent performed.
+- SLOT is 3 to 6 words that make the operation more concrete by combining an action, an object and a scope:
+  the action says what is done, the object says what type of thing it is done on, and the scope says how wide
+  the step is (for example a single file, a directory, the whole repository).
+  Every action category MUST contain both parts.
+  An operation without a SLOT is invalid.
+
+The category must stay general enough to be recognized in a DIFFERENT repository and on a DIFFERENT issue.
+Test for every SLOT: "in another repository, would this value be different?" If yes, it is a specific value
+and must NOT appear. Describe the type of the thing, never the thing itself.
+
+What the SLOT should say, depending on the operation:
+- For steps that look for something, the object is the KIND of thing looked for.
+  Never use vague words such as string, text, code or content as the object.
+- For steps that read, the object is how much is read, for example whole file, line range, directory listing.
+- For steps that change files, the SLOT says HOW the change is applied, for example rewrite whole file,
+  replace line range, insert lines. Do not name the language construct that is changed (no method, class, function).
+- For steps that run something, the object is what is run, for example test suite, single test, reproduction script.
+
+Rules for the SLOT:
+- NEVER include file names, paths, function or class names, variable names, or searched strings.
+- NEVER include the tool or flags of the command (no grep, sed, pytest, -n, -R, ...).
+- NEVER include commas, slashes, arrows (->), quotes, or nested parentheses.
+- The action in the SLOT must make the OPERATION more precise, not repeat it.
+- Describe only what this single command does; do not say whether something was already seen before.
+- Use the same wording for the same kind of step every time, so that equivalent steps get identical categories.
+
+Granularity:
+- Keep few distinct operations overall (roughly 5 to 8).
+- Prefer reusing existing categories. Only introduce a new one if none fits semantically.
+- Do not introduce categories that are minor variations of existing ones.
+
+Illustration of the format on an unrelated domain (a person repairing a bicycle), NOT to be reused as categories:
+- Inspect (check brake pads on rear wheel)
+- Inspect (look for cracks in whole frame)
+- Replace (swap worn part on front wheel)
+- Test (ride bicycle on flat road)
+- Finish (hand over repaired bicycle)
 
 Match outputs with abstract categories based on their usefulness for resolving the issue.
 
@@ -103,7 +130,7 @@ Use two components:
 - ERROR (the command failed: traceback, syntax error, file not found, ...)
 - INFO (informational but not directly useful)
 - DISCOVERY (reveals something new and relevant, e.g. where the bug is or how the code works)
-- PROGRESS (shows that the fix works or moves toward it: an edit was applied, the issue no longer reproduces, tests pass)
+- PROGRESS (shows that the fix works or moves toward it: an edit was applied without errors, the issue no longer reproduces, tests pass)
 - REPEATED (same or equivalent result as before)
 
 2. TARGET TYPE (what the output relates to):
@@ -118,19 +145,12 @@ Use two components:
 Combine them into a single category using the format:
 <VALUE>_<TARGET>
 
-Examples:
-- DISCOVERY_SOURCE
-- INFO_REPO
-- PROGRESS_TEST
+Examples: DISCOVERY_SOURCE, INFO_REPO, PROGRESS_TEST, ERROR_NONE, EMPTY_NONE, REPEATED_SOURCE, PROGRESS_PATCH
 
 Only use combinations that make sense and be as specific as you deem necessary to describe the strategy that leads to a fix.
-CRITICAL FORMATTING RULES:
-- Output categories MUST use <VALUE>_<TARGET> format. Examples of valid output categories:
-  DISCOVERY_SOURCE, INFO_REPO, ERROR_NONE, PROGRESS_TEST, PROGRESS_ISSUE, EMPTY_NONE, REPEATED_SOURCE, PROGRESS_PATCH
-- Action categories MUST be multi-word descriptive phrases. Examples of valid action categories:
-  "search codebase (grep)", "read source file (sed)", "edit source file (sed -i)", "run existing tests (pytest)", "run reproduction script (python -c)", "submit patch"
-- NEVER output single generic words. These are INVALID: "search", "read", "edit", "test", "error", "file", "none", "command", "execution", "output", "Command Output"
-{"If a specific target is especially relevant, such as the file or function that contains the bug, you may specify it concretely, but enclose it in parentheses(). " if output_precise else ""}{"If there are specific action aspects, like a command with an important argument, you may specify them concretely more concretely, but enclose them in parentheses(). " if input_precise else ""}
+Output categories MUST use the <VALUE>_<TARGET> format.
+A command that modifies files and prints nothing, or prints no error, is PROGRESS_PATCH, never EMPTY.
+EMPTY is only for searches or reads that found nothing.
 
 Return EXACTLY (comma-separated lists in curly braces):
 {{action categories}}
@@ -222,9 +242,23 @@ def normalize_categories(
         print(f"Normalize: capped {total_cats} categories to {len(sorted_act) + len(sorted_out)} for LLM call")
 
     prompt = f"""Normalize the following categories by merging duplicates and semantically equivalent ones.
+The categories were produced independently on different runs of the same kind of agent,
+so many of them describe the same step in different words.
 Do NOT over-merge. The categories are used to abstractly reason about the strategy of a software-engineering
 agent that resolves a GitHub issue, so keep the categories that distinguish different steps of a fix
 (searching, reading, editing, running tests, submitting).
+
+Action categories have the form OPERATION (SLOT).
+Output categories have the form <VALUE>_<TARGET>.
+
+Rules:
+- Keep the format. Never remove the SLOT and never reduce an action category to its OPERATION alone.
+  Never remove the VALUE or the TARGET from an output category.
+- Merge two categories if the agent does the same kind of step, on the same kind of thing, with the same extent,
+  and they differ only in wording, in a synonym, or in a level of detail that would not change what the agent does next.
+- Do not merge categories that describe genuinely different steps (a different kind of action,
+  a different kind of thing acted on, or a different extent).
+- Choose each merged category among the input categories. Do not invent new categories. Do not use quotes.
 
 Return EXACTLY this format, i.e., one set of action categories and one set of output categories:
 
@@ -282,11 +316,19 @@ Output categories:
                 continue
             raise ValueError("Could not extract both category sets from LLM output")
 
-        new_act_categories = {x.strip() for x in sets[0].split(",") if x.strip()}
-        new_out_categories = {x.strip() for x in sets[1].split(",") if x.strip()}
+        def _clean(item: str) -> str:
+            return item.strip().strip("'\"")
+
+        new_act_categories = {c for c in map(_clean, sets[0].split(",")) if c}
+        new_out_categories = {c for c in map(_clean, sets[1].split(",")) if c}
         return new_act_categories, new_out_categories
 
     raise ValueError("All normalization retries exhausted")
+
+
+def _clean_cat(s: str) -> str:
+    """Remove the #!# separator the model copies from the prompt, plus stray quotes and spaces."""
+    return s.replace("#!#", "").strip().strip("'\"").strip()
 
 
 def _parse_assignments(text: str) -> dict[int, tuple[str, str]]:
@@ -314,16 +356,16 @@ def _parse_assignments(text: str) -> dict[int, tuple[str, str]]:
             continue
         split_cat = category.strip().split("->")
         if len(split_cat) >= 2:
-            result[idx] = (split_cat[0].strip(), split_cat[1].strip())
+            result[idx] = (_clean_cat(split_cat[0]), _clean_cat(split_cat[1]))
         elif len(split_cat) == 1:
-            result[idx] = (split_cat[0].strip(), "")
+            result[idx] = (_clean_cat(split_cat[0]), "")
 
     # Fallback parser: if primary produced nothing, scan for assignment patterns
     # anywhere in the raw text (handles missing / malformed delimiters).
     if not result:
         for m in _ASSIGNMENT_LINE.finditer(text):
             idx = int(m.group(1))
-            result[idx] = (m.group(2).strip(), m.group(3).strip())
+            result[idx] = (_clean_cat(m.group(2)), _clean_cat(m.group(3)))
 
     return result
 
@@ -375,8 +417,10 @@ def abstract_sequence(
         f"{{ {','.join(sorted(out_categories))} }}"
     )
 
-    prompt = f"""We are analyzing interactions of an autonomous software-engineering agent that tries to resolve a GitHub issue in a Python repository, and you should help us in doing so.
+    prompt = f"""We are analyzing interactions of an autonomous software-engineering agent that tries to resolve a GitHub issue in a Python repository.
+The agent has two tools: exec_command (runs a shell command in the repository) and submit_patch (hands the patch over to be verified by the project's test suite).
 I will provide you with a list of actions performed by the agent and the corresponding output of the environment (truncated after {out_len_limit} characters).
+Each action starts with the name of the tool that was used.
 Additionally, I provide a set of action categories and a set of output categories. The input format is
 ACTIONS:
 (<id>:<action>-><output>#!#\\n)*
@@ -389,8 +433,30 @@ ACTIONS:
 CATEGORIES:
 {cat_block}
 
-Your task is to assign the actions performed by the agent to an action category and the output to an output category.
-Use the following syntax
+Your task is to assign every action to exactly one action category and its output to exactly one output category.
+
+Rules for the action category:
+- Choose only among the given action categories and write them exactly as given, word for word.
+- Choose the category that describes what this single command does, judging only from the command itself.
+- If several categories fit, choose the most specific one.
+- Never assign to an action a category that describes a step of the other tool.
+
+Rules for the output category:
+- Choose only among the given output categories and write them exactly as given.
+- An output category has the form <VALUE>_<TARGET>. Judge it from the output of the environment, using these definitions.
+  VALUE (usefulness of the output):
+  - EMPTY: no output, nothing found
+  - ERROR: the command failed or the tests failed (traceback, syntax error, file not found, failing tests, ...)
+  - INFO: informational but not directly useful
+  - DISCOVERY: reveals something new and relevant, e.g. where the bug is or how the code works
+  - PROGRESS: shows that the fix works or moves toward it: an edit was applied without errors, the issue no longer reproduces, tests pass
+  - REPEATED: same or equivalent result as an earlier step in this sequence
+  TARGET (what the output relates to): the part of the category after the underscore, e.g. source code, tests, the patch, the repository layout, no specific target.
+- A command that modifies files and prints nothing, or prints no error, has VALUE PROGRESS, never EMPTY.
+  EMPTY is only for searches or reads that found nothing.
+- If no given output category fits exactly, choose the closest one. Do not invent new categories.
+
+Use the following syntax, one line per action, in the same order, and nothing else
 $START$
 (<id>:<action category> -> <output category>\\n)*
 $END$

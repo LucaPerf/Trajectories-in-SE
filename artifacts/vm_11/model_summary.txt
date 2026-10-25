@@ -1,0 +1,80 @@
+25 states, 53 transitions
+
+[q0] init
+      0.90 -> [q1] Search (find pattern in repository),DISCOVERY_SOURCE
+      0.05 -> [q3] Search (find pattern in repository),EMPTY_NONE
+      0.05 -> [q2] Search (find pattern in repository),DISCOVERY_SOURCE#!#
+[q1] Search (find pattern in repository),DISCOVERY_SOURCE
+      0.50 -> [q4] Edit (replace string in file),PROGRESS_PATCH
+      0.20 -> [q5] Read (view code section in file),INFO_SOURCE
+      0.20 -> [q6] Search (find pattern in file),DISCOVERY_SOURCE
+      0.05 -> [q7] Search (find pattern in file),INFO_SOURCE
+      0.05 -> [q1] Search (find pattern in repository),DISCOVERY_SOURCE
+[q2] Search (find pattern in repository),DISCOVERY_SOURCE#!#
+      1.00 -> [q8] Edit (replace string in file),PROGRESS_PATCH#!#
+[q3] Search (find pattern in repository),EMPTY_NONE
+      0.50 -> [q1] Search (find pattern in repository),DISCOVERY_SOURCE
+      0.50 -> [q22] Search (find pattern in file),REPEATED_SOURCE
+[q4] Edit (replace string in file),PROGRESS_PATCH
+      0.37 -> [q10] Submit (submit patch to repository),PROGRESS_TEST__success
+      0.16 -> [q12] Verify (check modification in file),PROGRESS_PATCH
+      0.16 -> [q9] Search (find pattern in file),PROGRESS_PATCH
+      0.11 -> [q7] Search (find pattern in file),INFO_SOURCE
+      0.05 -> [q11] Verify (check modification in file),INFO_SOURCE
+      0.05 -> [q17] Search (find pattern in repository),INFO_TEST
+      0.05 -> [q20] Verify (check modification in file),EMPTY_NONE
+      0.05 -> [q19] Search (find pattern in file),EMPTY_NONE
+[q5] Read (view code section in file),INFO_SOURCE
+      0.44 -> [q4] Edit (replace string in file),PROGRESS_PATCH
+      0.33 -> [q10] Submit (submit patch to repository),PROGRESS_TEST__success
+      0.11 -> [q13] Read (view code section in file),DISCOVERY_SOURCE
+      0.11 -> [q5] Read (view code section in file),INFO_SOURCE
+[q6] Search (find pattern in file),DISCOVERY_SOURCE
+      0.25 -> [q4] Edit (replace string in file),PROGRESS_PATCH
+      0.25 -> [q14] Edit (replace string in file),ERROR_NONE
+      0.25 -> [q5] Read (view code section in file),INFO_SOURCE
+      0.25 -> [q15] Edit (replace string in file),PROGRESS_SOURCE
+[q7] Search (find pattern in file),INFO_SOURCE
+      0.25 -> [q4] Edit (replace string in file),PROGRESS_PATCH
+      0.25 -> [q7] Search (find pattern in file),INFO_SOURCE
+      0.12 -> [q11] Verify (check modification in file),INFO_SOURCE
+      0.12 -> [q19] Search (find pattern in file),EMPTY_NONE
+      0.12 -> [q5] Read (view code section in file),INFO_SOURCE
+      0.12 -> [q22] Search (find pattern in file),REPEATED_SOURCE
+[q8] Edit (replace string in file),PROGRESS_PATCH#!#
+      1.00 -> [q16] Submit (submit patch to repository),PROGRESS_TEST#!#__success
+[q9] Search (find pattern in file),PROGRESS_PATCH
+      0.67 -> [q10] Submit (submit patch to repository),PROGRESS_TEST__success
+      0.33 -> [q5] Read (view code section in file),INFO_SOURCE
+[q10] Submit (submit patch to repository),PROGRESS_TEST__success
+[q11] Verify (check modification in file),INFO_SOURCE
+      1.00 -> [q10] Submit (submit patch to repository),PROGRESS_TEST__success
+[q12] Verify (check modification in file),PROGRESS_PATCH
+      0.33 -> [q10] Submit (submit patch to repository),PROGRESS_TEST__success
+      0.33 -> [q5] Read (view code section in file),INFO_SOURCE
+      0.33 -> [q21] Read (view test code in file),INFO_TEST
+[q13] Read (view code section in file),DISCOVERY_SOURCE
+      1.00 -> [q18] Read (view code section in file),EMPTY_NONE
+[q14] Edit (replace string in file),ERROR_NONE
+      1.00 -> [q4] Edit (replace string in file),PROGRESS_PATCH
+[q15] Edit (replace string in file),PROGRESS_SOURCE
+      1.00 -> [q10] Submit (submit patch to repository),PROGRESS_TEST__success
+[q16] Submit (submit patch to repository),PROGRESS_TEST#!#__success
+[q17] Search (find pattern in repository),INFO_TEST
+      1.00 -> [q10] Submit (submit patch to repository),PROGRESS_TEST__success
+[q18] Read (view code section in file),EMPTY_NONE
+      1.00 -> [q4] Edit (replace string in file),PROGRESS_PATCH
+[q19] Search (find pattern in file),EMPTY_NONE
+      1.00 -> [q7] Search (find pattern in file),INFO_SOURCE
+[q20] Verify (check modification in file),EMPTY_NONE
+      1.00 -> [q10] Submit (submit patch to repository),PROGRESS_TEST__success
+[q21] Read (view test code in file),INFO_TEST
+      1.00 -> [q7] Search (find pattern in file),INFO_SOURCE
+[q22] Search (find pattern in file),REPEATED_SOURCE
+      0.33 -> [q3] Search (find pattern in repository),EMPTY_NONE
+      0.33 -> [q22] Search (find pattern in file),REPEATED_SOURCE
+      0.33 -> [q23] Search (find pattern in repository),DISCOVERY_TEST
+[q23] Search (find pattern in repository),DISCOVERY_TEST
+      1.00 -> [q10] Submit (submit patch to repository),PROGRESS_TEST__success
+[__start0] 
+      0.00 -> [q0] init
