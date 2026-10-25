@@ -1,0 +1,1505 @@
+==============================================================================
+Run transcript: django__django-11964
+run id: 34    tag: 'vm_27_iter_0'    turns: 10
+model: SWE-bench Pilot Task
+final state: got root
+started: 2026-10-24 21:47:15.536342    stopped: 2026-10-24 19:50:48  (start is local time, stop is UTC)
+==============================================================================
+
+HOW TO READ THIS FILE
+Each TURN is one round trip with the model:
+  1. prompt   what we send: the task, the available commands and the history of the earlier commands
+  2. reply    what the model answered, complete and unedited
+  3. command  the single line we extracted from the reply and actually executed in the container
+  4. result   what the container printed (this becomes part of the history in the next prompt)
+The run ends with a status line: "got root" means the tests passed (that is the framework's name for
+any success), anything else is the reason the run stopped.
+
+------------------------------------------------------------------------------
+TURN 1
+------------------------------------------------------------------------------
+
+[prompt sent to the model, 3777 characters]
+You are a software engineer working inside a checked-out git repository
+at /testbed. Your goal is to resolve the following issue by editing the code so that the
+project's test suite passes.
+
+ISSUE:
+The value of a TextChoices/IntegerChoices field has a differing type
+Description
+	
+If we create an instance of a model having a CharField or IntegerField with the keyword choices pointing to IntegerChoices or TextChoices, the value returned by the getter of the field will be of the same type as the one created by enum.Enum (enum value).
+For example, this model:
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+class MyChoice(models.TextChoices):
+	FIRST_CHOICE = "first", _("The first choice, it is")
+	SECOND_CHOICE = "second", _("The second choice, it is")
+class MyObject(models.Model):
+	my_str_value = models.CharField(max_length=10, choices=MyChoice.choices)
+Then this test:
+from django.test import TestCase
+from testing.pkg.models import MyObject, MyChoice
+class EnumTest(TestCase):
+	def setUp(self) -> None:
+		self.my_object = MyObject.objects.create(my_str_value=MyChoice.FIRST_CHOICE)
+	def test_created_object_is_str(self):
+		my_object = self.my_object
+		self.assertIsInstance(my_object.my_str_value, str)
+		self.assertEqual(str(my_object.my_str_value), "first")
+	def test_retrieved_object_is_str(self):
+		my_object = MyObject.objects.last()
+		self.assertIsInstance(my_object.my_str_value, str)
+		self.assertEqual(str(my_object.my_str_value), "first")
+And then the results:
+(django30-venv) ➜ django30 ./manage.py test
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+F.
+======================================================================
+FAIL: test_created_object_is_str (testing.tests.EnumTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+ File "/Users/mikailkocak/Development/django30/testing/tests.py", line 14, in test_created_object_is_str
+	self.assertEqual(str(my_object.my_str_value), "first")
+AssertionError: 'MyChoice.FIRST_CHOICE' != 'first'
+- MyChoice.FIRST_CHOICE
++ first
+----------------------------------------------------------------------
+Ran 2 tests in 0.002s
+FAILED (failures=1)
+We notice when invoking __str__(...) we don't actually get the value property of the enum value which can lead to some unexpected issues, especially when communicating to an external API with a freshly created instance that will send MyEnum.MyValue, and the one that was retrieved would send my_value.
+
+
+You can either
+
+- `exec_command command`: give a command to be executed and I will respond with the terminal output when running this command inside the task's container. The given command must not require user interaction. Do not use quotation marks in front and after your command.
+- `submit_patch note`: Call this when you believe the issue is fixed. I will run the project's test suite inside the container and tell you whether it passes. Usage: submit_patch <short note about what you changed>
+
+                        
+Do not modify the files in the `tests/` directory: they will be replaced by the official tests.
+ 
+The official tests are not in the repository: do not search for them.
+
+Decide your next single action. Use exec_command to read/search/edit files or run commands, and
+submit_patch only once you believe the fix is complete and want it verified against the test
+suite.
+
+Your entire reply must be a single action, in one of these two forms, and nothing else:
+exec_command <shell command>
+submit_patch <short note>
+The command may span several lines (for example a heredoc to write a script). 
+Do not explain your reasoning, do not add markup, and do not continue the conversation after that line.       
+
+
+[model reply, complete and unedited] (854 tokens in, 189 tokens out)
+
+
+exec_command find /testbed -type f -name "*.py" | head -30
+
+[command executed: exec_command]
+find /testbed -type f -name "*.py" | head -30
+
+[result]
+/testbed/tests/test_utils/test_simpletestcase.py
+/testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+/testbed/tests/aggregation_regress/__init__.py
+/testbed/tests/aggregation_regress/models.py
+/testbed/tests/aggregation_regress/tests.py
+/testbed/tests/model_indexes/__init__.py
+/testbed/tests/model_indexes/models.py
+/testbed/tests/model_indexes/tests.py
+/testbed/tests/generic_inline_admin/__init__.py
+/testbed/tests/generic_inline_admin/models.py
+/testbed/tests/generic_inline_admin/admin.py
+/testbed/tests/generic_inline_admin/urls.py
+
+
+------------------------------------------------------------------------------
+TURN 2
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 5253 characters, the same as turn 1 plus the history below]
+$exec_command find /testbed -type f -name "*.py" | head -30
+ /testbed/tests/test_utils/test_simpletestcase.py
+/testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+/testbed/tests/aggregation_regress/__init__.py
+/testbed/tests/aggregation_regress/models.py
+/testbed/tests/aggregation_regress/tests.py
+/testbed/tests/model_indexes/__init__.py
+/testbed/tests/model_indexes/models.py
+/testbed/tests/model_indexes/tests.py
+/testbed/tests/generic_inline_admin/__init__.py
+/testbed/tests/generic_inline_admin/models.py
+/testbed/tests/generic_inline_admin/admin.py
+/testbed/tests/generic_inline_admin/urls.py
+
+
+
+[model reply, complete and unedited] (1201 tokens in, 1032 tokens out)
+
+
+exec_command find /testbed -name "enum.py" -path "*/django/*" | head -10
+
+exec_command grep -r "class TextChoices" /testbed/django/ --include="*.py" | head -5
+
+exec_command grep -r "class IntegerChoices" /testbed/django/ --include="*.py" | head -5
+
+[command executed: exec_command]
+find /testbed -name "enum.py" -path "*/django/*" | head -10
+
+[result]
+(no output)
+
+------------------------------------------------------------------------------
+TURN 3
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 5341 characters, the same as turn 1 plus the history below]
+$exec_command find /testbed -type f -name "*.py" | head -30
+ /testbed/tests/test_utils/test_simpletestcase.py
+/testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+/testbed/tests/aggregation_regress/__init__.py
+/testbed/tests/aggregation_regress/models.py
+/testbed/tests/aggregation_regress/tests.py
+/testbed/tests/model_indexes/__init__.py
+/testbed/tests/model_indexes/models.py
+/testbed/tests/model_indexes/tests.py
+/testbed/tests/generic_inline_admin/__init__.py
+/testbed/tests/generic_inline_admin/models.py
+/testbed/tests/generic_inline_admin/admin.py
+/testbed/tests/generic_inline_admin/urls.py
+
+
+$exec_command find /testbed -name "enum.py" -path "*/django/*" | head -10
+ (no output)
+
+
+[model reply, complete and unedited] (1232 tokens in, 668 tokens out)
+
+
+exec_command find /testbed -name "choices.py" -path "*/django/*" | head -10
+
+[command executed: exec_command]
+find /testbed -name "choices.py" -path "*/django/*" | head -10
+
+[result]
+(no output)
+
+------------------------------------------------------------------------------
+TURN 4
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 5432 characters, the same as turn 1 plus the history below]
+$exec_command find /testbed -type f -name "*.py" | head -30
+ /testbed/tests/test_utils/test_simpletestcase.py
+/testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+/testbed/tests/aggregation_regress/__init__.py
+/testbed/tests/aggregation_regress/models.py
+/testbed/tests/aggregation_regress/tests.py
+/testbed/tests/model_indexes/__init__.py
+/testbed/tests/model_indexes/models.py
+/testbed/tests/model_indexes/tests.py
+/testbed/tests/generic_inline_admin/__init__.py
+/testbed/tests/generic_inline_admin/models.py
+/testbed/tests/generic_inline_admin/admin.py
+/testbed/tests/generic_inline_admin/urls.py
+
+
+$exec_command find /testbed -name "enum.py" -path "*/django/*" | head -10
+ (no output)
+
+$exec_command find /testbed -name "choices.py" -path "*/django/*" | head -10
+ (no output)
+
+
+[model reply, complete and unedited] (1263 tokens in, 535 tokens out)
+
+
+exec_command find /testbed -name "choices.py" | head -10
+
+[command executed: exec_command]
+find /testbed -name "choices.py" | head -10
+
+[result]
+(no output)
+
+------------------------------------------------------------------------------
+TURN 5
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 5504 characters, the same as turn 1 plus the history below]
+$exec_command find /testbed -type f -name "*.py" | head -30
+ /testbed/tests/test_utils/test_simpletestcase.py
+/testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+/testbed/tests/aggregation_regress/__init__.py
+/testbed/tests/aggregation_regress/models.py
+/testbed/tests/aggregation_regress/tests.py
+/testbed/tests/model_indexes/__init__.py
+/testbed/tests/model_indexes/models.py
+/testbed/tests/model_indexes/tests.py
+/testbed/tests/generic_inline_admin/__init__.py
+/testbed/tests/generic_inline_admin/models.py
+/testbed/tests/generic_inline_admin/admin.py
+/testbed/tests/generic_inline_admin/urls.py
+
+
+$exec_command find /testbed -name "enum.py" -path "*/django/*" | head -10
+ (no output)
+
+$exec_command find /testbed -name "choices.py" -path "*/django/*" | head -10
+ (no output)
+
+$exec_command find /testbed -name "choices.py" | head -10
+ (no output)
+
+
+[model reply, complete and unedited] (1287 tokens in, 152 tokens out)
+
+
+exec_command find /testbed -path "*/django/db/*" -name "*.py" | grep -i enum
+
+
+[command executed: exec_command]
+find /testbed -path "*/django/db/*" -name "*.py" | grep -i enum
+
+[result]
+/testbed/django/db/models/enums.py
+
+
+------------------------------------------------------------------------------
+TURN 6
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 5620 characters, the same as turn 1 plus the history below]
+$exec_command find /testbed -type f -name "*.py" | head -30
+ /testbed/tests/test_utils/test_simpletestcase.py
+/testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+/testbed/tests/aggregation_regress/__init__.py
+/testbed/tests/aggregation_regress/models.py
+/testbed/tests/aggregation_regress/tests.py
+/testbed/tests/model_indexes/__init__.py
+/testbed/tests/model_indexes/models.py
+/testbed/tests/model_indexes/tests.py
+/testbed/tests/generic_inline_admin/__init__.py
+/testbed/tests/generic_inline_admin/models.py
+/testbed/tests/generic_inline_admin/admin.py
+/testbed/tests/generic_inline_admin/urls.py
+
+
+$exec_command find /testbed -name "enum.py" -path "*/django/*" | head -10
+ (no output)
+
+$exec_command find /testbed -name "choices.py" -path "*/django/*" | head -10
+ (no output)
+
+$exec_command find /testbed -name "choices.py" | head -10
+ (no output)
+
+$exec_command find /testbed -path "*/django/db/*" -name "*.py" | grep -i enum
+ /testbed/django/db/models/enums.py
+
+
+
+[model reply, complete and unedited] (1324 tokens in, 116 tokens out)
+
+
+exec_command cat /testbed/django/db/models/enums.py
+
+[command executed: exec_command]
+cat /testbed/django/db/models/enums.py
+
+[result]
+import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+    pass
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+------------------------------------------------------------------------------
+TURN 7
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 8146 characters, the same as turn 1 plus the history below]
+$exec_command find /testbed -type f -name "*.py" | head -30
+ /testbed/tests/test_utils/test_simpletestcase.py
+/testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+/testbed/tests/aggregation_regress/__init__.py
+/testbed/tests/aggregation_regress/models.py
+/testbed/tests/aggregation_regress/tests.py
+/testbed/tests/model_indexes/__init__.py
+/testbed/tests/model_indexes/models.py
+/testbed/tests/model_indexes/tests.py
+/testbed/tests/generic_inline_admin/__init__.py
+/testbed/tests/generic_inline_admin/models.py
+/testbed/tests/generic_inline_admin/admin.py
+/testbed/tests/generic_inline_admin/urls.py
+
+
+$exec_command find /testbed -name "enum.py" -path "*/django/*" | head -10
+ (no output)
+
+$exec_command find /testbed -name "choices.py" -path "*/django/*" | head -10
+ (no output)
+
+$exec_command find /testbed -name "choices.py" | head -10
+ (no output)
+
+$exec_command find /testbed -path "*/django/db/*" -name "*.py" | grep -i enum
+ /testbed/django/db/models/enums.py
+
+
+$exec_command cat /testbed/django/db/models/enums.py
+ import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+    pass
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+
+[model reply, complete and unedited] (1923 tokens in, 2348 tokens out)
+
+
+exec_command grep -n "from_db_value\|to_python\|get_prep_value\|TextChoices\|IntegerChoices" /testbed/django/db/models/fields/__init__.py | head -50
+
+[command executed: exec_command]
+grep -n "from_db_value\|to_python\|get_prep_value\|TextChoices\|IntegerChoices" /testbed/django/db/models/fields/__init__.py | head -50
+
+[result]
+575:    def to_python(self, value):
+641:        from to_python() and validate() are propagated. Return the correct
+644:        value = self.to_python(value)
+722:        if hasattr(self, 'from_db_value'):
+723:            return [self.from_db_value]
+791:    def get_prep_value(self, value):
+804:            value = self.get_prep_value(value)
+897:            defaults['coerce'] = self.to_python
+933:    def to_python(self, value):
+949:    def get_prep_value(self, value):
+950:        value = super().get_prep_value(value)
+953:        return self.to_python(value)
+1010:    def to_python(self, value):
+1015:    def get_prep_value(self, value):
+1016:        value = super().get_prep_value(value)
+1017:        return self.to_python(value)
+1151:    def to_python(self, value):
+1201:    def get_prep_value(self, value):
+1202:        value = super().get_prep_value(value)
+1203:        return self.to_python(value)
+1208:            value = self.get_prep_value(value)
+1283:    def to_python(self, value):
+1342:    def get_prep_value(self, value):
+1343:        value = super().get_prep_value(value)
+1344:        value = self.to_python(value)
+1364:            value = self.get_prep_value(value)
+1483:    def to_python(self, value):
+1498:        return connection.ops.adapt_decimalfield_value(self.to_python(value), self.max_digits, self.decimal_places)
+1500:    def get_prep_value(self, value):
+1501:        value = super().get_prep_value(value)
+1502:        return self.to_python(value)
+1530:    def to_python(self, value):
+1640:    def get_prep_value(self, value):
+1641:        value = super().get_prep_value(value)
+1668:    def get_prep_value(self, value):
+1669:        value = super().get_prep_value(value)
+1682:    def to_python(self, value):
+1755:    def get_prep_value(self, value):
+1756:        value = super().get_prep_value(value)
+1769:    def to_python(self, value):
+1824:    def get_prep_value(self, value):
+1825:        value = super().get_prep_value(value)
+1880:    def to_python(self, value):
+1892:            value = self.get_prep_value(value)
+1895:    def get_prep_value(self, value):
+1896:        value = super().get_prep_value(value)
+2025:    def to_python(self, value):
+2030:    def get_prep_value(self, value):
+2031:        value = super().get_prep_value(value)
+2032:        return self.to_python(value)
+
+
+------------------------------------------------------------------------------
+TURN 8
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 10610 characters, the same as turn 1 plus the history below]
+$exec_command find /testbed -type f -name "*.py" | head -30
+ /testbed/tests/test_utils/test_simpletestcase.py
+/testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+/testbed/tests/aggregation_regress/__init__.py
+/testbed/tests/aggregation_regress/models.py
+/testbed/tests/aggregation_regress/tests.py
+/testbed/tests/model_indexes/__init__.py
+/testbed/tests/model_indexes/models.py
+/testbed/tests/model_indexes/tests.py
+/testbed/tests/generic_inline_admin/__init__.py
+/testbed/tests/generic_inline_admin/models.py
+/testbed/tests/generic_inline_admin/admin.py
+/testbed/tests/generic_inline_admin/urls.py
+
+
+$exec_command find /testbed -name "enum.py" -path "*/django/*" | head -10
+ (no output)
+
+$exec_command find /testbed -name "choices.py" -path "*/django/*" | head -10
+ (no output)
+
+$exec_command find /testbed -name "choices.py" | head -10
+ (no output)
+
+$exec_command find /testbed -path "*/django/db/*" -name "*.py" | grep -i enum
+ /testbed/django/db/models/enums.py
+
+
+$exec_command cat /testbed/django/db/models/enums.py
+ import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+    pass
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+$exec_command grep -n "from_db_value\|to_python\|get_prep_value\|TextChoices\|IntegerChoices" /testbed/django/db/models/fields/__init__.py | head -50
+ 575:    def to_python(self, value):
+641:        from to_python() and validate() are propagated. Return the correct
+644:        value = self.to_python(value)
+722:        if hasattr(self, 'from_db_value'):
+723:            return [self.from_db_value]
+791:    def get_prep_value(self, value):
+804:            value = self.get_prep_value(value)
+897:            defaults['coerce'] = self.to_python
+933:    def to_python(self, value):
+949:    def get_prep_value(self, value):
+950:        value = super().get_prep_value(value)
+953:        return self.to_python(value)
+1010:    def to_python(self, value):
+1015:    def get_prep_value(self, value):
+1016:        value = super().get_prep_value(value)
+1017:        return self.to_python(value)
+1151:    def to_python(self, value):
+1201:    def get_prep_value(self, value):
+1202:        value = super().get_prep_value(value)
+1203:        return self.to_python(value)
+1208:            value = self.get_prep_value(value)
+1283:    def to_python(self, value):
+1342:    def get_prep_value(self, value):
+1343:        value = super().get_prep_value(value)
+1344:        value = self.to_python(value)
+1364:            value = self.get_prep_value(value)
+1483:    def to_python(self, value):
+1498:        return connection.ops.adapt_decimalfield_value(self.to_python(value), self.max_digits, self.decimal_places)
+1500:    def get_prep_value(self, value):
+1501:        value = super().get_prep_value(value)
+1502:        return self.to_python(value)
+1530:    def to_python(self, value):
+1640:    def get_prep_value(self, value):
+1641:        value = super().get_prep_value(value)
+1668:    def get_prep_value(self, value):
+1669:        value = super().get_prep_value(value)
+1682:    def to_python(self, value):
+1755:    def get_prep_value(self, value):
+1756:        value = super().get_prep_value(value)
+1769:    def to_python(self, value):
+1824:    def get_prep_value(self, value):
+1825:        value = super().get_prep_value(value)
+1880:    def to_python(self, value):
+1892:            value = self.get_prep_value(value)
+1895:    def get_prep_value(self, value):
+1896:        value = super().get_prep_value(value)
+2025:    def to_python(self, value):
+2030:    def get_prep_value(self, value):
+2031:        value = super().get_prep_value(value)
+2032:        return self.to_python(value)
+
+
+
+[model reply, complete and unedited] (2717 tokens in, 6693 tokens out)
+
+
+exec_command cat > /tmp/fix_enum.py << 'EOF'
+with open('/testbed/django/db/models/enums.py', 'r') as f:
+    content = f.read()
+
+content = content.replace(
+    'class IntegerChoices(int, Choices):\n    """Class for creating enumerated integer choices."""\n    pass',
+    'class IntegerChoices(int, Choices):\n    """Class for creating enumerated integer choices."""\n    def __str__(self):\n        return str(self.value)'
+)
+
+content = content.replace(
+    'class TextChoices(str, Choices):\n    """Class for creating enumerated string choices."""\n\n    def _generate_next_value_',
+    'class TextChoices(str, Choices):\n    """Class for creating enumerated string choices."""\n    def __str__(self):\n        return self.value\n\n    def _generate_next_value_'
+)
+
+with open('/testbed/django/db/models/enums.py', 'w') as f:
+    f.write(content)
+EOF
+python3 /tmp/fix_enum.py
+
+[command executed: exec_command]
+cat > /tmp/fix_enum.py << 'EOF'
+with open('/testbed/django/db/models/enums.py', 'r') as f:
+    content = f.read()
+
+content = content.replace(
+    'class IntegerChoices(int, Choices):\n    """Class for creating enumerated integer choices."""\n    pass',
+    'class IntegerChoices(int, Choices):\n    """Class for creating enumerated integer choices."""\n    def __str__(self):\n        return str(self.value)'
+)
+
+content = content.replace(
+    'class TextChoices(str, Choices):\n    """Class for creating enumerated string choices."""\n\n    def _generate_next_value_',
+    'class TextChoices(str, Choices):\n    """Class for creating enumerated string choices."""\n    def __str__(self):\n        return self.value\n\n    def _generate_next_value_'
+)
+
+with open('/testbed/django/db/models/enums.py', 'w') as f:
+    f.write(content)
+EOF
+python3 /tmp/fix_enum.py
+
+[result]
+(no output)
+
+------------------------------------------------------------------------------
+TURN 9
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 11499 characters, the same as turn 1 plus the history below]
+$exec_command find /testbed -type f -name "*.py" | head -30
+ /testbed/tests/test_utils/test_simpletestcase.py
+/testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+/testbed/tests/aggregation_regress/__init__.py
+/testbed/tests/aggregation_regress/models.py
+/testbed/tests/aggregation_regress/tests.py
+/testbed/tests/model_indexes/__init__.py
+/testbed/tests/model_indexes/models.py
+/testbed/tests/model_indexes/tests.py
+/testbed/tests/generic_inline_admin/__init__.py
+/testbed/tests/generic_inline_admin/models.py
+/testbed/tests/generic_inline_admin/admin.py
+/testbed/tests/generic_inline_admin/urls.py
+
+
+$exec_command find /testbed -name "enum.py" -path "*/django/*" | head -10
+ (no output)
+
+$exec_command find /testbed -name "choices.py" -path "*/django/*" | head -10
+ (no output)
+
+$exec_command find /testbed -name "choices.py" | head -10
+ (no output)
+
+$exec_command find /testbed -path "*/django/db/*" -name "*.py" | grep -i enum
+ /testbed/django/db/models/enums.py
+
+
+$exec_command cat /testbed/django/db/models/enums.py
+ import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+    pass
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+$exec_command grep -n "from_db_value\|to_python\|get_prep_value\|TextChoices\|IntegerChoices" /testbed/django/db/models/fields/__init__.py | head -50
+ 575:    def to_python(self, value):
+641:        from to_python() and validate() are propagated. Return the correct
+644:        value = self.to_python(value)
+722:        if hasattr(self, 'from_db_value'):
+723:            return [self.from_db_value]
+791:    def get_prep_value(self, value):
+804:            value = self.get_prep_value(value)
+897:            defaults['coerce'] = self.to_python
+933:    def to_python(self, value):
+949:    def get_prep_value(self, value):
+950:        value = super().get_prep_value(value)
+953:        return self.to_python(value)
+1010:    def to_python(self, value):
+1015:    def get_prep_value(self, value):
+1016:        value = super().get_prep_value(value)
+1017:        return self.to_python(value)
+1151:    def to_python(self, value):
+1201:    def get_prep_value(self, value):
+1202:        value = super().get_prep_value(value)
+1203:        return self.to_python(value)
+1208:            value = self.get_prep_value(value)
+1283:    def to_python(self, value):
+1342:    def get_prep_value(self, value):
+1343:        value = super().get_prep_value(value)
+1344:        value = self.to_python(value)
+1364:            value = self.get_prep_value(value)
+1483:    def to_python(self, value):
+1498:        return connection.ops.adapt_decimalfield_value(self.to_python(value), self.max_digits, self.decimal_places)
+1500:    def get_prep_value(self, value):
+1501:        value = super().get_prep_value(value)
+1502:        return self.to_python(value)
+1530:    def to_python(self, value):
+1640:    def get_prep_value(self, value):
+1641:        value = super().get_prep_value(value)
+1668:    def get_prep_value(self, value):
+1669:        value = super().get_prep_value(value)
+1682:    def to_python(self, value):
+1755:    def get_prep_value(self, value):
+1756:        value = super().get_prep_value(value)
+1769:    def to_python(self, value):
+1824:    def get_prep_value(self, value):
+1825:        value = super().get_prep_value(value)
+1880:    def to_python(self, value):
+1892:            value = self.get_prep_value(value)
+1895:    def get_prep_value(self, value):
+1896:        value = super().get_prep_value(value)
+2025:    def to_python(self, value):
+2030:    def get_prep_value(self, value):
+2031:        value = super().get_prep_value(value)
+2032:        return self.to_python(value)
+
+
+$exec_command cat > /tmp/fix_enum.py << 'EOF'
+with open('/testbed/django/db/models/enums.py', 'r') as f:
+    content = f.read()
+
+content = content.replace(
+    'class IntegerChoices(int, Choices):\n    """Class for creating enumerated integer choices."""\n    pass',
+    'class IntegerChoices(int, Choices):\n    """Class for creating enumerated integer choices."""\n    def __str__(self):\n        return str(self.value)'
+)
+
+content = content.replace(
+    'class TextChoices(str, Choices):\n    """Class for creating enumerated string choices."""\n\n    def _generate_next_value_',
+    'class TextChoices(str, Choices):\n    """Class for creating enumerated string choices."""\n    def __str__(self):\n        return self.value\n\n    def _generate_next_value_'
+)
+
+with open('/testbed/django/db/models/enums.py', 'w') as f:
+    f.write(content)
+EOF
+python3 /tmp/fix_enum.py
+ (no output)
+
+
+[model reply, complete and unedited] (2952 tokens in, 262 tokens out)
+
+
+exec_command cat /testbed/django/db/models/enums.py
+
+[command executed: exec_command]
+cat /testbed/django/db/models/enums.py
+
+[result]
+import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+    def __str__(self):
+        return str(self.value)
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+    def __str__(self):
+        return self.value
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+------------------------------------------------------------------------------
+TURN 10
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 14119 characters, the same as turn 1 plus the history below]
+$exec_command find /testbed -type f -name "*.py" | head -30
+ /testbed/tests/test_utils/test_simpletestcase.py
+/testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+/testbed/tests/aggregation_regress/__init__.py
+/testbed/tests/aggregation_regress/models.py
+/testbed/tests/aggregation_regress/tests.py
+/testbed/tests/model_indexes/__init__.py
+/testbed/tests/model_indexes/models.py
+/testbed/tests/model_indexes/tests.py
+/testbed/tests/generic_inline_admin/__init__.py
+/testbed/tests/generic_inline_admin/models.py
+/testbed/tests/generic_inline_admin/admin.py
+/testbed/tests/generic_inline_admin/urls.py
+
+
+$exec_command find /testbed -name "enum.py" -path "*/django/*" | head -10
+ (no output)
+
+$exec_command find /testbed -name "choices.py" -path "*/django/*" | head -10
+ (no output)
+
+$exec_command find /testbed -name "choices.py" | head -10
+ (no output)
+
+$exec_command find /testbed -path "*/django/db/*" -name "*.py" | grep -i enum
+ /testbed/django/db/models/enums.py
+
+
+$exec_command cat /testbed/django/db/models/enums.py
+ import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+    pass
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+$exec_command grep -n "from_db_value\|to_python\|get_prep_value\|TextChoices\|IntegerChoices" /testbed/django/db/models/fields/__init__.py | head -50
+ 575:    def to_python(self, value):
+641:        from to_python() and validate() are propagated. Return the correct
+644:        value = self.to_python(value)
+722:        if hasattr(self, 'from_db_value'):
+723:            return [self.from_db_value]
+791:    def get_prep_value(self, value):
+804:            value = self.get_prep_value(value)
+897:            defaults['coerce'] = self.to_python
+933:    def to_python(self, value):
+949:    def get_prep_value(self, value):
+950:        value = super().get_prep_value(value)
+953:        return self.to_python(value)
+1010:    def to_python(self, value):
+1015:    def get_prep_value(self, value):
+1016:        value = super().get_prep_value(value)
+1017:        return self.to_python(value)
+1151:    def to_python(self, value):
+1201:    def get_prep_value(self, value):
+1202:        value = super().get_prep_value(value)
+1203:        return self.to_python(value)
+1208:            value = self.get_prep_value(value)
+1283:    def to_python(self, value):
+1342:    def get_prep_value(self, value):
+1343:        value = super().get_prep_value(value)
+1344:        value = self.to_python(value)
+1364:            value = self.get_prep_value(value)
+1483:    def to_python(self, value):
+1498:        return connection.ops.adapt_decimalfield_value(self.to_python(value), self.max_digits, self.decimal_places)
+1500:    def get_prep_value(self, value):
+1501:        value = super().get_prep_value(value)
+1502:        return self.to_python(value)
+1530:    def to_python(self, value):
+1640:    def get_prep_value(self, value):
+1641:        value = super().get_prep_value(value)
+1668:    def get_prep_value(self, value):
+1669:        value = super().get_prep_value(value)
+1682:    def to_python(self, value):
+1755:    def get_prep_value(self, value):
+1756:        value = super().get_prep_value(value)
+1769:    def to_python(self, value):
+1824:    def get_prep_value(self, value):
+1825:        value = super().get_prep_value(value)
+1880:    def to_python(self, value):
+1892:            value = self.get_prep_value(value)
+1895:    def get_prep_value(self, value):
+1896:        value = super().get_prep_value(value)
+2025:    def to_python(self, value):
+2030:    def get_prep_value(self, value):
+2031:        value = super().get_prep_value(value)
+2032:        return self.to_python(value)
+
+
+$exec_command cat > /tmp/fix_enum.py << 'EOF'
+with open('/testbed/django/db/models/enums.py', 'r') as f:
+    content = f.read()
+
+content = content.replace(
+    'class IntegerChoices(int, Choices):\n    """Class for creating enumerated integer choices."""\n    pass',
+    'class IntegerChoices(int, Choices):\n    """Class for creating enumerated integer choices."""\n    def __str__(self):\n        return str(self.value)'
+)
+
+content = content.replace(
+    'class TextChoices(str, Choices):\n    """Class for creating enumerated string choices."""\n\n    def _generate_next_value_',
+    'class TextChoices(str, Choices):\n    """Class for creating enumerated string choices."""\n    def __str__(self):\n        return self.value\n\n    def _generate_next_value_'
+)
+
+with open('/testbed/django/db/models/enums.py', 'w') as f:
+    f.write(content)
+EOF
+python3 /tmp/fix_enum.py
+ (no output)
+
+$exec_command cat /testbed/django/db/models/enums.py
+ import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+    def __str__(self):
+        return str(self.value)
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+    def __str__(self):
+        return self.value
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+
+[model reply, complete and unedited] (3576 tokens in, 4270 tokens out)
+
+
+submit_patch Added __str__ methods to TextChoices and IntegerChoices to return the choice value instead of the member name.
+
+[command executed: submit_patch]
+Added __str__ methods to TextChoices and IntegerChoices to return the choice value instead of the member name.
+
+[result]
+TESTS_PASSED
+
+------------------------------------------------------------------------------
+STATUS: Run finished successfully

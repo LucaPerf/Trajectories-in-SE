@@ -1,0 +1,3335 @@
+==============================================================================
+Run transcript: django__django-11964
+run id: 2    tag: 'vm_27_iter_0'    turns: 10
+model: SWE-bench Pilot Task
+final state: got root
+started: 2026-10-24 17:10:30.430822    stopped: 2026-10-24 15:17:37  (start is local time, stop is UTC)
+==============================================================================
+
+HOW TO READ THIS FILE
+Each TURN is one round trip with the model:
+  1. prompt   what we send: the task, the available commands and the history of the earlier commands
+  2. reply    what the model answered, complete and unedited
+  3. command  the single line we extracted from the reply and actually executed in the container
+  4. result   what the container printed (this becomes part of the history in the next prompt)
+The run ends with a status line: "got root" means the tests passed (that is the framework's name for
+any success), anything else is the reason the run stopped.
+
+------------------------------------------------------------------------------
+TURN 1
+------------------------------------------------------------------------------
+
+[prompt sent to the model, 3777 characters]
+You are a software engineer working inside a checked-out git repository
+at /testbed. Your goal is to resolve the following issue by editing the code so that the
+project's test suite passes.
+
+ISSUE:
+The value of a TextChoices/IntegerChoices field has a differing type
+Description
+	
+If we create an instance of a model having a CharField or IntegerField with the keyword choices pointing to IntegerChoices or TextChoices, the value returned by the getter of the field will be of the same type as the one created by enum.Enum (enum value).
+For example, this model:
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+class MyChoice(models.TextChoices):
+	FIRST_CHOICE = "first", _("The first choice, it is")
+	SECOND_CHOICE = "second", _("The second choice, it is")
+class MyObject(models.Model):
+	my_str_value = models.CharField(max_length=10, choices=MyChoice.choices)
+Then this test:
+from django.test import TestCase
+from testing.pkg.models import MyObject, MyChoice
+class EnumTest(TestCase):
+	def setUp(self) -> None:
+		self.my_object = MyObject.objects.create(my_str_value=MyChoice.FIRST_CHOICE)
+	def test_created_object_is_str(self):
+		my_object = self.my_object
+		self.assertIsInstance(my_object.my_str_value, str)
+		self.assertEqual(str(my_object.my_str_value), "first")
+	def test_retrieved_object_is_str(self):
+		my_object = MyObject.objects.last()
+		self.assertIsInstance(my_object.my_str_value, str)
+		self.assertEqual(str(my_object.my_str_value), "first")
+And then the results:
+(django30-venv) ➜ django30 ./manage.py test
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+F.
+======================================================================
+FAIL: test_created_object_is_str (testing.tests.EnumTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+ File "/Users/mikailkocak/Development/django30/testing/tests.py", line 14, in test_created_object_is_str
+	self.assertEqual(str(my_object.my_str_value), "first")
+AssertionError: 'MyChoice.FIRST_CHOICE' != 'first'
+- MyChoice.FIRST_CHOICE
++ first
+----------------------------------------------------------------------
+Ran 2 tests in 0.002s
+FAILED (failures=1)
+We notice when invoking __str__(...) we don't actually get the value property of the enum value which can lead to some unexpected issues, especially when communicating to an external API with a freshly created instance that will send MyEnum.MyValue, and the one that was retrieved would send my_value.
+
+
+You can either
+
+- `exec_command command`: give a command to be executed and I will respond with the terminal output when running this command inside the task's container. The given command must not require user interaction. Do not use quotation marks in front and after your command.
+- `submit_patch note`: Call this when you believe the issue is fixed. I will run the project's test suite inside the container and tell you whether it passes. Usage: submit_patch <short note about what you changed>
+
+                        
+Do not modify the files in the `tests/` directory: they will be replaced by the official tests.
+ 
+The official tests are not in the repository: do not search for them.
+
+Decide your next single action. Use exec_command to read/search/edit files or run commands, and
+submit_patch only once you believe the fix is complete and want it verified against the test
+suite.
+
+Your entire reply must be a single action, in one of these two forms, and nothing else:
+exec_command <shell command>
+submit_patch <short note>
+The command may span several lines (for example a heredoc to write a script). 
+Do not explain your reasoning, do not add markup, and do not continue the conversation after that line.       
+
+
+[model reply, complete and unedited] (854 tokens in, 484 tokens out)
+
+
+find /testbed -type f -name "*.py" -exec grep -l "class TextChoices" {} \;
+
+[command executed: exec_command]
+find /testbed -type f -name "*.py" -exec grep -l "class TextChoices" {} \;
+
+[result]
+/testbed/tests/migrations/test_writer.py
+/testbed/django/db/models/enums.py
+
+
+------------------------------------------------------------------------------
+TURN 2
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 4059 characters, the same as turn 1 plus the history below]
+$
+
+find /testbed -type f -name "*.py" -exec grep -l "class TextChoices" {} \;
+ /testbed/tests/migrations/test_writer.py
+/testbed/django/db/models/enums.py
+
+
+
+[model reply, complete and unedited] (932 tokens in, 164 tokens out)
+
+
+exec_command cat /testbed/django/db/models/enums.py
+
+[command executed: exec_command]
+cat /testbed/django/db/models/enums.py
+
+[result]
+import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+    pass
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+------------------------------------------------------------------------------
+TURN 3
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 6585 characters, the same as turn 1 plus the history below]
+$
+
+find /testbed -type f -name "*.py" -exec grep -l "class TextChoices" {} \;
+ /testbed/tests/migrations/test_writer.py
+/testbed/django/db/models/enums.py
+
+
+$exec_command cat /testbed/django/db/models/enums.py
+ import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+    pass
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+
+[model reply, complete and unedited] (1531 tokens in, 766 tokens out)
+
+
+exec_command find /testbed -type f -name "*.py" -path "*/tests/*" -exec grep -l "TextChoices\|IntegerChoices" {} \; | head -20
+
+[command executed: exec_command]
+find /testbed -type f -name "*.py" -path "*/tests/*" -exec grep -l "TextChoices\|IntegerChoices" {} \; | head -20
+
+[result]
+/testbed/tests/model_fields/test_charfield.py
+/testbed/tests/model_fields/test_integerfield.py
+/testbed/tests/model_enums/tests.py
+/testbed/tests/migrations/test_writer.py
+
+
+------------------------------------------------------------------------------
+TURN 4
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 6888 characters, the same as turn 1 plus the history below]
+$
+
+find /testbed -type f -name "*.py" -exec grep -l "class TextChoices" {} \;
+ /testbed/tests/migrations/test_writer.py
+/testbed/django/db/models/enums.py
+
+
+$exec_command cat /testbed/django/db/models/enums.py
+ import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+    pass
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+$exec_command find /testbed -type f -name "*.py" -path "*/tests/*" -exec grep -l "TextChoices\|IntegerChoices" {} \; | head -20
+ /testbed/tests/model_fields/test_charfield.py
+/testbed/tests/model_fields/test_integerfield.py
+/testbed/tests/model_enums/tests.py
+/testbed/tests/migrations/test_writer.py
+
+
+
+[model reply, complete and unedited] (1614 tokens in, 946 tokens out)
+
+
+exec_command grep -rn "TextChoices\|IntegerChoices" /testbed/django/db/models/fields/ --include="*.py"
+
+[command executed: exec_command]
+grep -rn "TextChoices\|IntegerChoices" /testbed/django/db/models/fields/ --include="*.py"
+
+[result]
+
+[exit code: 1]
+
+------------------------------------------------------------------------------
+TURN 5
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 7010 characters, the same as turn 1 plus the history below]
+$
+
+find /testbed -type f -name "*.py" -exec grep -l "class TextChoices" {} \;
+ /testbed/tests/migrations/test_writer.py
+/testbed/django/db/models/enums.py
+
+
+$exec_command cat /testbed/django/db/models/enums.py
+ import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+    pass
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+$exec_command find /testbed -type f -name "*.py" -path "*/tests/*" -exec grep -l "TextChoices\|IntegerChoices" {} \; | head -20
+ /testbed/tests/model_fields/test_charfield.py
+/testbed/tests/model_fields/test_integerfield.py
+/testbed/tests/model_enums/tests.py
+/testbed/tests/migrations/test_writer.py
+
+
+$exec_command grep -rn "TextChoices\|IntegerChoices" /testbed/django/db/models/fields/ --include="*.py"
+ 
+[exit code: 1]
+
+
+[model reply, complete and unedited] (1654 tokens in, 3953 tokens out)
+
+
+exec_command cat > /testbed/django/db/models/enums.py << 'ENDOFFILE'
+import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+
+    def __str__(self):
+        return str(self.value)
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def __str__(self):
+        return self.value
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+ENDOFFILE
+
+[command executed: exec_command]
+cat > /testbed/django/db/models/enums.py << 'ENDOFFILE'
+import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+
+    def __str__(self):
+        return str(self.value)
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def __str__(self):
+        return self.value
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+ENDOFFILE
+
+[result]
+(no output)
+
+------------------------------------------------------------------------------
+TURN 6
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 9670 characters, the same as turn 1 plus the history below]
+$
+
+find /testbed -type f -name "*.py" -exec grep -l "class TextChoices" {} \;
+ /testbed/tests/migrations/test_writer.py
+/testbed/django/db/models/enums.py
+
+
+$exec_command cat /testbed/django/db/models/enums.py
+ import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+    pass
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+$exec_command find /testbed -type f -name "*.py" -path "*/tests/*" -exec grep -l "TextChoices\|IntegerChoices" {} \; | head -20
+ /testbed/tests/model_fields/test_charfield.py
+/testbed/tests/model_fields/test_integerfield.py
+/testbed/tests/model_enums/tests.py
+/testbed/tests/migrations/test_writer.py
+
+
+$exec_command grep -rn "TextChoices\|IntegerChoices" /testbed/django/db/models/fields/ --include="*.py"
+ 
+[exit code: 1]
+
+$exec_command cat > /testbed/django/db/models/enums.py << 'ENDOFFILE'
+import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+
+    def __str__(self):
+        return str(self.value)
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def __str__(self):
+        return self.value
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+ENDOFFILE
+ (no output)
+
+
+[model reply, complete and unedited] (2294 tokens in, 2210 tokens out)
+
+
+exec_command cat /testbed/django/db/models/enums.py
+
+[command executed: exec_command]
+cat /testbed/django/db/models/enums.py
+
+[result]
+import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+
+    def __str__(self):
+        return str(self.value)
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def __str__(self):
+        return self.value
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+------------------------------------------------------------------------------
+TURN 7
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 12292 characters, the same as turn 1 plus the history below]
+$
+
+find /testbed -type f -name "*.py" -exec grep -l "class TextChoices" {} \;
+ /testbed/tests/migrations/test_writer.py
+/testbed/django/db/models/enums.py
+
+
+$exec_command cat /testbed/django/db/models/enums.py
+ import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+    pass
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+$exec_command find /testbed -type f -name "*.py" -path "*/tests/*" -exec grep -l "TextChoices\|IntegerChoices" {} \; | head -20
+ /testbed/tests/model_fields/test_charfield.py
+/testbed/tests/model_fields/test_integerfield.py
+/testbed/tests/model_enums/tests.py
+/testbed/tests/migrations/test_writer.py
+
+
+$exec_command grep -rn "TextChoices\|IntegerChoices" /testbed/django/db/models/fields/ --include="*.py"
+ 
+[exit code: 1]
+
+$exec_command cat > /testbed/django/db/models/enums.py << 'ENDOFFILE'
+import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+
+    def __str__(self):
+        return str(self.value)
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def __str__(self):
+        return self.value
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+ENDOFFILE
+ (no output)
+
+$exec_command cat /testbed/django/db/models/enums.py
+ import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+
+    def __str__(self):
+        return str(self.value)
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def __str__(self):
+        return self.value
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+
+[model reply, complete and unedited] (2918 tokens in, 548 tokens out)
+
+
+<antThinking>
+Let me look at the test files to understand what the actual tests are checking for. This will help me understand what the fix should be.
+</antThinking>
+
+exec_command cat /testbed/tests/model_enums/tests.py
+
+[command executed: exec_command]
+cat /testbed/tests/model_enums/tests.py
+
+[result]
+import datetime
+import decimal
+import ipaddress
+import uuid
+
+from django.db import models
+from django.test import SimpleTestCase
+from django.utils.functional import Promise
+from django.utils.translation import gettext_lazy as _
+
+
+class Suit(models.IntegerChoices):
+    DIAMOND = 1, _('Diamond')
+    SPADE = 2, _('Spade')
+    HEART = 3, _('Heart')
+    CLUB = 4, _('Club')
+
+
+class YearInSchool(models.TextChoices):
+    FRESHMAN = 'FR', _('Freshman')
+    SOPHOMORE = 'SO', _('Sophomore')
+    JUNIOR = 'JR', _('Junior')
+    SENIOR = 'SR', _('Senior')
+    GRADUATE = 'GR', _('Graduate')
+
+
+class Vehicle(models.IntegerChoices):
+    CAR = 1, 'Carriage'
+    TRUCK = 2
+    JET_SKI = 3
+
+    __empty__ = _('(Unknown)')
+
+
+class Gender(models.TextChoices):
+    MALE = 'M'
+    FEMALE = 'F'
+    NOT_SPECIFIED = 'X'
+
+    __empty__ = '(Undeclared)'
+
+
+class ChoicesTests(SimpleTestCase):
+    def test_integerchoices(self):
+        self.assertEqual(Suit.choices, [(1, 'Diamond'), (2, 'Spade'), (3, 'Heart'), (4, 'Club')])
+        self.assertEqual(Suit.labels, ['Diamond', 'Spade', 'Heart', 'Club'])
+        self.assertEqual(Suit.values, [1, 2, 3, 4])
+        self.assertEqual(Suit.names, ['DIAMOND', 'SPADE', 'HEART', 'CLUB'])
+
+        self.assertEqual(repr(Suit.DIAMOND), '<Suit.DIAMOND: 1>')
+        self.assertEqual(Suit.DIAMOND.label, 'Diamond')
+        self.assertEqual(Suit.DIAMOND.value, 1)
+        self.assertEqual(Suit['DIAMOND'], Suit.DIAMOND)
+        self.assertEqual(Suit(1), Suit.DIAMOND)
+
+        self.assertIsInstance(Suit, type(models.Choices))
+        self.assertIsInstance(Suit.DIAMOND, Suit)
+        self.assertIsInstance(Suit.DIAMOND.label, Promise)
+        self.assertIsInstance(Suit.DIAMOND.value, int)
+
+    def test_integerchoices_auto_label(self):
+        self.assertEqual(Vehicle.CAR.label, 'Carriage')
+        self.assertEqual(Vehicle.TRUCK.label, 'Truck')
+        self.assertEqual(Vehicle.JET_SKI.label, 'Jet Ski')
+
+    def test_integerchoices_empty_label(self):
+        self.assertEqual(Vehicle.choices[0], (None, '(Unknown)'))
+        self.assertEqual(Vehicle.labels[0], '(Unknown)')
+        self.assertEqual(Vehicle.values[0], None)
+        self.assertEqual(Vehicle.names[0], '__empty__')
+
+    def test_integerchoices_functional_api(self):
+        Place = models.IntegerChoices('Place', 'FIRST SECOND THIRD')
+        self.assertEqual(Place.labels, ['First', 'Second', 'Third'])
+        self.assertEqual(Place.values, [1, 2, 3])
+        self.assertEqual(Place.names, ['FIRST', 'SECOND', 'THIRD'])
+
+    def test_integerchoices_containment(self):
+        self.assertIn(Suit.DIAMOND, Suit)
+        self.assertIn(1, Suit)
+        self.assertNotIn(0, Suit)
+
+    def test_textchoices(self):
+        self.assertEqual(YearInSchool.choices, [
+            ('FR', 'Freshman'), ('SO', 'Sophomore'), ('JR', 'Junior'), ('SR', 'Senior'), ('GR', 'Graduate'),
+        ])
+        self.assertEqual(YearInSchool.labels, ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate'])
+        self.assertEqual(YearInSchool.values, ['FR', 'SO', 'JR', 'SR', 'GR'])
+        self.assertEqual(YearInSchool.names, ['FRESHMAN', 'SOPHOMORE', 'JUNIOR', 'SENIOR', 'GRADUATE'])
+
+        self.assertEqual(repr(YearInSchool.FRESHMAN), "<YearInSchool.FRESHMAN: 'FR'>")
+        self.assertEqual(YearInSchool.FRESHMAN.label, 'Freshman')
+        self.assertEqual(YearInSchool.FRESHMAN.value, 'FR')
+        self.assertEqual(YearInSchool['FRESHMAN'], YearInSchool.FRESHMAN)
+        self.assertEqual(YearInSchool('FR'), YearInSchool.FRESHMAN)
+
+        self.assertIsInstance(YearInSchool, type(models.Choices))
+        self.assertIsInstance(YearInSchool.FRESHMAN, YearInSchool)
+        self.assertIsInstance(YearInSchool.FRESHMAN.label, Promise)
+        self.assertIsInstance(YearInSchool.FRESHMAN.value, str)
+
+    def test_textchoices_auto_label(self):
+        self.assertEqual(Gender.MALE.label, 'Male')
+        self.assertEqual(Gender.FEMALE.label, 'Female')
+        self.assertEqual(Gender.NOT_SPECIFIED.label, 'Not Specified')
+
+    def test_textchoices_empty_label(self):
+        self.assertEqual(Gender.choices[0], (None, '(Undeclared)'))
+        self.assertEqual(Gender.labels[0], '(Undeclared)')
+        self.assertEqual(Gender.values[0], None)
+        self.assertEqual(Gender.names[0], '__empty__')
+
+    def test_textchoices_functional_api(self):
+        Medal = models.TextChoices('Medal', 'GOLD SILVER BRONZE')
+        self.assertEqual(Medal.labels, ['Gold', 'Silver', 'Bronze'])
+        self.assertEqual(Medal.values, ['GOLD', 'SILVER', 'BRONZE'])
+        self.assertEqual(Medal.names, ['GOLD', 'SILVER', 'BRONZE'])
+
+    def test_textchoices_containment(self):
+        self.assertIn(YearInSchool.FRESHMAN, YearInSchool)
+        self.assertIn('FR', YearInSchool)
+        self.assertNotIn('XX', YearInSchool)
+
+    def test_textchoices_blank_value(self):
+        class BlankStr(models.TextChoices):
+            EMPTY = '', '(Empty)'
+            ONE = 'ONE', 'One'
+
+        self.assertEqual(BlankStr.labels, ['(Empty)', 'One'])
+        self.assertEqual(BlankStr.values, ['', 'ONE'])
+        self.assertEqual(BlankStr.names, ['EMPTY', 'ONE'])
+
+    def test_invalid_definition(self):
+        msg = "'str' object cannot be interpreted as an integer"
+        with self.assertRaisesMessage(TypeError, msg):
+            class InvalidArgumentEnum(models.IntegerChoices):
+                # A string is not permitted as the second argument to int().
+                ONE = 1, 'X', 'Invalid'
+
+        msg = "duplicate values found in <enum 'Fruit'>: PINEAPPLE -> APPLE"
+        with self.assertRaisesMessage(ValueError, msg):
+            class Fruit(models.IntegerChoices):
+                APPLE = 1, 'Apple'
+                PINEAPPLE = 1, 'Pineapple'
+
+
+class Separator(bytes, models.Choices):
+    FS = b'\x1c', 'File Separator'
+    GS = b'\x1d', 'Group Separator'
+    RS = b'\x1e', 'Record Separator'
+    US = b'\x1f', 'Unit Separator'
+
+
+class Constants(float, models.Choices):
+    PI = 3.141592653589793, 'π'
+    TAU = 6.283185307179586, 'τ'
+
+
+class Set(frozenset, models.Choices):
+    A = {1, 2}
+    B = {2, 3}
+    UNION = A | B
+    DIFFERENCE = A - B
+    INTERSECTION = A & B
+
+
+class MoonLandings(datetime.date, models.Choices):
+    APOLLO_11 = 1969, 7, 20, 'Apollo 11 (Eagle)'
+    APOLLO_12 = 1969, 11, 19, 'Apollo 12 (Intrepid)'
+    APOLLO_14 = 1971, 2, 5, 'Apollo 14 (Antares)'
+    APOLLO_15 = 1971, 7, 30, 'Apollo 15 (Falcon)'
+    APOLLO_16 = 1972, 4, 21, 'Apollo 16 (Orion)'
+    APOLLO_17 = 1972, 12, 11, 'Apollo 17 (Challenger)'
+
+
+class DateAndTime(datetime.datetime, models.Choices):
+    A = 2010, 10, 10, 10, 10, 10
+    B = 2011, 11, 11, 11, 11, 11
+    C = 2012, 12, 12, 12, 12, 12
+
+
+class MealTimes(datetime.time, models.Choices):
+    BREAKFAST = 7, 0
+    LUNCH = 13, 0
+    DINNER = 18, 30
+
+
+class Frequency(datetime.timedelta, models.Choices):
+    WEEK = 0, 0, 0, 0, 0, 0, 1, 'Week'
+    DAY = 1, 'Day'
+    HOUR = 0, 0, 0, 0, 0, 1, 'Hour'
+    MINUTE = 0, 0, 0, 0, 1, 'Hour'
+    SECOND = 0, 1, 'Second'
+
+
+class Number(decimal.Decimal, models.Choices):
+    E = 2.718281828459045, 'e'
+    PI = '3.141592653589793', 'π'
+    TAU = decimal.Decimal('6.283185307179586'), 'τ'
+
+
+class IPv4Address(ipaddress.IPv4Address, models.Choices):
+    LOCALHOST = '127.0.0.1', 'Localhost'
+    GATEWAY = '192.168.0.1', 'Gateway'
+    BROADCAST = '192.168.0.255', 'Broadcast'
+
+
+class IPv6Address(ipaddress.IPv6Address, models.Choices):
+    LOCALHOST = '::1', 'Localhost'
+    UNSPECIFIED = '::', 'Unspecified'
+
+
+class IPv4Network(ipaddress.IPv4Network, models.Choices):
+    LOOPBACK = '127.0.0.0/8', 'Loopback'
+    LINK_LOCAL = '169.254.0.0/16', 'Link-Local'
+    PRIVATE_USE_A = '10.0.0.0/8', 'Private-Use (Class A)'
+
+
+class IPv6Network(ipaddress.IPv6Network, models.Choices):
+    LOOPBACK = '::1/128', 'Loopback'
+    UNSPECIFIED = '::/128', 'Unspecified'
+    UNIQUE_LOCAL = 'fc00::/7', 'Unique-Local'
+    LINK_LOCAL_UNICAST = 'fe80::/10', 'Link-Local Unicast'
+
+
+class CustomChoicesTests(SimpleTestCase):
+    def test_labels_valid(self):
+        enums = (
+            Separator, Constants, Set, MoonLandings, DateAndTime, MealTimes,
+            Frequency, Number, IPv4Address, IPv6Address, IPv4Network,
+            IPv6Network,
+        )
+        for choice_enum in enums:
+            with self.subTest(choice_enum.__name__):
+                self.assertNotIn(None, choice_enum.labels)
+
+    def test_bool_unsupported(self):
+        msg = "type 'bool' is not an acceptable base type"
+        with self.assertRaisesMessage(TypeError, msg):
+            class Boolean(bool, models.Choices):
+                pass
+
+    def test_timezone_unsupported(self):
+        msg = "type 'datetime.timezone' is not an acceptable base type"
+        with self.assertRaisesMessage(TypeError, msg):
+            class Timezone(datetime.timezone, models.Choices):
+                pass
+
+    def test_uuid_unsupported(self):
+        msg = 'UUID objects are immutable'
+        with self.assertRaisesMessage(TypeError, msg):
+            class Identifier(uuid.UUID, models.Choices):
+                A = '972ce4eb-a95f-4a56-9339-68c208a76f18'
+
+
+------------------------------------------------------------------------------
+TURN 8
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 21409 characters, the same as turn 1 plus the history below]
+$
+
+find /testbed -type f -name "*.py" -exec grep -l "class TextChoices" {} \;
+ /testbed/tests/migrations/test_writer.py
+/testbed/django/db/models/enums.py
+
+
+$exec_command cat /testbed/django/db/models/enums.py
+ import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+    pass
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+$exec_command find /testbed -type f -name "*.py" -path "*/tests/*" -exec grep -l "TextChoices\|IntegerChoices" {} \; | head -20
+ /testbed/tests/model_fields/test_charfield.py
+/testbed/tests/model_fields/test_integerfield.py
+/testbed/tests/model_enums/tests.py
+/testbed/tests/migrations/test_writer.py
+
+
+$exec_command grep -rn "TextChoices\|IntegerChoices" /testbed/django/db/models/fields/ --include="*.py"
+ 
+[exit code: 1]
+
+$exec_command cat > /testbed/django/db/models/enums.py << 'ENDOFFILE'
+import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+
+    def __str__(self):
+        return str(self.value)
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def __str__(self):
+        return self.value
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+ENDOFFILE
+ (no output)
+
+$exec_command cat /testbed/django/db/models/enums.py
+ import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+
+    def __str__(self):
+        return str(self.value)
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def __str__(self):
+        return self.value
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+$exec_command cat /testbed/tests/model_enums/tests.py
+ import datetime
+import decimal
+import ipaddress
+import uuid
+
+from django.db import models
+from django.test import SimpleTestCase
+from django.utils.functional import Promise
+from django.utils.translation import gettext_lazy as _
+
+
+class Suit(models.IntegerChoices):
+    DIAMOND = 1, _('Diamond')
+    SPADE = 2, _('Spade')
+    HEART = 3, _('Heart')
+    CLUB = 4, _('Club')
+
+
+class YearInSchool(models.TextChoices):
+    FRESHMAN = 'FR', _('Freshman')
+    SOPHOMORE = 'SO', _('Sophomore')
+    JUNIOR = 'JR', _('Junior')
+    SENIOR = 'SR', _('Senior')
+    GRADUATE = 'GR', _('Graduate')
+
+
+class Vehicle(models.IntegerChoices):
+    CAR = 1, 'Carriage'
+    TRUCK = 2
+    JET_SKI = 3
+
+    __empty__ = _('(Unknown)')
+
+
+class Gender(models.TextChoices):
+    MALE = 'M'
+    FEMALE = 'F'
+    NOT_SPECIFIED = 'X'
+
+    __empty__ = '(Undeclared)'
+
+
+class ChoicesTests(SimpleTestCase):
+    def test_integerchoices(self):
+        self.assertEqual(Suit.choices, [(1, 'Diamond'), (2, 'Spade'), (3, 'Heart'), (4, 'Club')])
+        self.assertEqual(Suit.labels, ['Diamond', 'Spade', 'Heart', 'Club'])
+        self.assertEqual(Suit.values, [1, 2, 3, 4])
+        self.assertEqual(Suit.names, ['DIAMOND', 'SPADE', 'HEART', 'CLUB'])
+
+        self.assertEqual(repr(Suit.DIAMOND), '<Suit.DIAMOND: 1>')
+        self.assertEqual(Suit.DIAMOND.label, 'Diamond')
+        self.assertEqual(Suit.DIAMOND.value, 1)
+        self.assertEqual(Suit['DIAMOND'], Suit.DIAMOND)
+        self.assertEqual(Suit(1), Suit.DIAMOND)
+
+        self.assertIsInstance(Suit, type(models.Choices))
+        self.assertIsInstance(Suit.DIAMOND, Suit)
+        self.assertIsInstance(Suit.DIAMOND.label, Promise)
+        self.assertIsInstance(Suit.DIAMOND.value, int)
+
+    def test_integerchoices_auto_label(self):
+        self.assertEqual(Vehicle.CAR.label, 'Carriage')
+        self.assertEqual(Vehicle.TRUCK.label, 'Truck')
+        self.assertEqual(Vehicle.JET_SKI.label, 'Jet Ski')
+
+    def test_integerchoices_empty_label(self):
+        self.assertEqual(Vehicle.choices[0], (None, '(Unknown)'))
+        self.assertEqual(Vehicle.labels[0], '(Unknown)')
+        self.assertEqual(Vehicle.values[0], None)
+        self.assertEqual(Vehicle.names[0], '__empty__')
+
+    def test_integerchoices_functional_api(self):
+        Place = models.IntegerChoices('Place', 'FIRST SECOND THIRD')
+        self.assertEqual(Place.labels, ['First', 'Second', 'Third'])
+        self.assertEqual(Place.values, [1, 2, 3])
+        self.assertEqual(Place.names, ['FIRST', 'SECOND', 'THIRD'])
+
+    def test_integerchoices_containment(self):
+        self.assertIn(Suit.DIAMOND, Suit)
+        self.assertIn(1, Suit)
+        self.assertNotIn(0, Suit)
+
+    def test_textchoices(self):
+        self.assertEqual(YearInSchool.choices, [
+            ('FR', 'Freshman'), ('SO', 'Sophomore'), ('JR', 'Junior'), ('SR', 'Senior'), ('GR', 'Graduate'),
+        ])
+        self.assertEqual(YearInSchool.labels, ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate'])
+        self.assertEqual(YearInSchool.values, ['FR', 'SO', 'JR', 'SR', 'GR'])
+        self.assertEqual(YearInSchool.names, ['FRESHMAN', 'SOPHOMORE', 'JUNIOR', 'SENIOR', 'GRADUATE'])
+
+        self.assertEqual(repr(YearInSchool.FRESHMAN), "<YearInSchool.FRESHMAN: 'FR'>")
+        self.assertEqual(YearInSchool.FRESHMAN.label, 'Freshman')
+        self.assertEqual(YearInSchool.FRESHMAN.value, 'FR')
+        self.assertEqual(YearInSchool['FRESHMAN'], YearInSchool.FRESHMAN)
+        self.assertEqual(YearInSchool('FR'), YearInSchool.FRESHMAN)
+
+        self.assertIsInstance(YearInSchool, type(models.Choices))
+        self.assertIsInstance(YearInSchool.FRESHMAN, YearInSchool)
+        self.assertIsInstance(YearInSchool.FRESHMAN.label, Promise)
+        self.assertIsInstance(YearInSchool.FRESHMAN.value, str)
+
+    def test_textchoices_auto_label(self):
+        self.assertEqual(Gender.MALE.label, 'Male')
+        self.assertEqual(Gender.FEMALE.label, 'Female')
+        self.assertEqual(Gender.NOT_SPECIFIED.label, 'Not Specified')
+
+    def test_textchoices_empty_label(self):
+        self.assertEqual(Gender.choices[0], (None, '(Undeclared)'))
+        self.assertEqual(Gender.labels[0], '(Undeclared)')
+        self.assertEqual(Gender.values[0], None)
+        self.assertEqual(Gender.names[0], '__empty__')
+
+    def test_textchoices_functional_api(self):
+        Medal = models.TextChoices('Medal', 'GOLD SILVER BRONZE')
+        self.assertEqual(Medal.labels, ['Gold', 'Silver', 'Bronze'])
+        self.assertEqual(Medal.values, ['GOLD', 'SILVER', 'BRONZE'])
+        self.assertEqual(Medal.names, ['GOLD', 'SILVER', 'BRONZE'])
+
+    def test_textchoices_containment(self):
+        self.assertIn(YearInSchool.FRESHMAN, YearInSchool)
+        self.assertIn('FR', YearInSchool)
+        self.assertNotIn('XX', YearInSchool)
+
+    def test_textchoices_blank_value(self):
+        class BlankStr(models.TextChoices):
+            EMPTY = '', '(Empty)'
+            ONE = 'ONE', 'One'
+
+        self.assertEqual(BlankStr.labels, ['(Empty)', 'One'])
+        self.assertEqual(BlankStr.values, ['', 'ONE'])
+        self.assertEqual(BlankStr.names, ['EMPTY', 'ONE'])
+
+    def test_invalid_definition(self):
+        msg = "'str' object cannot be interpreted as an integer"
+        with self.assertRaisesMessage(TypeError, msg):
+            class InvalidArgumentEnum(models.IntegerChoices):
+                # A string is not permitted as the second argument to int().
+                ONE = 1, 'X', 'Invalid'
+
+        msg = "duplicate values found in <enum 'Fruit'>: PINEAPPLE -> APPLE"
+        with self.assertRaisesMessage(ValueError, msg):
+            class Fruit(models.IntegerChoices):
+                APPLE = 1, 'Apple'
+                PINEAPPLE = 1, 'Pineapple'
+
+
+class Separator(bytes, models.Choices):
+    FS = b'\x1c', 'File Separator'
+    GS = b'\x1d', 'Group Separator'
+    RS = b'\x1e', 'Record Separator'
+    US = b'\x1f', 'Unit Separator'
+
+
+class Constants(float, models.Choices):
+    PI = 3.141592653589793, 'π'
+    TAU = 6.283185307179586, 'τ'
+
+
+class Set(frozenset, models.Choices):
+    A = {1, 2}
+    B = {2, 3}
+    UNION = A | B
+    DIFFERENCE = A - B
+    INTERSECTION = A & B
+
+
+class MoonLandings(datetime.date, models.Choices):
+    APOLLO_11 = 1969, 7, 20, 'Apollo 11 (Eagle)'
+    APOLLO_12 = 1969, 11, 19, 'Apollo 12 (Intrepid)'
+    APOLLO_14 = 1971, 2, 5, 'Apollo 14 (Antares)'
+    APOLLO_15 = 1971, 7, 30, 'Apollo 15 (Falcon)'
+    APOLLO_16 = 1972, 4, 21, 'Apollo 16 (Orion)'
+    APOLLO_17 = 1972, 12, 11, 'Apollo 17 (Challenger)'
+
+
+class DateAndTime(datetime.datetime, models.Choices):
+    A = 2010, 10, 10, 10, 10, 10
+    B = 2011, 11, 11, 11, 11, 11
+    C = 2012, 12, 12, 12, 12, 12
+
+
+class MealTimes(datetime.time, models.Choices):
+    BREAKFAST = 7, 0
+    LUNCH = 13, 0
+    DINNER = 18, 30
+
+
+class Frequency(datetime.timedelta, models.Choices):
+    WEEK = 0, 0, 0, 0, 0, 0, 1, 'Week'
+    DAY = 1, 'Day'
+    HOUR = 0, 0, 0, 0, 0, 1, 'Hour'
+    MINUTE = 0, 0, 0, 0, 1, 'Hour'
+    SECOND = 0, 1, 'Second'
+
+
+class Number(decimal.Decimal, models.Choices):
+    E = 2.718281828459045, 'e'
+    PI = '3.141592653589793', 'π'
+    TAU = decimal.Decimal('6.283185307179586'), 'τ'
+
+
+class IPv4Address(ipaddress.IPv4Address, models.Choices):
+    LOCALHOST = '127.0.0.1', 'Localhost'
+    GATEWAY = '192.168.0.1', 'Gateway'
+    BROADCAST = '192.168.0.255', 'Broadcast'
+
+
+class IPv6Address(ipaddress.IPv6Address, models.Choices):
+    LOCALHOST = '::1', 'Localhost'
+    UNSPECIFIED = '::', 'Unspecified'
+
+
+class IPv4Network(ipaddress.IPv4Network, models.Choices):
+    LOOPBACK = '127.0.0.0/8', 'Loopback'
+    LINK_LOCAL = '169.254.0.0/16', 'Link-Local'
+    PRIVATE_USE_A = '10.0.0.0/8', 'Private-Use (Class A)'
+
+
+class IPv6Network(ipaddress.IPv6Network, models.Choices):
+    LOOPBACK = '::1/128', 'Loopback'
+    UNSPECIFIED = '::/128', 'Unspecified'
+    UNIQUE_LOCAL = 'fc00::/7', 'Unique-Local'
+    LINK_LOCAL_UNICAST = 'fe80::/10', 'Link-Local Unicast'
+
+
+class CustomChoicesTests(SimpleTestCase):
+    def test_labels_valid(self):
+        enums = (
+            Separator, Constants, Set, MoonLandings, DateAndTime, MealTimes,
+            Frequency, Number, IPv4Address, IPv6Address, IPv4Network,
+            IPv6Network,
+        )
+        for choice_enum in enums:
+            with self.subTest(choice_enum.__name__):
+                self.assertNotIn(None, choice_enum.labels)
+
+    def test_bool_unsupported(self):
+        msg = "type 'bool' is not an acceptable base type"
+        with self.assertRaisesMessage(TypeError, msg):
+            class Boolean(bool, models.Choices):
+                pass
+
+    def test_timezone_unsupported(self):
+        msg = "type 'datetime.timezone' is not an acceptable base type"
+        with self.assertRaisesMessage(TypeError, msg):
+            class Timezone(datetime.timezone, models.Choices):
+                pass
+
+    def test_uuid_unsupported(self):
+        msg = 'UUID objects are immutable'
+        with self.assertRaisesMessage(TypeError, msg):
+            class Identifier(uuid.UUID, models.Choices):
+                A = '972ce4eb-a95f-4a56-9339-68c208a76f18'
+
+
+
+[model reply, complete and unedited] (5760 tokens in, 904 tokens out)
+
+
+exec_command grep -rn "__eq__\|__hash__" /testbed/django/db/models/enums.py
+
+submit_patch Added __str__ methods to IntegerChoices and TextChoices to return the actual value instead of the enum representation
+
+[command executed: exec_command]
+grep -rn "__eq__\|__hash__" /testbed/django/db/models/enums.py
+
+[result]
+
+[exit code: 1]
+
+------------------------------------------------------------------------------
+TURN 9
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 21504 characters, the same as turn 1 plus the history below]
+$
+
+find /testbed -type f -name "*.py" -exec grep -l "class TextChoices" {} \;
+ /testbed/tests/migrations/test_writer.py
+/testbed/django/db/models/enums.py
+
+
+$exec_command cat /testbed/django/db/models/enums.py
+ import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+    pass
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+$exec_command find /testbed -type f -name "*.py" -path "*/tests/*" -exec grep -l "TextChoices\|IntegerChoices" {} \; | head -20
+ /testbed/tests/model_fields/test_charfield.py
+/testbed/tests/model_fields/test_integerfield.py
+/testbed/tests/model_enums/tests.py
+/testbed/tests/migrations/test_writer.py
+
+
+$exec_command grep -rn "TextChoices\|IntegerChoices" /testbed/django/db/models/fields/ --include="*.py"
+ 
+[exit code: 1]
+
+$exec_command cat > /testbed/django/db/models/enums.py << 'ENDOFFILE'
+import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+
+    def __str__(self):
+        return str(self.value)
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def __str__(self):
+        return self.value
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+ENDOFFILE
+ (no output)
+
+$exec_command cat /testbed/django/db/models/enums.py
+ import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+
+    def __str__(self):
+        return str(self.value)
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def __str__(self):
+        return self.value
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+$exec_command cat /testbed/tests/model_enums/tests.py
+ import datetime
+import decimal
+import ipaddress
+import uuid
+
+from django.db import models
+from django.test import SimpleTestCase
+from django.utils.functional import Promise
+from django.utils.translation import gettext_lazy as _
+
+
+class Suit(models.IntegerChoices):
+    DIAMOND = 1, _('Diamond')
+    SPADE = 2, _('Spade')
+    HEART = 3, _('Heart')
+    CLUB = 4, _('Club')
+
+
+class YearInSchool(models.TextChoices):
+    FRESHMAN = 'FR', _('Freshman')
+    SOPHOMORE = 'SO', _('Sophomore')
+    JUNIOR = 'JR', _('Junior')
+    SENIOR = 'SR', _('Senior')
+    GRADUATE = 'GR', _('Graduate')
+
+
+class Vehicle(models.IntegerChoices):
+    CAR = 1, 'Carriage'
+    TRUCK = 2
+    JET_SKI = 3
+
+    __empty__ = _('(Unknown)')
+
+
+class Gender(models.TextChoices):
+    MALE = 'M'
+    FEMALE = 'F'
+    NOT_SPECIFIED = 'X'
+
+    __empty__ = '(Undeclared)'
+
+
+class ChoicesTests(SimpleTestCase):
+    def test_integerchoices(self):
+        self.assertEqual(Suit.choices, [(1, 'Diamond'), (2, 'Spade'), (3, 'Heart'), (4, 'Club')])
+        self.assertEqual(Suit.labels, ['Diamond', 'Spade', 'Heart', 'Club'])
+        self.assertEqual(Suit.values, [1, 2, 3, 4])
+        self.assertEqual(Suit.names, ['DIAMOND', 'SPADE', 'HEART', 'CLUB'])
+
+        self.assertEqual(repr(Suit.DIAMOND), '<Suit.DIAMOND: 1>')
+        self.assertEqual(Suit.DIAMOND.label, 'Diamond')
+        self.assertEqual(Suit.DIAMOND.value, 1)
+        self.assertEqual(Suit['DIAMOND'], Suit.DIAMOND)
+        self.assertEqual(Suit(1), Suit.DIAMOND)
+
+        self.assertIsInstance(Suit, type(models.Choices))
+        self.assertIsInstance(Suit.DIAMOND, Suit)
+        self.assertIsInstance(Suit.DIAMOND.label, Promise)
+        self.assertIsInstance(Suit.DIAMOND.value, int)
+
+    def test_integerchoices_auto_label(self):
+        self.assertEqual(Vehicle.CAR.label, 'Carriage')
+        self.assertEqual(Vehicle.TRUCK.label, 'Truck')
+        self.assertEqual(Vehicle.JET_SKI.label, 'Jet Ski')
+
+    def test_integerchoices_empty_label(self):
+        self.assertEqual(Vehicle.choices[0], (None, '(Unknown)'))
+        self.assertEqual(Vehicle.labels[0], '(Unknown)')
+        self.assertEqual(Vehicle.values[0], None)
+        self.assertEqual(Vehicle.names[0], '__empty__')
+
+    def test_integerchoices_functional_api(self):
+        Place = models.IntegerChoices('Place', 'FIRST SECOND THIRD')
+        self.assertEqual(Place.labels, ['First', 'Second', 'Third'])
+        self.assertEqual(Place.values, [1, 2, 3])
+        self.assertEqual(Place.names, ['FIRST', 'SECOND', 'THIRD'])
+
+    def test_integerchoices_containment(self):
+        self.assertIn(Suit.DIAMOND, Suit)
+        self.assertIn(1, Suit)
+        self.assertNotIn(0, Suit)
+
+    def test_textchoices(self):
+        self.assertEqual(YearInSchool.choices, [
+            ('FR', 'Freshman'), ('SO', 'Sophomore'), ('JR', 'Junior'), ('SR', 'Senior'), ('GR', 'Graduate'),
+        ])
+        self.assertEqual(YearInSchool.labels, ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate'])
+        self.assertEqual(YearInSchool.values, ['FR', 'SO', 'JR', 'SR', 'GR'])
+        self.assertEqual(YearInSchool.names, ['FRESHMAN', 'SOPHOMORE', 'JUNIOR', 'SENIOR', 'GRADUATE'])
+
+        self.assertEqual(repr(YearInSchool.FRESHMAN), "<YearInSchool.FRESHMAN: 'FR'>")
+        self.assertEqual(YearInSchool.FRESHMAN.label, 'Freshman')
+        self.assertEqual(YearInSchool.FRESHMAN.value, 'FR')
+        self.assertEqual(YearInSchool['FRESHMAN'], YearInSchool.FRESHMAN)
+        self.assertEqual(YearInSchool('FR'), YearInSchool.FRESHMAN)
+
+        self.assertIsInstance(YearInSchool, type(models.Choices))
+        self.assertIsInstance(YearInSchool.FRESHMAN, YearInSchool)
+        self.assertIsInstance(YearInSchool.FRESHMAN.label, Promise)
+        self.assertIsInstance(YearInSchool.FRESHMAN.value, str)
+
+    def test_textchoices_auto_label(self):
+        self.assertEqual(Gender.MALE.label, 'Male')
+        self.assertEqual(Gender.FEMALE.label, 'Female')
+        self.assertEqual(Gender.NOT_SPECIFIED.label, 'Not Specified')
+
+    def test_textchoices_empty_label(self):
+        self.assertEqual(Gender.choices[0], (None, '(Undeclared)'))
+        self.assertEqual(Gender.labels[0], '(Undeclared)')
+        self.assertEqual(Gender.values[0], None)
+        self.assertEqual(Gender.names[0], '__empty__')
+
+    def test_textchoices_functional_api(self):
+        Medal = models.TextChoices('Medal', 'GOLD SILVER BRONZE')
+        self.assertEqual(Medal.labels, ['Gold', 'Silver', 'Bronze'])
+        self.assertEqual(Medal.values, ['GOLD', 'SILVER', 'BRONZE'])
+        self.assertEqual(Medal.names, ['GOLD', 'SILVER', 'BRONZE'])
+
+    def test_textchoices_containment(self):
+        self.assertIn(YearInSchool.FRESHMAN, YearInSchool)
+        self.assertIn('FR', YearInSchool)
+        self.assertNotIn('XX', YearInSchool)
+
+    def test_textchoices_blank_value(self):
+        class BlankStr(models.TextChoices):
+            EMPTY = '', '(Empty)'
+            ONE = 'ONE', 'One'
+
+        self.assertEqual(BlankStr.labels, ['(Empty)', 'One'])
+        self.assertEqual(BlankStr.values, ['', 'ONE'])
+        self.assertEqual(BlankStr.names, ['EMPTY', 'ONE'])
+
+    def test_invalid_definition(self):
+        msg = "'str' object cannot be interpreted as an integer"
+        with self.assertRaisesMessage(TypeError, msg):
+            class InvalidArgumentEnum(models.IntegerChoices):
+                # A string is not permitted as the second argument to int().
+                ONE = 1, 'X', 'Invalid'
+
+        msg = "duplicate values found in <enum 'Fruit'>: PINEAPPLE -> APPLE"
+        with self.assertRaisesMessage(ValueError, msg):
+            class Fruit(models.IntegerChoices):
+                APPLE = 1, 'Apple'
+                PINEAPPLE = 1, 'Pineapple'
+
+
+class Separator(bytes, models.Choices):
+    FS = b'\x1c', 'File Separator'
+    GS = b'\x1d', 'Group Separator'
+    RS = b'\x1e', 'Record Separator'
+    US = b'\x1f', 'Unit Separator'
+
+
+class Constants(float, models.Choices):
+    PI = 3.141592653589793, 'π'
+    TAU = 6.283185307179586, 'τ'
+
+
+class Set(frozenset, models.Choices):
+    A = {1, 2}
+    B = {2, 3}
+    UNION = A | B
+    DIFFERENCE = A - B
+    INTERSECTION = A & B
+
+
+class MoonLandings(datetime.date, models.Choices):
+    APOLLO_11 = 1969, 7, 20, 'Apollo 11 (Eagle)'
+    APOLLO_12 = 1969, 11, 19, 'Apollo 12 (Intrepid)'
+    APOLLO_14 = 1971, 2, 5, 'Apollo 14 (Antares)'
+    APOLLO_15 = 1971, 7, 30, 'Apollo 15 (Falcon)'
+    APOLLO_16 = 1972, 4, 21, 'Apollo 16 (Orion)'
+    APOLLO_17 = 1972, 12, 11, 'Apollo 17 (Challenger)'
+
+
+class DateAndTime(datetime.datetime, models.Choices):
+    A = 2010, 10, 10, 10, 10, 10
+    B = 2011, 11, 11, 11, 11, 11
+    C = 2012, 12, 12, 12, 12, 12
+
+
+class MealTimes(datetime.time, models.Choices):
+    BREAKFAST = 7, 0
+    LUNCH = 13, 0
+    DINNER = 18, 30
+
+
+class Frequency(datetime.timedelta, models.Choices):
+    WEEK = 0, 0, 0, 0, 0, 0, 1, 'Week'
+    DAY = 1, 'Day'
+    HOUR = 0, 0, 0, 0, 0, 1, 'Hour'
+    MINUTE = 0, 0, 0, 0, 1, 'Hour'
+    SECOND = 0, 1, 'Second'
+
+
+class Number(decimal.Decimal, models.Choices):
+    E = 2.718281828459045, 'e'
+    PI = '3.141592653589793', 'π'
+    TAU = decimal.Decimal('6.283185307179586'), 'τ'
+
+
+class IPv4Address(ipaddress.IPv4Address, models.Choices):
+    LOCALHOST = '127.0.0.1', 'Localhost'
+    GATEWAY = '192.168.0.1', 'Gateway'
+    BROADCAST = '192.168.0.255', 'Broadcast'
+
+
+class IPv6Address(ipaddress.IPv6Address, models.Choices):
+    LOCALHOST = '::1', 'Localhost'
+    UNSPECIFIED = '::', 'Unspecified'
+
+
+class IPv4Network(ipaddress.IPv4Network, models.Choices):
+    LOOPBACK = '127.0.0.0/8', 'Loopback'
+    LINK_LOCAL = '169.254.0.0/16', 'Link-Local'
+    PRIVATE_USE_A = '10.0.0.0/8', 'Private-Use (Class A)'
+
+
+class IPv6Network(ipaddress.IPv6Network, models.Choices):
+    LOOPBACK = '::1/128', 'Loopback'
+    UNSPECIFIED = '::/128', 'Unspecified'
+    UNIQUE_LOCAL = 'fc00::/7', 'Unique-Local'
+    LINK_LOCAL_UNICAST = 'fe80::/10', 'Link-Local Unicast'
+
+
+class CustomChoicesTests(SimpleTestCase):
+    def test_labels_valid(self):
+        enums = (
+            Separator, Constants, Set, MoonLandings, DateAndTime, MealTimes,
+            Frequency, Number, IPv4Address, IPv6Address, IPv4Network,
+            IPv6Network,
+        )
+        for choice_enum in enums:
+            with self.subTest(choice_enum.__name__):
+                self.assertNotIn(None, choice_enum.labels)
+
+    def test_bool_unsupported(self):
+        msg = "type 'bool' is not an acceptable base type"
+        with self.assertRaisesMessage(TypeError, msg):
+            class Boolean(bool, models.Choices):
+                pass
+
+    def test_timezone_unsupported(self):
+        msg = "type 'datetime.timezone' is not an acceptable base type"
+        with self.assertRaisesMessage(TypeError, msg):
+            class Timezone(datetime.timezone, models.Choices):
+                pass
+
+    def test_uuid_unsupported(self):
+        msg = 'UUID objects are immutable'
+        with self.assertRaisesMessage(TypeError, msg):
+            class Identifier(uuid.UUID, models.Choices):
+                A = '972ce4eb-a95f-4a56-9339-68c208a76f18'
+
+
+$exec_command grep -rn "__eq__\|__hash__" /testbed/django/db/models/enums.py
+ 
+[exit code: 1]
+
+
+[model reply, complete and unedited] (5794 tokens in, 662 tokens out)
+
+
+exec_command cat /testbed/tests/model_enums/tests.py | head -100
+
+[command executed: exec_command]
+cat /testbed/tests/model_enums/tests.py | head -100
+
+[result]
+import datetime
+import decimal
+import ipaddress
+import uuid
+
+from django.db import models
+from django.test import SimpleTestCase
+from django.utils.functional import Promise
+from django.utils.translation import gettext_lazy as _
+
+
+class Suit(models.IntegerChoices):
+    DIAMOND = 1, _('Diamond')
+    SPADE = 2, _('Spade')
+    HEART = 3, _('Heart')
+    CLUB = 4, _('Club')
+
+
+class YearInSchool(models.TextChoices):
+    FRESHMAN = 'FR', _('Freshman')
+    SOPHOMORE = 'SO', _('Sophomore')
+    JUNIOR = 'JR', _('Junior')
+    SENIOR = 'SR', _('Senior')
+    GRADUATE = 'GR', _('Graduate')
+
+
+class Vehicle(models.IntegerChoices):
+    CAR = 1, 'Carriage'
+    TRUCK = 2
+    JET_SKI = 3
+
+    __empty__ = _('(Unknown)')
+
+
+class Gender(models.TextChoices):
+    MALE = 'M'
+    FEMALE = 'F'
+    NOT_SPECIFIED = 'X'
+
+    __empty__ = '(Undeclared)'
+
+
+class ChoicesTests(SimpleTestCase):
+    def test_integerchoices(self):
+        self.assertEqual(Suit.choices, [(1, 'Diamond'), (2, 'Spade'), (3, 'Heart'), (4, 'Club')])
+        self.assertEqual(Suit.labels, ['Diamond', 'Spade', 'Heart', 'Club'])
+        self.assertEqual(Suit.values, [1, 2, 3, 4])
+        self.assertEqual(Suit.names, ['DIAMOND', 'SPADE', 'HEART', 'CLUB'])
+
+        self.assertEqual(repr(Suit.DIAMOND), '<Suit.DIAMOND: 1>')
+        self.assertEqual(Suit.DIAMOND.label, 'Diamond')
+        self.assertEqual(Suit.DIAMOND.value, 1)
+        self.assertEqual(Suit['DIAMOND'], Suit.DIAMOND)
+        self.assertEqual(Suit(1), Suit.DIAMOND)
+
+        self.assertIsInstance(Suit, type(models.Choices))
+        self.assertIsInstance(Suit.DIAMOND, Suit)
+        self.assertIsInstance(Suit.DIAMOND.label, Promise)
+        self.assertIsInstance(Suit.DIAMOND.value, int)
+
+    def test_integerchoices_auto_label(self):
+        self.assertEqual(Vehicle.CAR.label, 'Carriage')
+        self.assertEqual(Vehicle.TRUCK.label, 'Truck')
+        self.assertEqual(Vehicle.JET_SKI.label, 'Jet Ski')
+
+    def test_integerchoices_empty_label(self):
+        self.assertEqual(Vehicle.choices[0], (None, '(Unknown)'))
+        self.assertEqual(Vehicle.labels[0], '(Unknown)')
+        self.assertEqual(Vehicle.values[0], None)
+        self.assertEqual(Vehicle.names[0], '__empty__')
+
+    def test_integerchoices_functional_api(self):
+        Place = models.IntegerChoices('Place', 'FIRST SECOND THIRD')
+        self.assertEqual(Place.labels, ['First', 'Second', 'Third'])
+        self.assertEqual(Place.values, [1, 2, 3])
+        self.assertEqual(Place.names, ['FIRST', 'SECOND', 'THIRD'])
+
+    def test_integerchoices_containment(self):
+        self.assertIn(Suit.DIAMOND, Suit)
+        self.assertIn(1, Suit)
+        self.assertNotIn(0, Suit)
+
+    def test_textchoices(self):
+        self.assertEqual(YearInSchool.choices, [
+            ('FR', 'Freshman'), ('SO', 'Sophomore'), ('JR', 'Junior'), ('SR', 'Senior'), ('GR', 'Graduate'),
+        ])
+        self.assertEqual(YearInSchool.labels, ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate'])
+        self.assertEqual(YearInSchool.values, ['FR', 'SO', 'JR', 'SR', 'GR'])
+        self.assertEqual(YearInSchool.names, ['FRESHMAN', 'SOPHOMORE', 'JUNIOR', 'SENIOR', 'GRADUATE'])
+
+        self.assertEqual(repr(YearInSchool.FRESHMAN), "<YearInSchool.FRESHMAN: 'FR'>")
+        self.assertEqual(YearInSchool.FRESHMAN.label, 'Freshman')
+        self.assertEqual(YearInSchool.FRESHMAN.value, 'FR')
+        self.assertEqual(YearInSchool['FRESHMAN'], YearInSchool.FRESHMAN)
+        self.assertEqual(YearInSchool('FR'), YearInSchool.FRESHMAN)
+
+        self.assertIsInstance(YearInSchool, type(models.Choices))
+        self.assertIsInstance(YearInSchool.FRESHMAN, YearInSchool)
+        self.assertIsInstance(YearInSchool.FRESHMAN.label, Promise)
+        self.assertIsInstance(YearInSchool.FRESHMAN.value, str)
+
+
+------------------------------------------------------------------------------
+TURN 10
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 25346 characters, the same as turn 1 plus the history below]
+$
+
+find /testbed -type f -name "*.py" -exec grep -l "class TextChoices" {} \;
+ /testbed/tests/migrations/test_writer.py
+/testbed/django/db/models/enums.py
+
+
+$exec_command cat /testbed/django/db/models/enums.py
+ import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+    pass
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+$exec_command find /testbed -type f -name "*.py" -path "*/tests/*" -exec grep -l "TextChoices\|IntegerChoices" {} \; | head -20
+ /testbed/tests/model_fields/test_charfield.py
+/testbed/tests/model_fields/test_integerfield.py
+/testbed/tests/model_enums/tests.py
+/testbed/tests/migrations/test_writer.py
+
+
+$exec_command grep -rn "TextChoices\|IntegerChoices" /testbed/django/db/models/fields/ --include="*.py"
+ 
+[exit code: 1]
+
+$exec_command cat > /testbed/django/db/models/enums.py << 'ENDOFFILE'
+import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+
+    def __str__(self):
+        return str(self.value)
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def __str__(self):
+        return self.value
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+ENDOFFILE
+ (no output)
+
+$exec_command cat /testbed/django/db/models/enums.py
+ import enum
+
+from django.utils.functional import Promise
+
+__all__ = ['Choices', 'IntegerChoices', 'TextChoices']
+
+
+class ChoicesMeta(enum.EnumMeta):
+    """A metaclass for creating a enum choices."""
+
+    def __new__(metacls, classname, bases, classdict):
+        labels = []
+        for key in classdict._member_names:
+            value = classdict[key]
+            if (
+                isinstance(value, (list, tuple)) and
+                len(value) > 1 and
+                isinstance(value[-1], (Promise, str))
+            ):
+                *value, label = value
+                value = tuple(value)
+            else:
+                label = key.replace('_', ' ').title()
+            labels.append(label)
+            # Use dict.__setitem__() to suppress defenses against double
+            # assignment in enum's classdict.
+            dict.__setitem__(classdict, key, value)
+        cls = super().__new__(metacls, classname, bases, classdict)
+        cls._value2label_map_ = dict(zip(cls._value2member_map_, labels))
+        # Add a label property to instances of enum which uses the enum member
+        # that is passed in as "self" as the value to use when looking up the
+        # label in the choices.
+        cls.label = property(lambda self: cls._value2label_map_.get(self.value))
+        return enum.unique(cls)
+
+    def __contains__(cls, member):
+        if not isinstance(member, enum.Enum):
+            # Allow non-enums to match against member values.
+            return member in {x.value for x in cls}
+        return super().__contains__(member)
+
+    @property
+    def names(cls):
+        empty = ['__empty__'] if hasattr(cls, '__empty__') else []
+        return empty + [member.name for member in cls]
+
+    @property
+    def choices(cls):
+        empty = [(None, cls.__empty__)] if hasattr(cls, '__empty__') else []
+        return empty + [(member.value, member.label) for member in cls]
+
+    @property
+    def labels(cls):
+        return [label for _, label in cls.choices]
+
+    @property
+    def values(cls):
+        return [value for value, _ in cls.choices]
+
+
+class Choices(enum.Enum, metaclass=ChoicesMeta):
+    """Class for creating enumerated choices."""
+    pass
+
+
+class IntegerChoices(int, Choices):
+    """Class for creating enumerated integer choices."""
+
+    def __str__(self):
+        return str(self.value)
+
+
+class TextChoices(str, Choices):
+    """Class for creating enumerated string choices."""
+
+    def __str__(self):
+        return self.value
+
+    def _generate_next_value_(name, start, count, last_values):
+        return name
+
+
+$exec_command cat /testbed/tests/model_enums/tests.py
+ import datetime
+import decimal
+import ipaddress
+import uuid
+
+from django.db import models
+from django.test import SimpleTestCase
+from django.utils.functional import Promise
+from django.utils.translation import gettext_lazy as _
+
+
+class Suit(models.IntegerChoices):
+    DIAMOND = 1, _('Diamond')
+    SPADE = 2, _('Spade')
+    HEART = 3, _('Heart')
+    CLUB = 4, _('Club')
+
+
+class YearInSchool(models.TextChoices):
+    FRESHMAN = 'FR', _('Freshman')
+    SOPHOMORE = 'SO', _('Sophomore')
+    JUNIOR = 'JR', _('Junior')
+    SENIOR = 'SR', _('Senior')
+    GRADUATE = 'GR', _('Graduate')
+
+
+class Vehicle(models.IntegerChoices):
+    CAR = 1, 'Carriage'
+    TRUCK = 2
+    JET_SKI = 3
+
+    __empty__ = _('(Unknown)')
+
+
+class Gender(models.TextChoices):
+    MALE = 'M'
+    FEMALE = 'F'
+    NOT_SPECIFIED = 'X'
+
+    __empty__ = '(Undeclared)'
+
+
+class ChoicesTests(SimpleTestCase):
+    def test_integerchoices(self):
+        self.assertEqual(Suit.choices, [(1, 'Diamond'), (2, 'Spade'), (3, 'Heart'), (4, 'Club')])
+        self.assertEqual(Suit.labels, ['Diamond', 'Spade', 'Heart', 'Club'])
+        self.assertEqual(Suit.values, [1, 2, 3, 4])
+        self.assertEqual(Suit.names, ['DIAMOND', 'SPADE', 'HEART', 'CLUB'])
+
+        self.assertEqual(repr(Suit.DIAMOND), '<Suit.DIAMOND: 1>')
+        self.assertEqual(Suit.DIAMOND.label, 'Diamond')
+        self.assertEqual(Suit.DIAMOND.value, 1)
+        self.assertEqual(Suit['DIAMOND'], Suit.DIAMOND)
+        self.assertEqual(Suit(1), Suit.DIAMOND)
+
+        self.assertIsInstance(Suit, type(models.Choices))
+        self.assertIsInstance(Suit.DIAMOND, Suit)
+        self.assertIsInstance(Suit.DIAMOND.label, Promise)
+        self.assertIsInstance(Suit.DIAMOND.value, int)
+
+    def test_integerchoices_auto_label(self):
+        self.assertEqual(Vehicle.CAR.label, 'Carriage')
+        self.assertEqual(Vehicle.TRUCK.label, 'Truck')
+        self.assertEqual(Vehicle.JET_SKI.label, 'Jet Ski')
+
+    def test_integerchoices_empty_label(self):
+        self.assertEqual(Vehicle.choices[0], (None, '(Unknown)'))
+        self.assertEqual(Vehicle.labels[0], '(Unknown)')
+        self.assertEqual(Vehicle.values[0], None)
+        self.assertEqual(Vehicle.names[0], '__empty__')
+
+    def test_integerchoices_functional_api(self):
+        Place = models.IntegerChoices('Place', 'FIRST SECOND THIRD')
+        self.assertEqual(Place.labels, ['First', 'Second', 'Third'])
+        self.assertEqual(Place.values, [1, 2, 3])
+        self.assertEqual(Place.names, ['FIRST', 'SECOND', 'THIRD'])
+
+    def test_integerchoices_containment(self):
+        self.assertIn(Suit.DIAMOND, Suit)
+        self.assertIn(1, Suit)
+        self.assertNotIn(0, Suit)
+
+    def test_textchoices(self):
+        self.assertEqual(YearInSchool.choices, [
+            ('FR', 'Freshman'), ('SO', 'Sophomore'), ('JR', 'Junior'), ('SR', 'Senior'), ('GR', 'Graduate'),
+        ])
+        self.assertEqual(YearInSchool.labels, ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate'])
+        self.assertEqual(YearInSchool.values, ['FR', 'SO', 'JR', 'SR', 'GR'])
+        self.assertEqual(YearInSchool.names, ['FRESHMAN', 'SOPHOMORE', 'JUNIOR', 'SENIOR', 'GRADUATE'])
+
+        self.assertEqual(repr(YearInSchool.FRESHMAN), "<YearInSchool.FRESHMAN: 'FR'>")
+        self.assertEqual(YearInSchool.FRESHMAN.label, 'Freshman')
+        self.assertEqual(YearInSchool.FRESHMAN.value, 'FR')
+        self.assertEqual(YearInSchool['FRESHMAN'], YearInSchool.FRESHMAN)
+        self.assertEqual(YearInSchool('FR'), YearInSchool.FRESHMAN)
+
+        self.assertIsInstance(YearInSchool, type(models.Choices))
+        self.assertIsInstance(YearInSchool.FRESHMAN, YearInSchool)
+        self.assertIsInstance(YearInSchool.FRESHMAN.label, Promise)
+        self.assertIsInstance(YearInSchool.FRESHMAN.value, str)
+
+    def test_textchoices_auto_label(self):
+        self.assertEqual(Gender.MALE.label, 'Male')
+        self.assertEqual(Gender.FEMALE.label, 'Female')
+        self.assertEqual(Gender.NOT_SPECIFIED.label, 'Not Specified')
+
+    def test_textchoices_empty_label(self):
+        self.assertEqual(Gender.choices[0], (None, '(Undeclared)'))
+        self.assertEqual(Gender.labels[0], '(Undeclared)')
+        self.assertEqual(Gender.values[0], None)
+        self.assertEqual(Gender.names[0], '__empty__')
+
+    def test_textchoices_functional_api(self):
+        Medal = models.TextChoices('Medal', 'GOLD SILVER BRONZE')
+        self.assertEqual(Medal.labels, ['Gold', 'Silver', 'Bronze'])
+        self.assertEqual(Medal.values, ['GOLD', 'SILVER', 'BRONZE'])
+        self.assertEqual(Medal.names, ['GOLD', 'SILVER', 'BRONZE'])
+
+    def test_textchoices_containment(self):
+        self.assertIn(YearInSchool.FRESHMAN, YearInSchool)
+        self.assertIn('FR', YearInSchool)
+        self.assertNotIn('XX', YearInSchool)
+
+    def test_textchoices_blank_value(self):
+        class BlankStr(models.TextChoices):
+            EMPTY = '', '(Empty)'
+            ONE = 'ONE', 'One'
+
+        self.assertEqual(BlankStr.labels, ['(Empty)', 'One'])
+        self.assertEqual(BlankStr.values, ['', 'ONE'])
+        self.assertEqual(BlankStr.names, ['EMPTY', 'ONE'])
+
+    def test_invalid_definition(self):
+        msg = "'str' object cannot be interpreted as an integer"
+        with self.assertRaisesMessage(TypeError, msg):
+            class InvalidArgumentEnum(models.IntegerChoices):
+                # A string is not permitted as the second argument to int().
+                ONE = 1, 'X', 'Invalid'
+
+        msg = "duplicate values found in <enum 'Fruit'>: PINEAPPLE -> APPLE"
+        with self.assertRaisesMessage(ValueError, msg):
+            class Fruit(models.IntegerChoices):
+                APPLE = 1, 'Apple'
+                PINEAPPLE = 1, 'Pineapple'
+
+
+class Separator(bytes, models.Choices):
+    FS = b'\x1c', 'File Separator'
+    GS = b'\x1d', 'Group Separator'
+    RS = b'\x1e', 'Record Separator'
+    US = b'\x1f', 'Unit Separator'
+
+
+class Constants(float, models.Choices):
+    PI = 3.141592653589793, 'π'
+    TAU = 6.283185307179586, 'τ'
+
+
+class Set(frozenset, models.Choices):
+    A = {1, 2}
+    B = {2, 3}
+    UNION = A | B
+    DIFFERENCE = A - B
+    INTERSECTION = A & B
+
+
+class MoonLandings(datetime.date, models.Choices):
+    APOLLO_11 = 1969, 7, 20, 'Apollo 11 (Eagle)'
+    APOLLO_12 = 1969, 11, 19, 'Apollo 12 (Intrepid)'
+    APOLLO_14 = 1971, 2, 5, 'Apollo 14 (Antares)'
+    APOLLO_15 = 1971, 7, 30, 'Apollo 15 (Falcon)'
+    APOLLO_16 = 1972, 4, 21, 'Apollo 16 (Orion)'
+    APOLLO_17 = 1972, 12, 11, 'Apollo 17 (Challenger)'
+
+
+class DateAndTime(datetime.datetime, models.Choices):
+    A = 2010, 10, 10, 10, 10, 10
+    B = 2011, 11, 11, 11, 11, 11
+    C = 2012, 12, 12, 12, 12, 12
+
+
+class MealTimes(datetime.time, models.Choices):
+    BREAKFAST = 7, 0
+    LUNCH = 13, 0
+    DINNER = 18, 30
+
+
+class Frequency(datetime.timedelta, models.Choices):
+    WEEK = 0, 0, 0, 0, 0, 0, 1, 'Week'
+    DAY = 1, 'Day'
+    HOUR = 0, 0, 0, 0, 0, 1, 'Hour'
+    MINUTE = 0, 0, 0, 0, 1, 'Hour'
+    SECOND = 0, 1, 'Second'
+
+
+class Number(decimal.Decimal, models.Choices):
+    E = 2.718281828459045, 'e'
+    PI = '3.141592653589793', 'π'
+    TAU = decimal.Decimal('6.283185307179586'), 'τ'
+
+
+class IPv4Address(ipaddress.IPv4Address, models.Choices):
+    LOCALHOST = '127.0.0.1', 'Localhost'
+    GATEWAY = '192.168.0.1', 'Gateway'
+    BROADCAST = '192.168.0.255', 'Broadcast'
+
+
+class IPv6Address(ipaddress.IPv6Address, models.Choices):
+    LOCALHOST = '::1', 'Localhost'
+    UNSPECIFIED = '::', 'Unspecified'
+
+
+class IPv4Network(ipaddress.IPv4Network, models.Choices):
+    LOOPBACK = '127.0.0.0/8', 'Loopback'
+    LINK_LOCAL = '169.254.0.0/16', 'Link-Local'
+    PRIVATE_USE_A = '10.0.0.0/8', 'Private-Use (Class A)'
+
+
+class IPv6Network(ipaddress.IPv6Network, models.Choices):
+    LOOPBACK = '::1/128', 'Loopback'
+    UNSPECIFIED = '::/128', 'Unspecified'
+    UNIQUE_LOCAL = 'fc00::/7', 'Unique-Local'
+    LINK_LOCAL_UNICAST = 'fe80::/10', 'Link-Local Unicast'
+
+
+class CustomChoicesTests(SimpleTestCase):
+    def test_labels_valid(self):
+        enums = (
+            Separator, Constants, Set, MoonLandings, DateAndTime, MealTimes,
+            Frequency, Number, IPv4Address, IPv6Address, IPv4Network,
+            IPv6Network,
+        )
+        for choice_enum in enums:
+            with self.subTest(choice_enum.__name__):
+                self.assertNotIn(None, choice_enum.labels)
+
+    def test_bool_unsupported(self):
+        msg = "type 'bool' is not an acceptable base type"
+        with self.assertRaisesMessage(TypeError, msg):
+            class Boolean(bool, models.Choices):
+                pass
+
+    def test_timezone_unsupported(self):
+        msg = "type 'datetime.timezone' is not an acceptable base type"
+        with self.assertRaisesMessage(TypeError, msg):
+            class Timezone(datetime.timezone, models.Choices):
+                pass
+
+    def test_uuid_unsupported(self):
+        msg = 'UUID objects are immutable'
+        with self.assertRaisesMessage(TypeError, msg):
+            class Identifier(uuid.UUID, models.Choices):
+                A = '972ce4eb-a95f-4a56-9339-68c208a76f18'
+
+
+$exec_command grep -rn "__eq__\|__hash__" /testbed/django/db/models/enums.py
+ 
+[exit code: 1]
+
+$exec_command cat /testbed/tests/model_enums/tests.py | head -100
+ import datetime
+import decimal
+import ipaddress
+import uuid
+
+from django.db import models
+from django.test import SimpleTestCase
+from django.utils.functional import Promise
+from django.utils.translation import gettext_lazy as _
+
+
+class Suit(models.IntegerChoices):
+    DIAMOND = 1, _('Diamond')
+    SPADE = 2, _('Spade')
+    HEART = 3, _('Heart')
+    CLUB = 4, _('Club')
+
+
+class YearInSchool(models.TextChoices):
+    FRESHMAN = 'FR', _('Freshman')
+    SOPHOMORE = 'SO', _('Sophomore')
+    JUNIOR = 'JR', _('Junior')
+    SENIOR = 'SR', _('Senior')
+    GRADUATE = 'GR', _('Graduate')
+
+
+class Vehicle(models.IntegerChoices):
+    CAR = 1, 'Carriage'
+    TRUCK = 2
+    JET_SKI = 3
+
+    __empty__ = _('(Unknown)')
+
+
+class Gender(models.TextChoices):
+    MALE = 'M'
+    FEMALE = 'F'
+    NOT_SPECIFIED = 'X'
+
+    __empty__ = '(Undeclared)'
+
+
+class ChoicesTests(SimpleTestCase):
+    def test_integerchoices(self):
+        self.assertEqual(Suit.choices, [(1, 'Diamond'), (2, 'Spade'), (3, 'Heart'), (4, 'Club')])
+        self.assertEqual(Suit.labels, ['Diamond', 'Spade', 'Heart', 'Club'])
+        self.assertEqual(Suit.values, [1, 2, 3, 4])
+        self.assertEqual(Suit.names, ['DIAMOND', 'SPADE', 'HEART', 'CLUB'])
+
+        self.assertEqual(repr(Suit.DIAMOND), '<Suit.DIAMOND: 1>')
+        self.assertEqual(Suit.DIAMOND.label, 'Diamond')
+        self.assertEqual(Suit.DIAMOND.value, 1)
+        self.assertEqual(Suit['DIAMOND'], Suit.DIAMOND)
+        self.assertEqual(Suit(1), Suit.DIAMOND)
+
+        self.assertIsInstance(Suit, type(models.Choices))
+        self.assertIsInstance(Suit.DIAMOND, Suit)
+        self.assertIsInstance(Suit.DIAMOND.label, Promise)
+        self.assertIsInstance(Suit.DIAMOND.value, int)
+
+    def test_integerchoices_auto_label(self):
+        self.assertEqual(Vehicle.CAR.label, 'Carriage')
+        self.assertEqual(Vehicle.TRUCK.label, 'Truck')
+        self.assertEqual(Vehicle.JET_SKI.label, 'Jet Ski')
+
+    def test_integerchoices_empty_label(self):
+        self.assertEqual(Vehicle.choices[0], (None, '(Unknown)'))
+        self.assertEqual(Vehicle.labels[0], '(Unknown)')
+        self.assertEqual(Vehicle.values[0], None)
+        self.assertEqual(Vehicle.names[0], '__empty__')
+
+    def test_integerchoices_functional_api(self):
+        Place = models.IntegerChoices('Place', 'FIRST SECOND THIRD')
+        self.assertEqual(Place.labels, ['First', 'Second', 'Third'])
+        self.assertEqual(Place.values, [1, 2, 3])
+        self.assertEqual(Place.names, ['FIRST', 'SECOND', 'THIRD'])
+
+    def test_integerchoices_containment(self):
+        self.assertIn(Suit.DIAMOND, Suit)
+        self.assertIn(1, Suit)
+        self.assertNotIn(0, Suit)
+
+    def test_textchoices(self):
+        self.assertEqual(YearInSchool.choices, [
+            ('FR', 'Freshman'), ('SO', 'Sophomore'), ('JR', 'Junior'), ('SR', 'Senior'), ('GR', 'Graduate'),
+        ])
+        self.assertEqual(YearInSchool.labels, ['Freshman', 'Sophomore', 'Junior', 'Senior', 'Graduate'])
+        self.assertEqual(YearInSchool.values, ['FR', 'SO', 'JR', 'SR', 'GR'])
+        self.assertEqual(YearInSchool.names, ['FRESHMAN', 'SOPHOMORE', 'JUNIOR', 'SENIOR', 'GRADUATE'])
+
+        self.assertEqual(repr(YearInSchool.FRESHMAN), "<YearInSchool.FRESHMAN: 'FR'>")
+        self.assertEqual(YearInSchool.FRESHMAN.label, 'Freshman')
+        self.assertEqual(YearInSchool.FRESHMAN.value, 'FR')
+        self.assertEqual(YearInSchool['FRESHMAN'], YearInSchool.FRESHMAN)
+        self.assertEqual(YearInSchool('FR'), YearInSchool.FRESHMAN)
+
+        self.assertIsInstance(YearInSchool, type(models.Choices))
+        self.assertIsInstance(YearInSchool.FRESHMAN, YearInSchool)
+        self.assertIsInstance(YearInSchool.FRESHMAN.label, Promise)
+        self.assertIsInstance(YearInSchool.FRESHMAN.value, str)
+
+
+
+[model reply, complete and unedited] (6859 tokens in, 2303 tokens out)
+
+
+submit_patch Add __str__ methods to IntegerChoices and TextChoices to return the enum value
+
+[command executed: submit_patch]
+Add __str__ methods to IntegerChoices and TextChoices to return the enum value
+
+[result]
+TESTS_PASSED
+
+------------------------------------------------------------------------------
+STATUS: Run finished successfully

@@ -1,0 +1,1582 @@
+==============================================================================
+Run transcript: django__django-10924
+run id: 31    tag: 'vm_7_iter_0'    turns: 9
+model: SWE-bench Pilot Task
+final state: got root
+started: 2026-10-24 14:19:50.194773    stopped: 2026-10-24 12:28:09  (start is local time, stop is UTC)
+==============================================================================
+
+HOW TO READ THIS FILE
+Each TURN is one round trip with the model:
+  1. prompt   what we send: the task, the available commands and the history of the earlier commands
+  2. reply    what the model answered, complete and unedited
+  3. command  the single line we extracted from the reply and actually executed in the container
+  4. result   what the container printed (this becomes part of the history in the next prompt)
+The run ends with a status line: "got root" means the tests passed (that is the framework's name for
+any success), anything else is the reason the run stopped.
+
+------------------------------------------------------------------------------
+TURN 1
+------------------------------------------------------------------------------
+
+[prompt sent to the model, 2246 characters]
+You are a software engineer working inside a checked-out git repository
+at /testbed. Your goal is to resolve the following issue by editing the code so that the
+project's test suite passes.
+
+ISSUE:
+Allow FilePathField path to accept a callable.
+Description
+	
+I have a special case where I want to create a model containing the path to some local files on the server/dev machine. Seeing as the place where these files are stored is different on different machines I have the following:
+import os
+from django.conf import settings
+from django.db import models
+class LocalFiles(models.Model):
+	name = models.CharField(max_length=255)
+	file = models.FilePathField(path=os.path.join(settings.LOCAL_FILE_DIR, 'example_dir'))
+Now when running manage.py makemigrations it will resolve the path based on the machine it is being run on. Eg: /home/<username>/server_files/example_dir
+I had to manually change the migration to include the os.path.join() part to not break this when running the migration on production/other machine.
+
+
+You can either
+
+- `exec_command command`: give a command to be executed and I will respond with the terminal output when running this command inside the task's container. The given command must not require user interaction. Do not use quotation marks in front and after your command.
+- `submit_patch note`: Call this when you believe the issue is fixed. I will run the project's test suite inside the container and tell you whether it passes. Usage: submit_patch <short note about what you changed>
+
+                        
+Do not modify the files in the `tests/` directory: they will be replaced by the official tests.
+ 
+The official tests are not in the repository: do not search for them.
+
+Decide your next single action. Use exec_command to read/search/edit files or run commands, and
+submit_patch only once you believe the fix is complete and want it verified against the test
+suite.
+
+Your entire reply must be a single action, in one of these two forms, and nothing else:
+exec_command <shell command>
+submit_patch <short note>
+The command may span several lines (for example a heredoc to write a script). 
+Do not explain your reasoning, do not add markup, and do not continue the conversation after that line.       
+
+
+[model reply, complete and unedited] (492 tokens in, 268 tokens out)
+
+
+exec_command find /testbed -type f -name "*.py" | head -20
+
+exec_command grep -r "class FilePathField" /testbed --include="*.py"
+
+exec_command cat /testbed/django/db/models/fields/files.py | head -500
+
+[command executed: exec_command]
+find /testbed -type f -name "*.py" | head -20
+
+[result]
+/testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/test_deprecated_features.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+
+
+------------------------------------------------------------------------------
+TURN 2
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 3290 characters, the same as turn 1 plus the history below]
+$exec_command find /testbed -type f -name "*.py" | head -20
+ /testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/test_deprecated_features.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+
+
+
+[model reply, complete and unedited] (738 tokens in, 191 tokens out)
+
+
+exec_command find /testbed -type f -name "*.py" -exec grep -l "class FilePathField" {} \;
+</think>
+
+exec_command find /testbed -type f -name "*.py" -exec grep -l "class FilePathField" {} \;
+
+[command executed: exec_command]
+find /testbed -type f -name "*.py" -exec grep -l "class FilePathField" {} \;
+
+[result]
+/testbed/tests/forms_tests/field_tests/test_filepathfield.py
+/testbed/tests/invalid_models_tests/test_ordinary_fields.py
+/testbed/django/db/models/fields/__init__.py
+/testbed/django/forms/fields.py
+
+
+------------------------------------------------------------------------------
+TURN 3
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 3582 characters, the same as turn 1 plus the history below]
+$exec_command find /testbed -type f -name "*.py" | head -20
+ /testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/test_deprecated_features.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+
+
+$exec_command find /testbed -type f -name "*.py" -exec grep -l "class FilePathField" {} \;
+ /testbed/tests/forms_tests/field_tests/test_filepathfield.py
+/testbed/tests/invalid_models_tests/test_ordinary_fields.py
+/testbed/django/db/models/fields/__init__.py
+/testbed/django/forms/fields.py
+
+
+
+[model reply, complete and unedited] (816 tokens in, 218 tokens out)
+
+
+exec_command grep -n "class FilePathField" /testbed/django/db/models/fields/__init__.py
+
+
+[command executed: exec_command]
+grep -n "class FilePathField" /testbed/django/db/models/fields/__init__.py
+
+[result]
+1661:class FilePathField(Field):
+
+
+------------------------------------------------------------------------------
+TURN 4
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 3707 characters, the same as turn 1 plus the history below]
+$exec_command find /testbed -type f -name "*.py" | head -20
+ /testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/test_deprecated_features.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+
+
+$exec_command find /testbed -type f -name "*.py" -exec grep -l "class FilePathField" {} \;
+ /testbed/tests/forms_tests/field_tests/test_filepathfield.py
+/testbed/tests/invalid_models_tests/test_ordinary_fields.py
+/testbed/django/db/models/fields/__init__.py
+/testbed/django/forms/fields.py
+
+
+$exec_command grep -n "class FilePathField" /testbed/django/db/models/fields/__init__.py
+ 1661:class FilePathField(Field):
+
+
+
+[model reply, complete and unedited] (852 tokens in, 416 tokens out)
+
+
+exec_command sed -n '1650,1750p' /testbed/django/db/models/fields/__init__.py
+
+submit_patch <note>
+
+[command executed: exec_command]
+sed -n '1650,1750p' /testbed/django/db/models/fields/__init__.py
+
+[result]
+        return name, path, args, kwargs
+
+    def formfield(self, **kwargs):
+        # As with CharField, this will cause email validation to be performed
+        # twice.
+        return super().formfield(**{
+            'form_class': forms.EmailField,
+            **kwargs,
+        })
+
+
+class FilePathField(Field):
+    description = _("File path")
+
+    def __init__(self, verbose_name=None, name=None, path='', match=None,
+                 recursive=False, allow_files=True, allow_folders=False, **kwargs):
+        self.path, self.match, self.recursive = path, match, recursive
+        self.allow_files, self.allow_folders = allow_files, allow_folders
+        kwargs.setdefault('max_length', 100)
+        super().__init__(verbose_name, name, **kwargs)
+
+    def check(self, **kwargs):
+        return [
+            *super().check(**kwargs),
+            *self._check_allowing_files_or_folders(**kwargs),
+        ]
+
+    def _check_allowing_files_or_folders(self, **kwargs):
+        if not self.allow_files and not self.allow_folders:
+            return [
+                checks.Error(
+                    "FilePathFields must have either 'allow_files' or 'allow_folders' set to True.",
+                    obj=self,
+                    id='fields.E140',
+                )
+            ]
+        return []
+
+    def deconstruct(self):
+        name, path, args, kwargs = super().deconstruct()
+        if self.path != '':
+            kwargs['path'] = self.path
+        if self.match is not None:
+            kwargs['match'] = self.match
+        if self.recursive is not False:
+            kwargs['recursive'] = self.recursive
+        if self.allow_files is not True:
+            kwargs['allow_files'] = self.allow_files
+        if self.allow_folders is not False:
+            kwargs['allow_folders'] = self.allow_folders
+        if kwargs.get("max_length") == 100:
+            del kwargs["max_length"]
+        return name, path, args, kwargs
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        if value is None:
+            return None
+        return str(value)
+
+    def formfield(self, **kwargs):
+        return super().formfield(**{
+            'path': self.path,
+            'match': self.match,
+            'recursive': self.recursive,
+            'form_class': forms.FilePathField,
+            'allow_files': self.allow_files,
+            'allow_folders': self.allow_folders,
+            **kwargs,
+        })
+
+    def get_internal_type(self):
+        return "FilePathField"
+
+
+class FloatField(Field):
+    empty_strings_allowed = False
+    default_error_messages = {
+        'invalid': _("'%(value)s' value must be a float."),
+    }
+    description = _("Floating point number")
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        if value is None:
+            return None
+        return float(value)
+
+    def get_internal_type(self):
+        return "FloatField"
+
+    def to_python(self, value):
+        if value is None:
+            return value
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            raise exceptions.ValidationError(
+                self.error_messages['invalid'],
+                code='invalid',
+                params={'value': value},
+
+
+------------------------------------------------------------------------------
+TURN 5
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 7062 characters, the same as turn 1 plus the history below]
+$exec_command find /testbed -type f -name "*.py" | head -20
+ /testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/test_deprecated_features.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+
+
+$exec_command find /testbed -type f -name "*.py" -exec grep -l "class FilePathField" {} \;
+ /testbed/tests/forms_tests/field_tests/test_filepathfield.py
+/testbed/tests/invalid_models_tests/test_ordinary_fields.py
+/testbed/django/db/models/fields/__init__.py
+/testbed/django/forms/fields.py
+
+
+$exec_command grep -n "class FilePathField" /testbed/django/db/models/fields/__init__.py
+ 1661:class FilePathField(Field):
+
+
+$exec_command sed -n '1650,1750p' /testbed/django/db/models/fields/__init__.py
+         return name, path, args, kwargs
+
+    def formfield(self, **kwargs):
+        # As with CharField, this will cause email validation to be performed
+        # twice.
+        return super().formfield(**{
+            'form_class': forms.EmailField,
+            **kwargs,
+        })
+
+
+class FilePathField(Field):
+    description = _("File path")
+
+    def __init__(self, verbose_name=None, name=None, path='', match=None,
+                 recursive=False, allow_files=True, allow_folders=False, **kwargs):
+        self.path, self.match, self.recursive = path, match, recursive
+        self.allow_files, self.allow_folders = allow_files, allow_folders
+        kwargs.setdefault('max_length', 100)
+        super().__init__(verbose_name, name, **kwargs)
+
+    def check(self, **kwargs):
+        return [
+            *super().check(**kwargs),
+            *self._check_allowing_files_or_folders(**kwargs),
+        ]
+
+    def _check_allowing_files_or_folders(self, **kwargs):
+        if not self.allow_files and not self.allow_folders:
+            return [
+                checks.Error(
+                    "FilePathFields must have either 'allow_files' or 'allow_folders' set to True.",
+                    obj=self,
+                    id='fields.E140',
+                )
+            ]
+        return []
+
+    def deconstruct(self):
+        name, path, args, kwargs = super().deconstruct()
+        if self.path != '':
+            kwargs['path'] = self.path
+        if self.match is not None:
+            kwargs['match'] = self.match
+        if self.recursive is not False:
+            kwargs['recursive'] = self.recursive
+        if self.allow_files is not True:
+            kwargs['allow_files'] = self.allow_files
+        if self.allow_folders is not False:
+            kwargs['allow_folders'] = self.allow_folders
+        if kwargs.get("max_length") == 100:
+            del kwargs["max_length"]
+        return name, path, args, kwargs
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        if value is None:
+            return None
+        return str(value)
+
+    def formfield(self, **kwargs):
+        return super().formfield(**{
+            'path': self.path,
+            'match': self.match,
+            'recursive': self.recursive,
+            'form_class': forms.FilePathField,
+            'allow_files': self.allow_files,
+            'allow_folders': self.allow_folders,
+            **kwargs,
+        })
+
+    def get_internal_type(self):
+        return "FilePathField"
+
+
+class FloatField(Field):
+    empty_strings_allowed = False
+    default_error_messages = {
+        'invalid': _("'%(value)s' value must be a float."),
+    }
+    description = _("Floating point number")
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        if value is None:
+            return None
+        return float(value)
+
+    def get_internal_type(self):
+        return "FloatField"
+
+    def to_python(self, value):
+        if value is None:
+            return value
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            raise exceptions.ValidationError(
+                self.error_messages['invalid'],
+                code='invalid',
+                params={'value': value},
+
+
+
+[model reply, complete and unedited] (1638 tokens in, 9538 tokens out)
+
+
+exec_command sed -n '250,300p' /testbed/django/forms/fields.py
+
+[command executed: exec_command]
+sed -n '250,300p' /testbed/django/forms/fields.py
+
+[result]
+        self.max_value, self.min_value = max_value, min_value
+        if kwargs.get('localize') and self.widget == NumberInput:
+            # Localized number input is not well supported on most browsers
+            kwargs.setdefault('widget', super().widget)
+        super().__init__(**kwargs)
+
+        if max_value is not None:
+            self.validators.append(validators.MaxValueValidator(max_value))
+        if min_value is not None:
+            self.validators.append(validators.MinValueValidator(min_value))
+
+    def to_python(self, value):
+        """
+        Validate that int() can be called on the input. Return the result
+        of int() or None for empty values.
+        """
+        value = super().to_python(value)
+        if value in self.empty_values:
+            return None
+        if self.localize:
+            value = formats.sanitize_separators(value)
+        # Strip trailing decimal and zeros.
+        try:
+            value = int(self.re_decimal.sub('', str(value)))
+        except (ValueError, TypeError):
+            raise ValidationError(self.error_messages['invalid'], code='invalid')
+        return value
+
+    def widget_attrs(self, widget):
+        attrs = super().widget_attrs(widget)
+        if isinstance(widget, NumberInput):
+            if self.min_value is not None:
+                attrs['min'] = self.min_value
+            if self.max_value is not None:
+                attrs['max'] = self.max_value
+        return attrs
+
+
+class FloatField(IntegerField):
+    default_error_messages = {
+        'invalid': _('Enter a number.'),
+    }
+
+    def to_python(self, value):
+        """
+        Validate that float() can be called on the input. Return the result
+        of float() or None for empty values.
+        """
+        value = super(IntegerField, self).to_python(value)
+        if value in self.empty_values:
+            return None
+
+
+------------------------------------------------------------------------------
+TURN 6
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 9002 characters, the same as turn 1 plus the history below]
+$exec_command find /testbed -type f -name "*.py" | head -20
+ /testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/test_deprecated_features.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+
+
+$exec_command find /testbed -type f -name "*.py" -exec grep -l "class FilePathField" {} \;
+ /testbed/tests/forms_tests/field_tests/test_filepathfield.py
+/testbed/tests/invalid_models_tests/test_ordinary_fields.py
+/testbed/django/db/models/fields/__init__.py
+/testbed/django/forms/fields.py
+
+
+$exec_command grep -n "class FilePathField" /testbed/django/db/models/fields/__init__.py
+ 1661:class FilePathField(Field):
+
+
+$exec_command sed -n '1650,1750p' /testbed/django/db/models/fields/__init__.py
+         return name, path, args, kwargs
+
+    def formfield(self, **kwargs):
+        # As with CharField, this will cause email validation to be performed
+        # twice.
+        return super().formfield(**{
+            'form_class': forms.EmailField,
+            **kwargs,
+        })
+
+
+class FilePathField(Field):
+    description = _("File path")
+
+    def __init__(self, verbose_name=None, name=None, path='', match=None,
+                 recursive=False, allow_files=True, allow_folders=False, **kwargs):
+        self.path, self.match, self.recursive = path, match, recursive
+        self.allow_files, self.allow_folders = allow_files, allow_folders
+        kwargs.setdefault('max_length', 100)
+        super().__init__(verbose_name, name, **kwargs)
+
+    def check(self, **kwargs):
+        return [
+            *super().check(**kwargs),
+            *self._check_allowing_files_or_folders(**kwargs),
+        ]
+
+    def _check_allowing_files_or_folders(self, **kwargs):
+        if not self.allow_files and not self.allow_folders:
+            return [
+                checks.Error(
+                    "FilePathFields must have either 'allow_files' or 'allow_folders' set to True.",
+                    obj=self,
+                    id='fields.E140',
+                )
+            ]
+        return []
+
+    def deconstruct(self):
+        name, path, args, kwargs = super().deconstruct()
+        if self.path != '':
+            kwargs['path'] = self.path
+        if self.match is not None:
+            kwargs['match'] = self.match
+        if self.recursive is not False:
+            kwargs['recursive'] = self.recursive
+        if self.allow_files is not True:
+            kwargs['allow_files'] = self.allow_files
+        if self.allow_folders is not False:
+            kwargs['allow_folders'] = self.allow_folders
+        if kwargs.get("max_length") == 100:
+            del kwargs["max_length"]
+        return name, path, args, kwargs
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        if value is None:
+            return None
+        return str(value)
+
+    def formfield(self, **kwargs):
+        return super().formfield(**{
+            'path': self.path,
+            'match': self.match,
+            'recursive': self.recursive,
+            'form_class': forms.FilePathField,
+            'allow_files': self.allow_files,
+            'allow_folders': self.allow_folders,
+            **kwargs,
+        })
+
+    def get_internal_type(self):
+        return "FilePathField"
+
+
+class FloatField(Field):
+    empty_strings_allowed = False
+    default_error_messages = {
+        'invalid': _("'%(value)s' value must be a float."),
+    }
+    description = _("Floating point number")
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        if value is None:
+            return None
+        return float(value)
+
+    def get_internal_type(self):
+        return "FloatField"
+
+    def to_python(self, value):
+        if value is None:
+            return value
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            raise exceptions.ValidationError(
+                self.error_messages['invalid'],
+                code='invalid',
+                params={'value': value},
+
+
+$exec_command sed -n '250,300p' /testbed/django/forms/fields.py
+         self.max_value, self.min_value = max_value, min_value
+        if kwargs.get('localize') and self.widget == NumberInput:
+            # Localized number input is not well supported on most browsers
+            kwargs.setdefault('widget', super().widget)
+        super().__init__(**kwargs)
+
+        if max_value is not None:
+            self.validators.append(validators.MaxValueValidator(max_value))
+        if min_value is not None:
+            self.validators.append(validators.MinValueValidator(min_value))
+
+    def to_python(self, value):
+        """
+        Validate that int() can be called on the input. Return the result
+        of int() or None for empty values.
+        """
+        value = super().to_python(value)
+        if value in self.empty_values:
+            return None
+        if self.localize:
+            value = formats.sanitize_separators(value)
+        # Strip trailing decimal and zeros.
+        try:
+            value = int(self.re_decimal.sub('', str(value)))
+        except (ValueError, TypeError):
+            raise ValidationError(self.error_messages['invalid'], code='invalid')
+        return value
+
+    def widget_attrs(self, widget):
+        attrs = super().widget_attrs(widget)
+        if isinstance(widget, NumberInput):
+            if self.min_value is not None:
+                attrs['min'] = self.min_value
+            if self.max_value is not None:
+                attrs['max'] = self.max_value
+        return attrs
+
+
+class FloatField(IntegerField):
+    default_error_messages = {
+        'invalid': _('Enter a number.'),
+    }
+
+    def to_python(self, value):
+        """
+        Validate that float() can be called on the input. Return the result
+        of float() or None for empty values.
+        """
+        value = super(IntegerField, self).to_python(value)
+        if value in self.empty_values:
+            return None
+
+
+
+[model reply, complete and unedited] (2077 tokens in, 2862 tokens out)
+
+
+exec_command python3 -c "
+with open('/testbed/django/db/models/fields/__init__.py', 'r') as f:
+    content = f.read()
+old = '        self.path, self.match, self.recursive = path, match, recursive'
+new = '''        if callable(path):
+            path = path()
+        self.path, self.match, self.recursive = path, match, recursive'''
+content = content.replace(old, new, 1)
+with open('/testbed/django/db/models/fields/__init__.py', 'w') as f:
+    f.write(content)
+"
+
+[command executed: exec_command]
+python3 -c "
+with open('/testbed/django/db/models/fields/__init__.py', 'r') as f:
+    content = f.read()
+old = '        self.path, self.match, self.recursive = path, match, recursive'
+new = '''        if callable(path):
+            path = path()
+        self.path, self.match, self.recursive = path, match, recursive'''
+content = content.replace(old, new, 1)
+with open('/testbed/django/db/models/fields/__init__.py', 'w') as f:
+    f.write(content)
+"
+
+[result]
+(no output)
+
+------------------------------------------------------------------------------
+TURN 7
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 9481 characters, the same as turn 1 plus the history below]
+$exec_command find /testbed -type f -name "*.py" | head -20
+ /testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/test_deprecated_features.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+
+
+$exec_command find /testbed -type f -name "*.py" -exec grep -l "class FilePathField" {} \;
+ /testbed/tests/forms_tests/field_tests/test_filepathfield.py
+/testbed/tests/invalid_models_tests/test_ordinary_fields.py
+/testbed/django/db/models/fields/__init__.py
+/testbed/django/forms/fields.py
+
+
+$exec_command grep -n "class FilePathField" /testbed/django/db/models/fields/__init__.py
+ 1661:class FilePathField(Field):
+
+
+$exec_command sed -n '1650,1750p' /testbed/django/db/models/fields/__init__.py
+         return name, path, args, kwargs
+
+    def formfield(self, **kwargs):
+        # As with CharField, this will cause email validation to be performed
+        # twice.
+        return super().formfield(**{
+            'form_class': forms.EmailField,
+            **kwargs,
+        })
+
+
+class FilePathField(Field):
+    description = _("File path")
+
+    def __init__(self, verbose_name=None, name=None, path='', match=None,
+                 recursive=False, allow_files=True, allow_folders=False, **kwargs):
+        self.path, self.match, self.recursive = path, match, recursive
+        self.allow_files, self.allow_folders = allow_files, allow_folders
+        kwargs.setdefault('max_length', 100)
+        super().__init__(verbose_name, name, **kwargs)
+
+    def check(self, **kwargs):
+        return [
+            *super().check(**kwargs),
+            *self._check_allowing_files_or_folders(**kwargs),
+        ]
+
+    def _check_allowing_files_or_folders(self, **kwargs):
+        if not self.allow_files and not self.allow_folders:
+            return [
+                checks.Error(
+                    "FilePathFields must have either 'allow_files' or 'allow_folders' set to True.",
+                    obj=self,
+                    id='fields.E140',
+                )
+            ]
+        return []
+
+    def deconstruct(self):
+        name, path, args, kwargs = super().deconstruct()
+        if self.path != '':
+            kwargs['path'] = self.path
+        if self.match is not None:
+            kwargs['match'] = self.match
+        if self.recursive is not False:
+            kwargs['recursive'] = self.recursive
+        if self.allow_files is not True:
+            kwargs['allow_files'] = self.allow_files
+        if self.allow_folders is not False:
+            kwargs['allow_folders'] = self.allow_folders
+        if kwargs.get("max_length") == 100:
+            del kwargs["max_length"]
+        return name, path, args, kwargs
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        if value is None:
+            return None
+        return str(value)
+
+    def formfield(self, **kwargs):
+        return super().formfield(**{
+            'path': self.path,
+            'match': self.match,
+            'recursive': self.recursive,
+            'form_class': forms.FilePathField,
+            'allow_files': self.allow_files,
+            'allow_folders': self.allow_folders,
+            **kwargs,
+        })
+
+    def get_internal_type(self):
+        return "FilePathField"
+
+
+class FloatField(Field):
+    empty_strings_allowed = False
+    default_error_messages = {
+        'invalid': _("'%(value)s' value must be a float."),
+    }
+    description = _("Floating point number")
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        if value is None:
+            return None
+        return float(value)
+
+    def get_internal_type(self):
+        return "FloatField"
+
+    def to_python(self, value):
+        if value is None:
+            return value
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            raise exceptions.ValidationError(
+                self.error_messages['invalid'],
+                code='invalid',
+                params={'value': value},
+
+
+$exec_command sed -n '250,300p' /testbed/django/forms/fields.py
+         self.max_value, self.min_value = max_value, min_value
+        if kwargs.get('localize') and self.widget == NumberInput:
+            # Localized number input is not well supported on most browsers
+            kwargs.setdefault('widget', super().widget)
+        super().__init__(**kwargs)
+
+        if max_value is not None:
+            self.validators.append(validators.MaxValueValidator(max_value))
+        if min_value is not None:
+            self.validators.append(validators.MinValueValidator(min_value))
+
+    def to_python(self, value):
+        """
+        Validate that int() can be called on the input. Return the result
+        of int() or None for empty values.
+        """
+        value = super().to_python(value)
+        if value in self.empty_values:
+            return None
+        if self.localize:
+            value = formats.sanitize_separators(value)
+        # Strip trailing decimal and zeros.
+        try:
+            value = int(self.re_decimal.sub('', str(value)))
+        except (ValueError, TypeError):
+            raise ValidationError(self.error_messages['invalid'], code='invalid')
+        return value
+
+    def widget_attrs(self, widget):
+        attrs = super().widget_attrs(widget)
+        if isinstance(widget, NumberInput):
+            if self.min_value is not None:
+                attrs['min'] = self.min_value
+            if self.max_value is not None:
+                attrs['max'] = self.max_value
+        return attrs
+
+
+class FloatField(IntegerField):
+    default_error_messages = {
+        'invalid': _('Enter a number.'),
+    }
+
+    def to_python(self, value):
+        """
+        Validate that float() can be called on the input. Return the result
+        of float() or None for empty values.
+        """
+        value = super(IntegerField, self).to_python(value)
+        if value in self.empty_values:
+            return None
+
+
+$exec_command python3 -c "
+with open('/testbed/django/db/models/fields/__init__.py', 'r') as f:
+    content = f.read()
+old = '        self.path, self.match, self.recursive = path, match, recursive'
+new = '''        if callable(path):
+            path = path()
+        self.path, self.match, self.recursive = path, match, recursive'''
+content = content.replace(old, new, 1)
+with open('/testbed/django/db/models/fields/__init__.py', 'w') as f:
+    f.write(content)
+"
+ (no output)
+
+
+[model reply, complete and unedited] (2218 tokens in, 4349 tokens out)
+
+
+submit_patch Evaluate `path` argument if it's a callable in __init__
+
+[command executed: submit_patch]
+Evaluate `path` argument if it's a callable in __init__
+
+[result]
+TESTS_FAILED
+Testing against Django installed in '/testbed/django' with up to 8 processes
+System check identified no issues (0 silenced).
+
+E.
+======================================================================
+ERROR: test_callable_path (model_fields.test_filepathfield.FilePathFieldTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/testbed/tests/model_fields/test_filepathfield.py", line 21, in test_callable_path
+    self.assertEqual(field.path(), path)
+TypeError: 'str' object is not callable
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+FAILED (errors=1)
+
+------------------------------------------------------------------------------
+TURN 8
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 10236 characters, the same as turn 1 plus the history below]
+$exec_command find /testbed -type f -name "*.py" | head -20
+ /testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/test_deprecated_features.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+
+
+$exec_command find /testbed -type f -name "*.py" -exec grep -l "class FilePathField" {} \;
+ /testbed/tests/forms_tests/field_tests/test_filepathfield.py
+/testbed/tests/invalid_models_tests/test_ordinary_fields.py
+/testbed/django/db/models/fields/__init__.py
+/testbed/django/forms/fields.py
+
+
+$exec_command grep -n "class FilePathField" /testbed/django/db/models/fields/__init__.py
+ 1661:class FilePathField(Field):
+
+
+$exec_command sed -n '1650,1750p' /testbed/django/db/models/fields/__init__.py
+         return name, path, args, kwargs
+
+    def formfield(self, **kwargs):
+        # As with CharField, this will cause email validation to be performed
+        # twice.
+        return super().formfield(**{
+            'form_class': forms.EmailField,
+            **kwargs,
+        })
+
+
+class FilePathField(Field):
+    description = _("File path")
+
+    def __init__(self, verbose_name=None, name=None, path='', match=None,
+                 recursive=False, allow_files=True, allow_folders=False, **kwargs):
+        self.path, self.match, self.recursive = path, match, recursive
+        self.allow_files, self.allow_folders = allow_files, allow_folders
+        kwargs.setdefault('max_length', 100)
+        super().__init__(verbose_name, name, **kwargs)
+
+    def check(self, **kwargs):
+        return [
+            *super().check(**kwargs),
+            *self._check_allowing_files_or_folders(**kwargs),
+        ]
+
+    def _check_allowing_files_or_folders(self, **kwargs):
+        if not self.allow_files and not self.allow_folders:
+            return [
+                checks.Error(
+                    "FilePathFields must have either 'allow_files' or 'allow_folders' set to True.",
+                    obj=self,
+                    id='fields.E140',
+                )
+            ]
+        return []
+
+    def deconstruct(self):
+        name, path, args, kwargs = super().deconstruct()
+        if self.path != '':
+            kwargs['path'] = self.path
+        if self.match is not None:
+            kwargs['match'] = self.match
+        if self.recursive is not False:
+            kwargs['recursive'] = self.recursive
+        if self.allow_files is not True:
+            kwargs['allow_files'] = self.allow_files
+        if self.allow_folders is not False:
+            kwargs['allow_folders'] = self.allow_folders
+        if kwargs.get("max_length") == 100:
+            del kwargs["max_length"]
+        return name, path, args, kwargs
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        if value is None:
+            return None
+        return str(value)
+
+    def formfield(self, **kwargs):
+        return super().formfield(**{
+            'path': self.path,
+            'match': self.match,
+            'recursive': self.recursive,
+            'form_class': forms.FilePathField,
+            'allow_files': self.allow_files,
+            'allow_folders': self.allow_folders,
+            **kwargs,
+        })
+
+    def get_internal_type(self):
+        return "FilePathField"
+
+
+class FloatField(Field):
+    empty_strings_allowed = False
+    default_error_messages = {
+        'invalid': _("'%(value)s' value must be a float."),
+    }
+    description = _("Floating point number")
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        if value is None:
+            return None
+        return float(value)
+
+    def get_internal_type(self):
+        return "FloatField"
+
+    def to_python(self, value):
+        if value is None:
+            return value
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            raise exceptions.ValidationError(
+                self.error_messages['invalid'],
+                code='invalid',
+                params={'value': value},
+
+
+$exec_command sed -n '250,300p' /testbed/django/forms/fields.py
+         self.max_value, self.min_value = max_value, min_value
+        if kwargs.get('localize') and self.widget == NumberInput:
+            # Localized number input is not well supported on most browsers
+            kwargs.setdefault('widget', super().widget)
+        super().__init__(**kwargs)
+
+        if max_value is not None:
+            self.validators.append(validators.MaxValueValidator(max_value))
+        if min_value is not None:
+            self.validators.append(validators.MinValueValidator(min_value))
+
+    def to_python(self, value):
+        """
+        Validate that int() can be called on the input. Return the result
+        of int() or None for empty values.
+        """
+        value = super().to_python(value)
+        if value in self.empty_values:
+            return None
+        if self.localize:
+            value = formats.sanitize_separators(value)
+        # Strip trailing decimal and zeros.
+        try:
+            value = int(self.re_decimal.sub('', str(value)))
+        except (ValueError, TypeError):
+            raise ValidationError(self.error_messages['invalid'], code='invalid')
+        return value
+
+    def widget_attrs(self, widget):
+        attrs = super().widget_attrs(widget)
+        if isinstance(widget, NumberInput):
+            if self.min_value is not None:
+                attrs['min'] = self.min_value
+            if self.max_value is not None:
+                attrs['max'] = self.max_value
+        return attrs
+
+
+class FloatField(IntegerField):
+    default_error_messages = {
+        'invalid': _('Enter a number.'),
+    }
+
+    def to_python(self, value):
+        """
+        Validate that float() can be called on the input. Return the result
+        of float() or None for empty values.
+        """
+        value = super(IntegerField, self).to_python(value)
+        if value in self.empty_values:
+            return None
+
+
+$exec_command python3 -c "
+with open('/testbed/django/db/models/fields/__init__.py', 'r') as f:
+    content = f.read()
+old = '        self.path, self.match, self.recursive = path, match, recursive'
+new = '''        if callable(path):
+            path = path()
+        self.path, self.match, self.recursive = path, match, recursive'''
+content = content.replace(old, new, 1)
+with open('/testbed/django/db/models/fields/__init__.py', 'w') as f:
+    f.write(content)
+"
+ (no output)
+
+$submit_patch Evaluate `path` argument if it's a callable in __init__
+ TESTS_FAILED
+Testing against Django installed in '/testbed/django' with up to 8 processes
+System check identified no issues (0 silenced).
+
+E.
+======================================================================
+ERROR: test_callable_path (model_fields.test_filepathfield.FilePathFieldTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/testbed/tests/model_fields/test_filepathfield.py", line 21, in test_callable_path
+    self.assertEqual(field.path(), path)
+TypeError: 'str' object is not callable
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+FAILED (errors=1)
+
+
+[model reply, complete and unedited] (2367 tokens in, 5030 tokens out)
+
+
+exec_command python3 -c "
+with open('/testbed/django/db/models/fields/__init__.py', 'r') as f:
+    content = f.read()
+
+# Revert __init__ change to store callable as-is
+old_init = '''        if callable(path):
+            path = path()
+        self.path, self.match, self.recursive = path, match, recursive'''
+new_init = '''        self.path, self.match, self.recursive = path, match, recursive'''
+content = content.replace(old_init, new_init, 1)
+
+# Update deconstruct to evaluate callable for migrations
+old_deconstruct = '''        if self.path != '':
+            kwargs['path'] = self.path'''
+new_deconstruct = '''        if self.path != '':
+            kwargs['path'] = self.path() if callable(self.path) else self.path'''
+content = content.replace(old_deconstruct, new_deconstruct, 1)
+
+# Update formfield to evaluate callable for form rendering
+old_formfield = '''            'path': self.path,'''
+new_formfield = '''            'path': self.path() if callable(self.path) else self.path,'''
+content = content.replace(old_formfield, new_formfield, 1)
+
+with open('/testbed/django/db/models/fields/__init__.py', 'w') as f:
+    f.write(content)
+"
+
+[command executed: exec_command]
+python3 -c "
+with open('/testbed/django/db/models/fields/__init__.py', 'r') as f:
+    content = f.read()
+
+# Revert __init__ change to store callable as-is
+old_init = '''        if callable(path):
+            path = path()
+        self.path, self.match, self.recursive = path, match, recursive'''
+new_init = '''        self.path, self.match, self.recursive = path, match, recursive'''
+content = content.replace(old_init, new_init, 1)
+
+# Update deconstruct to evaluate callable for migrations
+old_deconstruct = '''        if self.path != '':
+            kwargs['path'] = self.path'''
+new_deconstruct = '''        if self.path != '':
+            kwargs['path'] = self.path() if callable(self.path) else self.path'''
+content = content.replace(old_deconstruct, new_deconstruct, 1)
+
+# Update formfield to evaluate callable for form rendering
+old_formfield = '''            'path': self.path,'''
+new_formfield = '''            'path': self.path() if callable(self.path) else self.path,'''
+content = content.replace(old_formfield, new_formfield, 1)
+
+with open('/testbed/django/db/models/fields/__init__.py', 'w') as f:
+    f.write(content)
+"
+
+[result]
+(no output)
+
+------------------------------------------------------------------------------
+TURN 9
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 11398 characters, the same as turn 1 plus the history below]
+$exec_command find /testbed -type f -name "*.py" | head -20
+ /testbed/tests/test_utils/views.py
+/testbed/tests/test_utils/__init__.py
+/testbed/tests/test_utils/models.py
+/testbed/tests/test_utils/test_deprecated_features.py
+/testbed/tests/test_utils/urls.py
+/testbed/tests/test_utils/tests.py
+/testbed/tests/test_utils/test_transactiontestcase.py
+/testbed/tests/test_utils/test_testcase.py
+/testbed/tests/expressions/test_deprecation.py
+/testbed/tests/expressions/__init__.py
+/testbed/tests/expressions/models.py
+/testbed/tests/expressions/tests.py
+/testbed/tests/expressions/test_queryset_values.py
+/testbed/tests/conditional_processing/views.py
+/testbed/tests/conditional_processing/__init__.py
+/testbed/tests/conditional_processing/urls.py
+/testbed/tests/conditional_processing/tests.py
+/testbed/tests/unmanaged_models/__init__.py
+/testbed/tests/unmanaged_models/models.py
+/testbed/tests/unmanaged_models/tests.py
+
+
+$exec_command find /testbed -type f -name "*.py" -exec grep -l "class FilePathField" {} \;
+ /testbed/tests/forms_tests/field_tests/test_filepathfield.py
+/testbed/tests/invalid_models_tests/test_ordinary_fields.py
+/testbed/django/db/models/fields/__init__.py
+/testbed/django/forms/fields.py
+
+
+$exec_command grep -n "class FilePathField" /testbed/django/db/models/fields/__init__.py
+ 1661:class FilePathField(Field):
+
+
+$exec_command sed -n '1650,1750p' /testbed/django/db/models/fields/__init__.py
+         return name, path, args, kwargs
+
+    def formfield(self, **kwargs):
+        # As with CharField, this will cause email validation to be performed
+        # twice.
+        return super().formfield(**{
+            'form_class': forms.EmailField,
+            **kwargs,
+        })
+
+
+class FilePathField(Field):
+    description = _("File path")
+
+    def __init__(self, verbose_name=None, name=None, path='', match=None,
+                 recursive=False, allow_files=True, allow_folders=False, **kwargs):
+        self.path, self.match, self.recursive = path, match, recursive
+        self.allow_files, self.allow_folders = allow_files, allow_folders
+        kwargs.setdefault('max_length', 100)
+        super().__init__(verbose_name, name, **kwargs)
+
+    def check(self, **kwargs):
+        return [
+            *super().check(**kwargs),
+            *self._check_allowing_files_or_folders(**kwargs),
+        ]
+
+    def _check_allowing_files_or_folders(self, **kwargs):
+        if not self.allow_files and not self.allow_folders:
+            return [
+                checks.Error(
+                    "FilePathFields must have either 'allow_files' or 'allow_folders' set to True.",
+                    obj=self,
+                    id='fields.E140',
+                )
+            ]
+        return []
+
+    def deconstruct(self):
+        name, path, args, kwargs = super().deconstruct()
+        if self.path != '':
+            kwargs['path'] = self.path
+        if self.match is not None:
+            kwargs['match'] = self.match
+        if self.recursive is not False:
+            kwargs['recursive'] = self.recursive
+        if self.allow_files is not True:
+            kwargs['allow_files'] = self.allow_files
+        if self.allow_folders is not False:
+            kwargs['allow_folders'] = self.allow_folders
+        if kwargs.get("max_length") == 100:
+            del kwargs["max_length"]
+        return name, path, args, kwargs
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        if value is None:
+            return None
+        return str(value)
+
+    def formfield(self, **kwargs):
+        return super().formfield(**{
+            'path': self.path,
+            'match': self.match,
+            'recursive': self.recursive,
+            'form_class': forms.FilePathField,
+            'allow_files': self.allow_files,
+            'allow_folders': self.allow_folders,
+            **kwargs,
+        })
+
+    def get_internal_type(self):
+        return "FilePathField"
+
+
+class FloatField(Field):
+    empty_strings_allowed = False
+    default_error_messages = {
+        'invalid': _("'%(value)s' value must be a float."),
+    }
+    description = _("Floating point number")
+
+    def get_prep_value(self, value):
+        value = super().get_prep_value(value)
+        if value is None:
+            return None
+        return float(value)
+
+    def get_internal_type(self):
+        return "FloatField"
+
+    def to_python(self, value):
+        if value is None:
+            return value
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            raise exceptions.ValidationError(
+                self.error_messages['invalid'],
+                code='invalid',
+                params={'value': value},
+
+
+$exec_command sed -n '250,300p' /testbed/django/forms/fields.py
+         self.max_value, self.min_value = max_value, min_value
+        if kwargs.get('localize') and self.widget == NumberInput:
+            # Localized number input is not well supported on most browsers
+            kwargs.setdefault('widget', super().widget)
+        super().__init__(**kwargs)
+
+        if max_value is not None:
+            self.validators.append(validators.MaxValueValidator(max_value))
+        if min_value is not None:
+            self.validators.append(validators.MinValueValidator(min_value))
+
+    def to_python(self, value):
+        """
+        Validate that int() can be called on the input. Return the result
+        of int() or None for empty values.
+        """
+        value = super().to_python(value)
+        if value in self.empty_values:
+            return None
+        if self.localize:
+            value = formats.sanitize_separators(value)
+        # Strip trailing decimal and zeros.
+        try:
+            value = int(self.re_decimal.sub('', str(value)))
+        except (ValueError, TypeError):
+            raise ValidationError(self.error_messages['invalid'], code='invalid')
+        return value
+
+    def widget_attrs(self, widget):
+        attrs = super().widget_attrs(widget)
+        if isinstance(widget, NumberInput):
+            if self.min_value is not None:
+                attrs['min'] = self.min_value
+            if self.max_value is not None:
+                attrs['max'] = self.max_value
+        return attrs
+
+
+class FloatField(IntegerField):
+    default_error_messages = {
+        'invalid': _('Enter a number.'),
+    }
+
+    def to_python(self, value):
+        """
+        Validate that float() can be called on the input. Return the result
+        of float() or None for empty values.
+        """
+        value = super(IntegerField, self).to_python(value)
+        if value in self.empty_values:
+            return None
+
+
+$exec_command python3 -c "
+with open('/testbed/django/db/models/fields/__init__.py', 'r') as f:
+    content = f.read()
+old = '        self.path, self.match, self.recursive = path, match, recursive'
+new = '''        if callable(path):
+            path = path()
+        self.path, self.match, self.recursive = path, match, recursive'''
+content = content.replace(old, new, 1)
+with open('/testbed/django/db/models/fields/__init__.py', 'w') as f:
+    f.write(content)
+"
+ (no output)
+
+$submit_patch Evaluate `path` argument if it's a callable in __init__
+ TESTS_FAILED
+Testing against Django installed in '/testbed/django' with up to 8 processes
+System check identified no issues (0 silenced).
+
+E.
+======================================================================
+ERROR: test_callable_path (model_fields.test_filepathfield.FilePathFieldTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/testbed/tests/model_fields/test_filepathfield.py", line 21, in test_callable_path
+    self.assertEqual(field.path(), path)
+TypeError: 'str' object is not callable
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+FAILED (errors=1)
+
+$exec_command python3 -c "
+with open('/testbed/django/db/models/fields/__init__.py', 'r') as f:
+    content = f.read()
+
+# Revert __init__ change to store callable as-is
+old_init = '''        if callable(path):
+            path = path()
+        self.path, self.match, self.recursive = path, match, recursive'''
+new_init = '''        self.path, self.match, self.recursive = path, match, recursive'''
+content = content.replace(old_init, new_init, 1)
+
+# Update deconstruct to evaluate callable for migrations
+old_deconstruct = '''        if self.path != '':
+            kwargs['path'] = self.path'''
+new_deconstruct = '''        if self.path != '':
+            kwargs['path'] = self.path() if callable(self.path) else self.path'''
+content = content.replace(old_deconstruct, new_deconstruct, 1)
+
+# Update formfield to evaluate callable for form rendering
+old_formfield = '''            'path': self.path,'''
+new_formfield = '''            'path': self.path() if callable(self.path) else self.path,'''
+content = content.replace(old_formfield, new_formfield, 1)
+
+with open('/testbed/django/db/models/fields/__init__.py', 'w') as f:
+    f.write(content)
+"
+ (no output)
+
+
+[model reply, complete and unedited] (2670 tokens in, 3785 tokens out)
+
+
+submit_patch Allow FilePathField path to accept a callable; evaluate in deconstruct and formfield.
+
+[command executed: submit_patch]
+Allow FilePathField path to accept a callable; evaluate in deconstruct and formfield.
+
+[result]
+TESTS_PASSED
+
+------------------------------------------------------------------------------
+STATUS: Run finished successfully
