@@ -6,7 +6,7 @@ import sys
 import requests
 
 # Dataset indices (SWE-bench Lite) to run, in order, one after another.
-INSTANCES = [35, 101]
+INSTANCES = [35]
 #INSTANCES = [113]
 
 RUNS_PER_INSTANCE = 40
