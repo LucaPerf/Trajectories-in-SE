@@ -1,0 +1,453 @@
+91 states, 360 transitions
+
+[q0] init
+      0.15 -> [q11] Search (locate file by pattern in repository),INFO_REPO
+      0.15 -> [q9] Search (locate file by pattern in repository),DISCOVERY_REPO
+      0.15 -> [q4] Read (view directory contents in directory),INFO_REPO
+      0.10 -> [q7] Search (locate class definitions across repository),DISCOVERY_SOURCE
+      0.07 -> [q6] Search (locate class definitions across repository),DISCOVERY_REPO
+      0.07 -> [q12] Search (locate string pattern in source file),DISCOVERY_SOURCE
+      0.05 -> [q3] Read (view directory contents in directory),DISCOVERY_REPO
+      0.05 -> [q15] Search,DISCOVERY_SOURCE
+      0.05 -> [q10] Search (locate file by pattern in repository),DISCOVERY_SOURCE
+      0.03 -> [q1] Execute (run shell command in repository),DISCOVERY_REPO
+      0.03 -> [q8] Search (locate class definitions in source file),ERROR_SOURCE
+      0.03 -> [q2] Execute,INFO_REPO
+      0.03 -> [q5] Read (view single file in directory),DISCOVERY_SOURCE
+      0.03 -> [q13] Search (locate string pattern in source file),EMPTY_SOURCE
+      0.03 -> [q14] Search (locate string pattern in source file),ERROR_SOURCE
+[q1] Execute (run shell command in repository),DISCOVERY_REPO
+      1.00 -> [q7] Search (locate class definitions across repository),DISCOVERY_SOURCE
+[q2] Execute,INFO_REPO
+      0.50 -> [q16] Execute,EMPTY_SOURCE
+      0.50 -> [q44] Execute,INFO_SOURCE
+[q3] Read (view directory contents in directory),DISCOVERY_REPO
+      0.50 -> [q6] Search (locate class definitions across repository),DISCOVERY_REPO
+      0.50 -> [q17] Search (locate class definitions in source file),EMPTY_SOURCE
+[q4] Read (view directory contents in directory),INFO_REPO
+      0.33 -> [q13] Search (locate string pattern in source file),EMPTY_SOURCE
+      0.33 -> [q7] Search (locate class definitions across repository),DISCOVERY_SOURCE
+      0.17 -> [q18] Read (view single file in directory),INFO_SOURCE
+      0.17 -> [q12] Search (locate string pattern in source file),DISCOVERY_SOURCE
+[q5] Read (view single file in directory),DISCOVERY_SOURCE
+      1.00 -> [q7] Search (locate class definitions across repository),DISCOVERY_SOURCE
+[q6] Search (locate class definitions across repository),DISCOVERY_REPO
+      0.40 -> [q19] Read (view line range in file),DISCOVERY_SOURCE
+      0.40 -> [q21] Search (locate class definitions in source file),DISCOVERY_SOURCE
+      0.20 -> [q17] Search (locate class definitions in source file),EMPTY_SOURCE
+[q7] Search (locate class definitions across repository),DISCOVERY_SOURCE
+      0.45 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.25 -> [q21] Search (locate class definitions in source file),DISCOVERY_SOURCE
+      0.15 -> [q19] Read (view line range in file),DISCOVERY_SOURCE
+      0.10 -> [q18] Read (view single file in directory),INFO_SOURCE
+      0.05 -> [q28] Search (locate class definitions in source file),INFO_SOURCE
+[q8] Search (locate class definitions in source file),ERROR_SOURCE
+      1.00 -> [q7] Search (locate class definitions across repository),DISCOVERY_SOURCE
+[q9] Search (locate file by pattern in repository),DISCOVERY_REPO
+      0.11 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.11 -> [q9] Search (locate file by pattern in repository),DISCOVERY_REPO
+      0.11 -> [q22] Read (view line range in file),ERROR_SOURCE
+      0.11 -> [q10] Search (locate file by pattern in repository),DISCOVERY_SOURCE
+      0.11 -> [q18] Read (view single file in directory),INFO_SOURCE
+      0.11 -> [q17] Search (locate class definitions in source file),EMPTY_SOURCE
+      0.11 -> [q12] Search (locate string pattern in source file),DISCOVERY_SOURCE
+      0.11 -> [q37] Test (run test suite with command),ERROR_TEST
+      0.11 -> [q63] Test (run test suite with command),PROGRESS_TEST
+[q10] Search (locate file by pattern in repository),DISCOVERY_SOURCE
+      0.67 -> [q21] Search (locate class definitions in source file),DISCOVERY_SOURCE
+      0.33 -> [q19] Read (view line range in file),DISCOVERY_SOURCE
+[q11] Search (locate file by pattern in repository),INFO_REPO
+      0.36 -> [q7] Search (locate class definitions across repository),DISCOVERY_SOURCE
+      0.18 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.18 -> [q63] Test (run test suite with command),PROGRESS_TEST
+      0.09 -> [q23] Search (locate class definitions across repository),INFO_SOURCE
+      0.09 -> [q11] Search (locate file by pattern in repository),INFO_REPO
+      0.09 -> [q20] Read (view line range in file),INFO_SOURCE
+[q12] Search (locate string pattern in source file),DISCOVERY_SOURCE
+      0.33 -> [q19] Read (view line range in file),DISCOVERY_SOURCE
+      0.17 -> [q21] Search (locate class definitions in source file),DISCOVERY_SOURCE
+      0.17 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.08 -> [q55] Execute (run shell command in repository),ERROR_NONE
+      0.08 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.08 -> [q12] Search (locate string pattern in source file),DISCOVERY_SOURCE
+      0.08 -> [q9] Search (locate file by pattern in repository),DISCOVERY_REPO
+[q13] Search (locate string pattern in source file),EMPTY_SOURCE
+      0.33 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.11 -> [q7] Search (locate class definitions across repository),DISCOVERY_SOURCE
+      0.06 -> [q6] Search (locate class definitions across repository),DISCOVERY_REPO
+      0.06 -> [q28] Search (locate class definitions in source file),INFO_SOURCE
+      0.06 -> [q21] Search (locate class definitions in source file),DISCOVERY_SOURCE
+      0.06 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.06 -> [q19] Read (view line range in file),DISCOVERY_SOURCE
+      0.06 -> [q45] Search (locate string pattern in source file),EMPTY_TEST
+      0.06 -> [q12] Search (locate string pattern in source file),DISCOVERY_SOURCE
+      0.06 -> [q13] Search (locate string pattern in source file),EMPTY_SOURCE
+      0.06 -> [q46] Read (view single file in directory),DISCOVERY_TEST
+      0.06 -> [q60] Read (view single file in directory),INFO_TEST
+[q14] Search (locate string pattern in source file),ERROR_SOURCE
+      0.33 -> [q7] Search (locate class definitions across repository),DISCOVERY_SOURCE
+      0.33 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.33 -> [q52] Search (locate string pattern in source file),DISCOVERY_TEST
+[q15] Search,DISCOVERY_SOURCE
+      0.50 -> [q25] Read,INFO_SOURCE
+      0.25 -> [q24] Execute,ERROR_NONE
+      0.25 -> [q29] Modify,PROGRESS_SOURCE
+[q16] Execute,EMPTY_SOURCE
+      0.67 -> [q26] Execute,DISCOVERY_SOURCE
+      0.33 -> [q16] Execute,EMPTY_SOURCE
+[q17] Search (locate class definitions in source file),EMPTY_SOURCE
+      0.80 -> [q7] Search (locate class definitions across repository),DISCOVERY_SOURCE
+      0.20 -> [q21] Search (locate class definitions in source file),DISCOVERY_SOURCE
+[q18] Read (view single file in directory),INFO_SOURCE
+      0.25 -> [q17] Search (locate class definitions in source file),EMPTY_SOURCE
+      0.25 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.12 -> [q21] Search (locate class definitions in source file),DISCOVERY_SOURCE
+      0.12 -> [q18] Read (view single file in directory),INFO_SOURCE
+      0.12 -> [q35] Submit (submit patch for verification),ERROR_TEST
+      0.12 -> [q20] Read (view line range in file),INFO_SOURCE
+[q19] Read (view line range in file),DISCOVERY_SOURCE
+      0.44 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.12 -> [q19] Read (view line range in file),DISCOVERY_SOURCE
+      0.06 -> [q30] Read (view line range in file),REPEATED_SOURCE
+      0.06 -> [q13] Search (locate string pattern in source file),EMPTY_SOURCE
+      0.06 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.06 -> [q36] Modify (apply patch to source code),PROGRESS_PATCH
+      0.03 -> [q35] Submit (submit patch for verification),ERROR_TEST
+      0.03 -> [q40] Search (locate file by pattern in repository),DISCOVERY_TEST
+      0.03 -> [q46] Read (view single file in directory),DISCOVERY_TEST
+      0.03 -> [q12] Search (locate string pattern in source file),DISCOVERY_SOURCE
+      0.03 -> [q37] Test (run test suite with command),ERROR_TEST
+      0.03 -> [q57] Execute (run shell command in repository),ERROR_SOURCE
+[q20] Read (view line range in file),INFO_SOURCE
+      0.39 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.13 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.05 -> [q32] Submit (submit patch for verification),PROGRESS_TEST__success
+      0.04 -> [q21] Search (locate class definitions in source file),DISCOVERY_SOURCE
+      0.04 -> [q37] Test (run test suite with command),ERROR_TEST
+      0.03 -> [q33] Search (locate string pattern in source file),INFO_SOURCE
+      0.03 -> [q30] Read (view line range in file),REPEATED_SOURCE
+      0.03 -> [q35] Submit (submit patch for verification),ERROR_TEST
+      0.02 -> [q13] Search (locate string pattern in source file),EMPTY_SOURCE
+      0.02 -> [q12] Search (locate string pattern in source file),DISCOVERY_SOURCE
+      0.02 -> [q28] Search (locate class definitions in source file),INFO_SOURCE
+      0.02 -> [q55] Execute (run shell command in repository),ERROR_NONE
+      0.02 -> [q61] Read (view line range in file),INFO_TEST
+      0.02 -> [q40] Search (locate file by pattern in repository),DISCOVERY_TEST
+      0.02 -> [q14] Search (locate string pattern in source file),ERROR_SOURCE
+      0.02 -> [q73] Read (view single file in directory),EMPTY_TEST
+      0.02 -> [q52] Search (locate string pattern in source file),DISCOVERY_TEST
+      0.01 -> [q19] Read (view line range in file),DISCOVERY_SOURCE
+      0.01 -> [q45] Search (locate string pattern in source file),EMPTY_TEST
+      0.01 -> [q67] Search (locate class definitions across repository),DISCOVERY_TEST
+      0.01 -> [q54] Execute (run shell command in repository),INFO_SOURCE
+      0.01 -> [q66] Execute (run shell command in repository),REPEATED_SOURCE
+      0.01 -> [q78] Execute (run shell command in repository),INFO_REPO
+      0.01 -> [q80] Execute (run shell command in repository),INFO_TEST
+      0.01 -> [q63] Test (run test suite with command),PROGRESS_TEST
+      0.01 -> [q68] Read (view single file in directory),EMPTY_SOURCE
+      0.01 -> [q86] Search (locate string pattern in source file),EMPTY_SOURCE__fail
+      0.01 -> [q77] Execute (run shell command in repository),PROGRESS_SOURCE
+      0.01 -> [q47] Read (view single file in directory),ERROR_SOURCE
+      0.01 -> [q83] Read (view line range in file),INFO_SOURCE__fail
+[q21] Search (locate class definitions in source file),DISCOVERY_SOURCE
+      0.32 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.23 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.23 -> [q19] Read (view line range in file),DISCOVERY_SOURCE
+      0.09 -> [q31] Search (locate class definitions in source file),REPEATED_SOURCE
+      0.05 -> [q35] Submit (submit patch for verification),ERROR_TEST
+      0.05 -> [q48] Execute (run shell command in repository),INFO_NONE
+      0.05 -> [q32] Submit (submit patch for verification),PROGRESS_TEST__success
+[q22] Read (view line range in file),ERROR_SOURCE
+      0.50 -> [q12] Search (locate string pattern in source file),DISCOVERY_SOURCE
+      0.50 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+[q23] Search (locate class definitions across repository),INFO_SOURCE
+      1.00 -> [q20] Read (view line range in file),INFO_SOURCE
+[q24] Execute,ERROR_NONE
+      0.40 -> [q25] Read,INFO_SOURCE
+      0.20 -> [q15] Search,DISCOVERY_SOURCE
+      0.20 -> [q24] Execute,ERROR_NONE
+      0.20 -> [q29] Modify,PROGRESS_SOURCE
+[q25] Read,INFO_SOURCE
+      0.23 -> [q29] Modify,PROGRESS_SOURCE
+      0.15 -> [q25] Read,INFO_SOURCE
+      0.15 -> [q44] Execute,INFO_SOURCE
+      0.08 -> [q15] Search,DISCOVERY_SOURCE
+      0.08 -> [q50] Test,ERROR_TEST
+      0.08 -> [q24] Execute,ERROR_NONE
+      0.08 -> [q74] Read,INFO_REPO
+      0.08 -> [q43] Submit,ERROR_TEST
+      0.08 -> [q58] Execute,ERROR_TEST
+[q26] Execute,DISCOVERY_SOURCE
+      0.50 -> [q16] Execute,EMPTY_SOURCE
+      0.50 -> [q29] Modify,PROGRESS_SOURCE
+[q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.31 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.29 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.07 -> [q32] Submit (submit patch for verification),PROGRESS_TEST__success
+      0.05 -> [q35] Submit (submit patch for verification),ERROR_TEST
+      0.04 -> [q33] Search (locate string pattern in source file),INFO_SOURCE
+      0.04 -> [q42] Read (view line range in file),PROGRESS_SOURCE
+      0.02 -> [q13] Search (locate string pattern in source file),EMPTY_SOURCE
+      0.02 -> [q37] Test (run test suite with command),ERROR_TEST
+      0.02 -> [q54] Execute (run shell command in repository),INFO_SOURCE
+      0.01 -> [q21] Search (locate class definitions in source file),DISCOVERY_SOURCE
+      0.01 -> [q38] Search (locate string pattern in source file),PROGRESS_SOURCE
+      0.01 -> [q30] Read (view line range in file),REPEATED_SOURCE
+      0.01 -> [q18] Read (view single file in directory),INFO_SOURCE
+      0.01 -> [q40] Search (locate file by pattern in repository),DISCOVERY_TEST
+      0.01 -> [q39] Submit (submit patch for verification),PROGRESS_PATCH__success
+      0.01 -> [q55] Execute (run shell command in repository),ERROR_NONE
+      0.01 -> [q41] Read (view single file in directory),ERROR_TEST
+      0.01 -> [q22] Read (view line range in file),ERROR_SOURCE
+      0.01 -> [q47] Read (view single file in directory),ERROR_SOURCE
+      0.01 -> [q52] Search (locate string pattern in source file),DISCOVERY_TEST
+      0.01 -> [q11] Search (locate file by pattern in repository),INFO_REPO
+      0.01 -> [q19] Read (view line range in file),DISCOVERY_SOURCE
+      0.01 -> [q64] Read (view single file in directory),ERROR_NONE
+      0.01 -> [q77] Execute (run shell command in repository),PROGRESS_SOURCE
+      0.01 -> [q60] Read (view single file in directory),INFO_TEST
+      0.01 -> [q85] Read (view line range in file),PROGRESS_SOURCE__fail
+      0.01 -> [q84] Modify (apply patch to source code),PROGRESS_SOURCE__fail
+      0.01 -> [q83] Read (view line range in file),INFO_SOURCE__fail
+[q28] Search (locate class definitions in source file),INFO_SOURCE
+      0.40 -> [q32] Submit (submit patch for verification),PROGRESS_TEST__success
+      0.40 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.20 -> [q19] Read (view line range in file),DISCOVERY_SOURCE
+[q29] Modify,PROGRESS_SOURCE
+      0.24 -> [q29] Modify,PROGRESS_SOURCE
+      0.18 -> [q25] Read,INFO_SOURCE
+      0.12 -> [q43] Submit,ERROR_TEST
+      0.12 -> [q50] Test,ERROR_TEST
+      0.06 -> [q34] Search,EMPTY_SOURCE
+      0.06 -> [q44] Execute,INFO_SOURCE
+      0.06 -> [q49] Modify,INFO_SOURCE
+      0.06 -> [q62] Submit,PROGRESS_TEST
+      0.06 -> [q56] Read,INFO_TEST
+      0.06 -> [q89] Read,INFO_SOURCE__fail
+[q30] Read (view line range in file),REPEATED_SOURCE
+      0.31 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.15 -> [q30] Read (view line range in file),REPEATED_SOURCE
+      0.15 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.08 -> [q36] Modify (apply patch to source code),PROGRESS_PATCH
+      0.08 -> [q13] Search (locate string pattern in source file),EMPTY_SOURCE
+      0.08 -> [q19] Read (view line range in file),DISCOVERY_SOURCE
+      0.08 -> [q37] Test (run test suite with command),ERROR_TEST
+      0.08 -> [q68] Read (view single file in directory),EMPTY_SOURCE
+[q31] Search (locate class definitions in source file),REPEATED_SOURCE
+      0.50 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.50 -> [q20] Read (view line range in file),INFO_SOURCE
+[q32] Submit (submit patch for verification),PROGRESS_TEST__success
+[q33] Search (locate string pattern in source file),INFO_SOURCE
+      0.50 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.25 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.08 -> [q32] Submit (submit patch for verification),PROGRESS_TEST__success
+      0.08 -> [q19] Read (view line range in file),DISCOVERY_SOURCE
+      0.08 -> [q68] Read (view single file in directory),EMPTY_SOURCE
+[q34] Search,EMPTY_SOURCE
+      0.50 -> [q25] Read,INFO_SOURCE
+      0.50 -> [q44] Execute,INFO_SOURCE
+[q35] Submit (submit patch for verification),ERROR_TEST
+      0.30 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.25 -> [q47] Read (view single file in directory),ERROR_SOURCE
+      0.15 -> [q41] Read (view single file in directory),ERROR_TEST
+      0.05 -> [q37] Test (run test suite with command),ERROR_TEST
+      0.05 -> [q51] Read (view line range in file),EMPTY_TEST
+      0.05 -> [q73] Read (view single file in directory),EMPTY_TEST
+      0.05 -> [q36] Modify (apply patch to source code),PROGRESS_PATCH
+      0.05 -> [q46] Read (view single file in directory),DISCOVERY_TEST
+      0.05 -> [q60] Read (view single file in directory),INFO_TEST
+[q36] Modify (apply patch to source code),PROGRESS_PATCH
+      0.50 -> [q19] Read (view line range in file),DISCOVERY_SOURCE
+      0.25 -> [q30] Read (view line range in file),REPEATED_SOURCE
+      0.25 -> [q73] Read (view single file in directory),EMPTY_TEST
+[q37] Test (run test suite with command),ERROR_TEST
+      0.31 -> [q37] Test (run test suite with command),ERROR_TEST
+      0.14 -> [q63] Test (run test suite with command),PROGRESS_TEST
+      0.11 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.06 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.06 -> [q60] Read (view single file in directory),INFO_TEST
+      0.06 -> [q19] Read (view line range in file),DISCOVERY_SOURCE
+      0.03 -> [q46] Read (view single file in directory),DISCOVERY_TEST
+      0.03 -> [q33] Search (locate string pattern in source file),INFO_SOURCE
+      0.03 -> [q30] Read (view line range in file),REPEATED_SOURCE
+      0.03 -> [q9] Search (locate file by pattern in repository),DISCOVERY_REPO
+      0.03 -> [q40] Search (locate file by pattern in repository),DISCOVERY_TEST
+      0.03 -> [q55] Execute (run shell command in repository),ERROR_NONE
+      0.03 -> [q52] Search (locate string pattern in source file),DISCOVERY_TEST
+      0.03 -> [q54] Execute (run shell command in repository),INFO_SOURCE
+      0.03 -> [q88] Read (view single file in directory),EMPTY_TEST__fail
+[q38] Search (locate string pattern in source file),PROGRESS_SOURCE
+      1.00 -> [q20] Read (view line range in file),INFO_SOURCE
+[q39] Submit (submit patch for verification),PROGRESS_PATCH__success
+[q40] Search (locate file by pattern in repository),DISCOVERY_TEST
+      0.33 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.17 -> [q60] Read (view single file in directory),INFO_TEST
+      0.08 -> [q32] Submit (submit patch for verification),PROGRESS_TEST__success
+      0.08 -> [q54] Execute (run shell command in repository),INFO_SOURCE
+      0.08 -> [q65] Search (locate string pattern in source file),ERROR_TEST
+      0.08 -> [q70] Modify (apply patch to source code),ERROR_SOURCE
+      0.08 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.08 -> [q37] Test (run test suite with command),ERROR_TEST
+[q41] Read (view single file in directory),ERROR_TEST
+      0.75 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.25 -> [q19] Read (view line range in file),DISCOVERY_SOURCE
+[q42] Read (view line range in file),PROGRESS_SOURCE
+      0.43 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.14 -> [q32] Submit (submit patch for verification),PROGRESS_TEST__success
+      0.14 -> [q30] Read (view line range in file),REPEATED_SOURCE
+      0.14 -> [q13] Search (locate string pattern in source file),EMPTY_SOURCE
+      0.14 -> [q19] Read (view line range in file),DISCOVERY_SOURCE
+[q43] Submit,ERROR_TEST
+      0.20 -> [q29] Modify,PROGRESS_SOURCE
+      0.20 -> [q44] Execute,INFO_SOURCE
+      0.20 -> [q58] Execute,ERROR_TEST
+      0.20 -> [q24] Execute,ERROR_NONE
+      0.20 -> [q25] Read,INFO_SOURCE
+[q44] Execute,INFO_SOURCE
+      0.30 -> [q29] Modify,PROGRESS_SOURCE
+      0.30 -> [q44] Execute,INFO_SOURCE
+      0.20 -> [q43] Submit,ERROR_TEST
+      0.10 -> [q59] Execute,DISCOVERY_TEST
+      0.10 -> [q34] Search,EMPTY_SOURCE
+[q45] Search (locate string pattern in source file),EMPTY_TEST
+      0.25 -> [q32] Submit (submit patch for verification),PROGRESS_TEST__success
+      0.25 -> [q39] Submit (submit patch for verification),PROGRESS_PATCH__success
+      0.25 -> [q37] Test (run test suite with command),ERROR_TEST
+      0.25 -> [q63] Test (run test suite with command),PROGRESS_TEST
+[q46] Read (view single file in directory),DISCOVERY_TEST
+      0.25 -> [q19] Read (view line range in file),DISCOVERY_SOURCE
+      0.25 -> [q37] Test (run test suite with command),ERROR_TEST
+      0.25 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.25 -> [q66] Execute (run shell command in repository),REPEATED_SOURCE
+[q47] Read (view single file in directory),ERROR_SOURCE
+      0.44 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.22 -> [q40] Search (locate file by pattern in repository),DISCOVERY_TEST
+      0.11 -> [q33] Search (locate string pattern in source file),INFO_SOURCE
+      0.11 -> [q11] Search (locate file by pattern in repository),INFO_REPO
+      0.11 -> [q68] Read (view single file in directory),EMPTY_SOURCE
+[q48] Execute (run shell command in repository),INFO_NONE
+      0.25 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.25 -> [q63] Test (run test suite with command),PROGRESS_TEST
+      0.25 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.25 -> [q83] Read (view line range in file),INFO_SOURCE__fail
+[q49] Modify,INFO_SOURCE
+      0.50 -> [q49] Modify,INFO_SOURCE
+      0.50 -> [q53] Read,ERROR_TEST
+[q50] Test,ERROR_TEST
+      0.33 -> [q25] Read,INFO_SOURCE
+      0.33 -> [q2] Execute,INFO_REPO
+      0.33 -> [q69] Read,DISCOVERY_REPO
+[q51] Read (view line range in file),EMPTY_TEST
+      1.00 -> [q21] Search (locate class definitions in source file),DISCOVERY_SOURCE
+[q52] Search (locate string pattern in source file),DISCOVERY_TEST
+      0.43 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.14 -> [q13] Search (locate string pattern in source file),EMPTY_SOURCE
+      0.14 -> [q37] Test (run test suite with command),ERROR_TEST
+      0.14 -> [q40] Search (locate file by pattern in repository),DISCOVERY_TEST
+      0.14 -> [q63] Test (run test suite with command),PROGRESS_TEST
+[q53] Read,ERROR_TEST
+      1.00 -> [q56] Read,INFO_TEST
+[q54] Execute (run shell command in repository),INFO_SOURCE
+      0.33 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.11 -> [q57] Execute (run shell command in repository),ERROR_SOURCE
+      0.11 -> [q66] Execute (run shell command in repository),REPEATED_SOURCE
+      0.11 -> [q13] Search (locate string pattern in source file),EMPTY_SOURCE
+      0.11 -> [q52] Search (locate string pattern in source file),DISCOVERY_TEST
+      0.11 -> [q60] Read (view single file in directory),INFO_TEST
+      0.11 -> [q87] Test (run test suite with command),ERROR_TEST__fail
+[q55] Execute (run shell command in repository),ERROR_NONE
+      0.17 -> [q35] Submit (submit patch for verification),ERROR_TEST
+      0.17 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.17 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.17 -> [q11] Search (locate file by pattern in repository),INFO_REPO
+      0.17 -> [q55] Execute (run shell command in repository),ERROR_NONE
+      0.17 -> [q63] Test (run test suite with command),PROGRESS_TEST
+[q56] Read,INFO_TEST
+      0.50 -> [q24] Execute,ERROR_NONE
+      0.50 -> [q44] Execute,INFO_SOURCE
+[q57] Execute (run shell command in repository),ERROR_SOURCE
+      0.50 -> [q47] Read (view single file in directory),ERROR_SOURCE
+      0.50 -> [q40] Search (locate file by pattern in repository),DISCOVERY_TEST
+[q58] Execute,ERROR_TEST
+      0.50 -> [q59] Execute,DISCOVERY_TEST
+      0.50 -> [q29] Modify,PROGRESS_SOURCE
+[q59] Execute,DISCOVERY_TEST
+      0.50 -> [q29] Modify,PROGRESS_SOURCE
+      0.50 -> [q72] Submit,PROGRESS_TEST__success
+[q60] Read (view single file in directory),INFO_TEST
+      0.25 -> [q63] Test (run test suite with command),PROGRESS_TEST
+      0.25 -> [q54] Execute (run shell command in repository),INFO_SOURCE
+      0.12 -> [q11] Search (locate file by pattern in repository),INFO_REPO
+      0.12 -> [q13] Search (locate string pattern in source file),EMPTY_SOURCE
+      0.12 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.12 -> [q48] Execute (run shell command in repository),INFO_NONE
+[q61] Read (view line range in file),INFO_TEST
+      0.33 -> [q61] Read (view line range in file),INFO_TEST
+      0.33 -> [q63] Test (run test suite with command),PROGRESS_TEST
+      0.33 -> [q68] Read (view single file in directory),EMPTY_SOURCE
+[q62] Submit,PROGRESS_TEST
+      1.00 -> [q29] Modify,PROGRESS_SOURCE
+[q63] Test (run test suite with command),PROGRESS_TEST
+      0.24 -> [q37] Test (run test suite with command),ERROR_TEST
+      0.24 -> [q63] Test (run test suite with command),PROGRESS_TEST
+      0.14 -> [q35] Submit (submit patch for verification),ERROR_TEST
+      0.10 -> [q39] Submit (submit patch for verification),PROGRESS_PATCH__success
+      0.05 -> [q12] Search (locate string pattern in source file),DISCOVERY_SOURCE
+      0.05 -> [q48] Execute (run shell command in repository),INFO_NONE
+      0.05 -> [q75] Test (run test suite with command),INFO_TEST
+      0.05 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.05 -> [q45] Search (locate string pattern in source file),EMPTY_TEST
+      0.05 -> [q81] Test (run test suite with command),REPEATED_TEST
+[q64] Read (view single file in directory),ERROR_NONE
+      1.00 -> [q20] Read (view line range in file),INFO_SOURCE
+[q65] Search (locate string pattern in source file),ERROR_TEST
+      1.00 -> [q45] Search (locate string pattern in source file),EMPTY_TEST
+[q66] Execute (run shell command in repository),REPEATED_SOURCE
+      0.50 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.25 -> [q47] Read (view single file in directory),ERROR_SOURCE
+      0.25 -> [q76] Read (view directory contents in directory),EMPTY_SOURCE
+[q67] Search (locate class definitions across repository),DISCOVERY_TEST
+      1.00 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+[q68] Read (view single file in directory),EMPTY_SOURCE
+      0.33 -> [q20] Read (view line range in file),INFO_SOURCE
+      0.17 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+      0.17 -> [q68] Read (view single file in directory),EMPTY_SOURCE
+      0.17 -> [q79] Search (locate file by pattern in repository),EMPTY_SOURCE
+      0.17 -> [q54] Execute (run shell command in repository),INFO_SOURCE
+[q69] Read,DISCOVERY_REPO
+      1.00 -> [q71] Submit,INFO_TEST__success
+[q70] Modify (apply patch to source code),ERROR_SOURCE
+      1.00 -> [q66] Execute (run shell command in repository),REPEATED_SOURCE
+[q71] Submit,INFO_TEST__success
+[q72] Submit,PROGRESS_TEST__success
+[q73] Read (view single file in directory),EMPTY_TEST
+      0.50 -> [q40] Search (locate file by pattern in repository),DISCOVERY_TEST
+      0.25 -> [q13] Search (locate string pattern in source file),EMPTY_SOURCE
+      0.25 -> [q37] Test (run test suite with command),ERROR_TEST
+[q74] Read,INFO_REPO
+      1.00 -> [q25] Read,INFO_SOURCE
+[q75] Test (run test suite with command),INFO_TEST
+      1.00 -> [q37] Test (run test suite with command),ERROR_TEST
+[q76] Read (view directory contents in directory),EMPTY_SOURCE
+      1.00 -> [q20] Read (view line range in file),INFO_SOURCE
+[q77] Execute (run shell command in repository),PROGRESS_SOURCE
+      1.00 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+[q78] Execute (run shell command in repository),INFO_REPO
+      1.00 -> [q27] Modify (apply patch to source code),PROGRESS_SOURCE
+[q79] Search (locate file by pattern in repository),EMPTY_SOURCE
+      1.00 -> [q18] Read (view single file in directory),INFO_SOURCE
+[q80] Execute (run shell command in repository),INFO_TEST
+      1.00 -> [q48] Execute (run shell command in repository),INFO_NONE
+[q81] Test (run test suite with command),REPEATED_TEST
+      1.00 -> [q82] Execute (run shell command in repository),PROGRESS_TEST
+[q82] Execute (run shell command in repository),PROGRESS_TEST
+      1.00 -> [q35] Submit (submit patch for verification),ERROR_TEST
+[q83] Read (view line range in file),INFO_SOURCE__fail
+[q84] Modify (apply patch to source code),PROGRESS_SOURCE__fail
+[q85] Read (view line range in file),PROGRESS_SOURCE__fail
+[q86] Search (locate string pattern in source file),EMPTY_SOURCE__fail
+[q87] Test (run test suite with command),ERROR_TEST__fail
+[q88] Read (view single file in directory),EMPTY_TEST__fail
+[q89] Read,INFO_SOURCE__fail
+[__start0] 
+      0.00 -> [q0] init

@@ -1,0 +1,559 @@
+99 states, 458 transitions
+
+[q0] init
+      0.25 -> [q11] Search (locate usage references in source file),DISCOVERY_SOURCE
+      0.17 -> [q2] Read (inspect directory contents in repository),INFO_REPO
+      0.12 -> [q7] Search (locate source file in repository),DISCOVERY_SOURCE
+      0.12 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+      0.07 -> [q8] Search (locate source file in repository),INFO_REPO
+      0.07 -> [q1] Read (inspect directory contents in repository),DISCOVERY_REPO
+      0.05 -> [q6] Search (locate source file in repository),DISCOVERY_REPO
+      0.03 -> [q12] Search (locate usage references in source file),EMPTY_NONE
+      0.03 -> [q9] Search (locate source file in repository),INFO_SOURCE
+      0.03 -> [q10] Search (locate test file in repository),INFO_REPO
+      0.03 -> [q3] Read (inspect directory contents in repository),INFO_SOURCE
+      0.03 -> [q5] Search (locate class definition in source file),INFO_SOURCE
+[q1] Read (inspect directory contents in repository),DISCOVERY_REPO
+      0.50 -> [q7] Search (locate source file in repository),DISCOVERY_SOURCE
+      0.25 -> [q1] Read (inspect directory contents in repository),DISCOVERY_REPO
+      0.25 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+[q2] Read (inspect directory contents in repository),INFO_REPO
+      0.38 -> [q7] Search (locate source file in repository),DISCOVERY_SOURCE
+      0.25 -> [q11] Search (locate usage references in source file),DISCOVERY_SOURCE
+      0.12 -> [q13] Read (inspect specified line range in source file),ERROR_SOURCE
+      0.12 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+      0.12 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+[q3] Read (inspect directory contents in repository),INFO_SOURCE
+      1.00 -> [q14] Search (locate usage references in source file),INFO_SOURCE
+[q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+      0.24 -> [q15] Read (inspect initial portion of source file),INFO_SOURCE
+      0.14 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.10 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.07 -> [q11] Search (locate usage references in source file),DISCOVERY_SOURCE
+      0.07 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.07 -> [q39] Search (locate class definition in source file),REPEATED_SOURCE
+      0.07 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+      0.03 -> [q19] Read (inspect method implementation in source file),INFO_SOURCE
+      0.03 -> [q30] Read (inspect filtered portion of test file),DISCOVERY_TEST
+      0.03 -> [q14] Search (locate usage references in source file),INFO_SOURCE
+      0.03 -> [q13] Read (inspect specified line range in source file),ERROR_SOURCE
+      0.03 -> [q17] Read (inspect initial portion of source file),DISCOVERY_SOURCE
+      0.03 -> [q58] Read (inspect specified line range in source file),ERROR_NONE
+      0.03 -> [q44] Read (inspect specified line range in test file),INFO_TEST
+[q5] Search (locate class definition in source file),INFO_SOURCE
+      0.29 -> [q5] Search (locate class definition in source file),INFO_SOURCE
+      0.21 -> [q19] Read (inspect method implementation in source file),INFO_SOURCE
+      0.21 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.14 -> [q23] Read (inspect filtered portion of test file),INFO_TEST
+      0.07 -> [q15] Read (inspect initial portion of source file),INFO_SOURCE
+      0.07 -> [q28] Search (locate method implementation in source file),INFO_SOURCE
+[q6] Search (locate source file in repository),DISCOVERY_REPO
+      0.50 -> [q11] Search (locate usage references in source file),DISCOVERY_SOURCE
+      0.50 -> [q7] Search (locate source file in repository),DISCOVERY_SOURCE
+[q7] Search (locate source file in repository),DISCOVERY_SOURCE
+      0.53 -> [q15] Read (inspect initial portion of source file),INFO_SOURCE
+      0.40 -> [q17] Read (inspect initial portion of source file),DISCOVERY_SOURCE
+      0.07 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+[q8] Search (locate source file in repository),INFO_REPO
+      0.40 -> [q11] Search (locate usage references in source file),DISCOVERY_SOURCE
+      0.20 -> [q8] Search (locate source file in repository),INFO_REPO
+      0.20 -> [q7] Search (locate source file in repository),DISCOVERY_SOURCE
+      0.20 -> [q15] Read (inspect initial portion of source file),INFO_SOURCE
+[q9] Search (locate source file in repository),INFO_SOURCE
+      1.00 -> [q15] Read (inspect initial portion of source file),INFO_SOURCE
+[q10] Search (locate test file in repository),INFO_REPO
+      1.00 -> [q8] Search (locate source file in repository),INFO_REPO
+[q11] Search (locate usage references in source file),DISCOVERY_SOURCE
+      0.38 -> [q15] Read (inspect initial portion of source file),INFO_SOURCE
+      0.21 -> [q17] Read (inspect initial portion of source file),DISCOVERY_SOURCE
+      0.12 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.08 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.04 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+      0.04 -> [q19] Read (inspect method implementation in source file),INFO_SOURCE
+      0.04 -> [q14] Search (locate usage references in source file),INFO_SOURCE
+      0.04 -> [q11] Search (locate usage references in source file),DISCOVERY_SOURCE
+      0.04 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+[q12] Search (locate usage references in source file),EMPTY_NONE
+      0.50 -> [q20] Search (locate source file in repository),EMPTY_NONE
+      0.50 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+[q13] Read (inspect specified line range in source file),ERROR_SOURCE
+      0.53 -> [q13] Read (inspect specified line range in source file),ERROR_SOURCE
+      0.13 -> [q39] Search (locate class definition in source file),REPEATED_SOURCE
+      0.07 -> [q7] Search (locate source file in repository),DISCOVERY_SOURCE
+      0.07 -> [q31] Search (locate class definition in source file),ERROR_SOURCE
+      0.07 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.07 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.07 -> [q66] Modify (run script in repository),ERROR_SOURCE
+[q14] Search (locate usage references in source file),INFO_SOURCE
+      0.20 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.13 -> [q5] Search (locate class definition in source file),INFO_SOURCE
+      0.13 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.13 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+      0.07 -> [q15] Read (inspect initial portion of source file),INFO_SOURCE
+      0.07 -> [q14] Search (locate usage references in source file),INFO_SOURCE
+      0.07 -> [q32] Edit (insert conditional check in source file),PROGRESS_SOURCE
+      0.07 -> [q41] Search (locate usage references in source file),EMPTY_TEST
+      0.07 -> [q51] Search (locate usage references in source file),REPEATED_SOURCE
+      0.07 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+[q15] Read (inspect initial portion of source file),INFO_SOURCE
+      0.22 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.11 -> [q15] Read (inspect initial portion of source file),INFO_SOURCE
+      0.11 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.09 -> [q21] Read (inspect initial portion of source file),REPEATED_SOURCE
+      0.09 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+      0.04 -> [q14] Search (locate usage references in source file),INFO_SOURCE
+      0.04 -> [q11] Search (locate usage references in source file),DISCOVERY_SOURCE
+      0.04 -> [q19] Read (inspect method implementation in source file),INFO_SOURCE
+      0.04 -> [q28] Search (locate method implementation in source file),INFO_SOURCE
+      0.04 -> [q23] Read (inspect filtered portion of test file),INFO_TEST
+      0.04 -> [q27] Read (inspect initial portion of test file),INFO_TEST
+      0.02 -> [q7] Search (locate source file in repository),DISCOVERY_SOURCE
+      0.02 -> [q13] Read (inspect specified line range in source file),ERROR_SOURCE
+      0.02 -> [q22] Edit (insert conditional check in source file),PROGRESS_PATCH
+      0.02 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.02 -> [q5] Search (locate class definition in source file),INFO_SOURCE
+      0.02 -> [q47] Search (locate usage references in source file),EMPTY_SOURCE
+      0.02 -> [q33] Run (execute test suite in repository),ERROR_TEST
+      0.02 -> [q41] Search (locate usage references in source file),EMPTY_TEST
+      0.02 -> [q96] Run (execute isolated test script),PROGRESS_TEST__fail
+[q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.28 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.24 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.05 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+      0.03 -> [q14] Search (locate usage references in source file),INFO_SOURCE
+      0.03 -> [q61] Modify (replace line range in source file),PROGRESS_SOURCE
+      0.03 -> [q39] Search (locate class definition in source file),REPEATED_SOURCE
+      0.03 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+      0.03 -> [q75] Modify (restore source file in repository),PROGRESS_SOURCE
+      0.02 -> [q26] Modify (replace line range in source file),PROGRESS_PATCH
+      0.02 -> [q42] Read (inspect method implementation in source file),EMPTY_SOURCE
+      0.02 -> [q35] Read (inspect method implementation in source file),ERROR_SOURCE
+      0.02 -> [q38] Search (locate usage references in source file),DISCOVERY_TEST
+      0.02 -> [q30] Read (inspect filtered portion of test file),DISCOVERY_TEST
+      0.02 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.02 -> [q17] Read (inspect initial portion of source file),DISCOVERY_SOURCE
+      0.02 -> [q23] Read (inspect filtered portion of test file),INFO_TEST
+      0.02 -> [q54] Read (inspect specified line range in source file),EMPTY_SOURCE
+      0.02 -> [q29] Read (inspect initial portion of test file),DISCOVERY_TEST
+      0.02 -> [q73] Submit (apply patch to repository),ERROR_TEST
+      0.02 -> [q72] Run (execute isolated test script),INFO_NONE
+      0.02 -> [q80] Modify (run script in repository),PROGRESS_SOURCE
+      0.02 -> [q47] Search (locate usage references in source file),EMPTY_SOURCE
+      0.02 -> [q67] Read (inspect specified line range in test file),EMPTY_TEST
+[q17] Read (inspect initial portion of source file),DISCOVERY_SOURCE
+      0.26 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.17 -> [q17] Read (inspect initial portion of source file),DISCOVERY_SOURCE
+      0.09 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.09 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+      0.04 -> [q11] Search (locate usage references in source file),DISCOVERY_SOURCE
+      0.04 -> [q31] Search (locate class definition in source file),ERROR_SOURCE
+      0.04 -> [q5] Search (locate class definition in source file),INFO_SOURCE
+      0.04 -> [q21] Read (inspect initial portion of source file),REPEATED_SOURCE
+      0.04 -> [q14] Search (locate usage references in source file),INFO_SOURCE
+      0.04 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.04 -> [q54] Read (inspect specified line range in source file),EMPTY_SOURCE
+      0.04 -> [q38] Search (locate usage references in source file),DISCOVERY_TEST
+      0.04 -> [q95] Search (locate usage references in source file),DISCOVERY_TEST__fail
+[q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+      0.15 -> [q24] Read (inspect method implementation in source file),REPEATED_SOURCE
+      0.11 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+      0.11 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.07 -> [q38] Search (locate usage references in source file),DISCOVERY_TEST
+      0.07 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.04 -> [q26] Modify (replace line range in source file),PROGRESS_PATCH
+      0.04 -> [q22] Edit (insert conditional check in source file),PROGRESS_PATCH
+      0.04 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.04 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+      0.04 -> [q17] Read (inspect initial portion of source file),DISCOVERY_SOURCE
+      0.04 -> [q45] Search (locate test file in repository),DISCOVERY_TEST
+      0.04 -> [q50] Search (locate usage references in source file),INFO_TEST
+      0.04 -> [q41] Search (locate usage references in source file),EMPTY_TEST
+      0.04 -> [q30] Read (inspect filtered portion of test file),DISCOVERY_TEST
+      0.04 -> [q33] Run (execute test suite in repository),ERROR_TEST
+      0.04 -> [q63] Run (execute isolated test script),ERROR_TEST
+      0.04 -> [q42] Read (inspect method implementation in source file),EMPTY_SOURCE
+      0.04 -> [q46] Modify (run script in repository),PROGRESS_PATCH
+[q19] Read (inspect method implementation in source file),INFO_SOURCE
+      0.31 -> [q24] Read (inspect method implementation in source file),REPEATED_SOURCE
+      0.19 -> [q19] Read (inspect method implementation in source file),INFO_SOURCE
+      0.12 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.12 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.06 -> [q27] Read (inspect initial portion of test file),INFO_TEST
+      0.06 -> [q47] Search (locate usage references in source file),EMPTY_SOURCE
+      0.06 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+      0.06 -> [q33] Run (execute test suite in repository),ERROR_TEST
+[q20] Search (locate source file in repository),EMPTY_NONE
+      1.00 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+[q21] Read (inspect initial portion of source file),REPEATED_SOURCE
+      0.29 -> [q15] Read (inspect initial portion of source file),INFO_SOURCE
+      0.14 -> [q12] Search (locate usage references in source file),EMPTY_NONE
+      0.14 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+      0.14 -> [q29] Read (inspect initial portion of test file),DISCOVERY_TEST
+      0.14 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+      0.14 -> [q24] Read (inspect method implementation in source file),REPEATED_SOURCE
+[q22] Edit (insert conditional check in source file),PROGRESS_PATCH
+      0.57 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.14 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+      0.14 -> [q52] Submit (apply patch to repository),PROGRESS_TEST__success
+      0.14 -> [q71] Read (inspect specified line range in source file),PROGRESS_PATCH
+[q23] Read (inspect filtered portion of test file),INFO_TEST
+      0.30 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.26 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.11 -> [q15] Read (inspect initial portion of source file),INFO_SOURCE
+      0.11 -> [q23] Read (inspect filtered portion of test file),INFO_TEST
+      0.04 -> [q5] Search (locate class definition in source file),INFO_SOURCE
+      0.04 -> [q28] Search (locate method implementation in source file),INFO_SOURCE
+      0.04 -> [q56] Read (inspect specified line range in test file),DISCOVERY_TEST
+      0.04 -> [q19] Read (inspect method implementation in source file),INFO_SOURCE
+      0.04 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.04 -> [q24] Read (inspect method implementation in source file),REPEATED_SOURCE
+[q24] Read (inspect method implementation in source file),REPEATED_SOURCE
+      0.45 -> [q24] Read (inspect method implementation in source file),REPEATED_SOURCE
+      0.10 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.07 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.07 -> [q66] Modify (run script in repository),ERROR_SOURCE
+      0.03 -> [q14] Search (locate usage references in source file),INFO_SOURCE
+      0.03 -> [q19] Read (inspect method implementation in source file),INFO_SOURCE
+      0.03 -> [q15] Read (inspect initial portion of source file),INFO_SOURCE
+      0.03 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+      0.03 -> [q47] Search (locate usage references in source file),EMPTY_SOURCE
+      0.03 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+      0.03 -> [q21] Read (inspect initial portion of source file),REPEATED_SOURCE
+      0.03 -> [q56] Read (inspect specified line range in test file),DISCOVERY_TEST
+      0.03 -> [q44] Read (inspect specified line range in test file),INFO_TEST
+      0.03 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.03 -> [q81] Modify (insert lines into source file),PROGRESS_PATCH
+      0.03 -> [q13] Read (inspect specified line range in source file),ERROR_SOURCE
+[q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.44 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.21 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.05 -> [q33] Run (execute test suite in repository),ERROR_TEST
+      0.03 -> [q15] Read (inspect initial portion of source file),INFO_SOURCE
+      0.03 -> [q23] Read (inspect filtered portion of test file),INFO_TEST
+      0.02 -> [q30] Read (inspect filtered portion of test file),DISCOVERY_TEST
+      0.02 -> [q5] Search (locate class definition in source file),INFO_SOURCE
+      0.02 -> [q50] Search (locate usage references in source file),INFO_TEST
+      0.02 -> [q22] Edit (insert conditional check in source file),PROGRESS_PATCH
+      0.02 -> [q52] Submit (apply patch to repository),PROGRESS_TEST__success
+      0.02 -> [q26] Modify (replace line range in source file),PROGRESS_PATCH
+      0.01 -> [q11] Search (locate usage references in source file),DISCOVERY_SOURCE
+      0.01 -> [q17] Read (inspect initial portion of source file),DISCOVERY_SOURCE
+      0.01 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+      0.01 -> [q43] Run (execute test suite in repository),ERROR_NONE
+      0.01 -> [q45] Search (locate test file in repository),DISCOVERY_TEST
+      0.01 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+      0.01 -> [q55] Read (inspect filtered portion of test file),EMPTY_TEST
+      0.01 -> [q44] Read (inspect specified line range in test file),INFO_TEST
+      0.01 -> [q47] Search (locate usage references in source file),EMPTY_SOURCE
+      0.01 -> [q63] Run (execute isolated test script),ERROR_TEST
+      0.01 -> [q70] Search (locate test file in repository),INFO_TEST
+      0.01 -> [q68] Read (read entire test file in repository),INFO_TEST
+      0.01 -> [q27] Read (inspect initial portion of test file),INFO_TEST
+      0.01 -> [q41] Search (locate usage references in source file),EMPTY_TEST
+      0.01 -> [q19] Read (inspect method implementation in source file),INFO_SOURCE
+      0.01 -> [q90] Read (inspect specified line range in source file),REPEATED_SOURCE__fail
+      0.01 -> [q2] Read (inspect directory contents in repository),INFO_REPO
+      0.01 -> [q86] Search (locate configuration files in repository),INFO_REPO
+      0.01 -> [q93] Read (inspect specified line range in source file),INFO_SOURCE__fail
+      0.01 -> [q85] Run (execute test suite in repository),ERROR_SOURCE
+[q26] Modify (replace line range in source file),PROGRESS_PATCH
+      0.40 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.10 -> [q33] Run (execute test suite in repository),ERROR_TEST
+      0.10 -> [q36] Run (execute isolated test script),DISCOVERY_SOURCE
+      0.10 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+      0.10 -> [q71] Read (inspect specified line range in source file),PROGRESS_PATCH
+      0.10 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.10 -> [q13] Read (inspect specified line range in source file),ERROR_SOURCE
+[q27] Read (inspect initial portion of test file),INFO_TEST
+      0.33 -> [q15] Read (inspect initial portion of source file),INFO_SOURCE
+      0.33 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.17 -> [q44] Read (inspect specified line range in test file),INFO_TEST
+      0.17 -> [q39] Search (locate class definition in source file),REPEATED_SOURCE
+[q28] Search (locate method implementation in source file),INFO_SOURCE
+      0.20 -> [q37] Search (locate method implementation in source file),EMPTY_SOURCE
+      0.20 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+      0.20 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.20 -> [q14] Search (locate usage references in source file),INFO_SOURCE
+      0.20 -> [q41] Search (locate usage references in source file),EMPTY_TEST
+[q29] Read (inspect initial portion of test file),DISCOVERY_TEST
+      0.25 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.25 -> [q30] Read (inspect filtered portion of test file),DISCOVERY_TEST
+      0.25 -> [q24] Read (inspect method implementation in source file),REPEATED_SOURCE
+      0.25 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+[q30] Read (inspect filtered portion of test file),DISCOVERY_TEST
+      0.27 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.18 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.18 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.09 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+      0.09 -> [q23] Read (inspect filtered portion of test file),INFO_TEST
+      0.09 -> [q54] Read (inspect specified line range in source file),EMPTY_SOURCE
+      0.09 -> [q87] Read (inspect filtered portion of test file),REPEATED_TEST
+[q31] Search (locate class definition in source file),ERROR_SOURCE
+      0.50 -> [q7] Search (locate source file in repository),DISCOVERY_SOURCE
+      0.50 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+[q32] Edit (insert conditional check in source file),PROGRESS_SOURCE
+      1.00 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+[q33] Run (execute test suite in repository),ERROR_TEST
+      0.35 -> [q33] Run (execute test suite in repository),ERROR_TEST
+      0.19 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.06 -> [q63] Run (execute isolated test script),ERROR_TEST
+      0.03 -> [q40] Search (locate executable script in repository),DISCOVERY_TEST
+      0.03 -> [q27] Read (inspect initial portion of test file),INFO_TEST
+      0.03 -> [q45] Search (locate test file in repository),DISCOVERY_TEST
+      0.03 -> [q57] Search (locate configuration files in repository),DISCOVERY_REPO
+      0.03 -> [q43] Run (execute test suite in repository),ERROR_NONE
+      0.03 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+      0.03 -> [q49] Run (execute isolated test script),ERROR_NONE
+      0.03 -> [q79] Search (locate executable script in repository),DISCOVERY_REPO
+      0.03 -> [q65] Run (execute isolated test script),PROGRESS_TEST
+      0.03 -> [q84] Run (execute test suite in repository),REPEATED_TEST
+      0.03 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.03 -> [q97] Run (execute test suite in repository),ERROR_TEST__fail
+[q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.73 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.05 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.02 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.02 -> [q23] Read (inspect filtered portion of test file),INFO_TEST
+      0.02 -> [q90] Read (inspect specified line range in source file),REPEATED_SOURCE__fail
+      0.01 -> [q26] Modify (replace line range in source file),PROGRESS_PATCH
+      0.01 -> [q50] Search (locate usage references in source file),INFO_TEST
+      0.01 -> [q38] Search (locate usage references in source file),DISCOVERY_TEST
+      0.01 -> [q15] Read (inspect initial portion of source file),INFO_SOURCE
+      0.01 -> [q56] Read (inspect specified line range in test file),DISCOVERY_TEST
+      0.01 -> [q30] Read (inspect filtered portion of test file),DISCOVERY_TEST
+      0.01 -> [q44] Read (inspect specified line range in test file),INFO_TEST
+      0.01 -> [q77] Read (inspect specified line range in test file),REPEATED_TEST
+      0.01 -> [q81] Modify (insert lines into source file),PROGRESS_PATCH
+      0.00 -> [q19] Read (inspect method implementation in source file),INFO_SOURCE
+      0.00 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+      0.00 -> [q14] Search (locate usage references in source file),INFO_SOURCE
+      0.00 -> [q45] Search (locate test file in repository),DISCOVERY_TEST
+      0.00 -> [q22] Edit (insert conditional check in source file),PROGRESS_PATCH
+      0.00 -> [q46] Modify (run script in repository),PROGRESS_PATCH
+      0.00 -> [q58] Read (inspect specified line range in source file),ERROR_NONE
+      0.00 -> [q47] Search (locate usage references in source file),EMPTY_SOURCE
+      0.00 -> [q60] Read (inspect filtered portion of test file),ERROR_TEST
+      0.00 -> [q59] Modify (insert lines into source file),PROGRESS_SOURCE
+      0.00 -> [q54] Read (inspect specified line range in source file),EMPTY_SOURCE
+      0.00 -> [q55] Read (inspect filtered portion of test file),EMPTY_TEST
+      0.00 -> [q24] Read (inspect method implementation in source file),REPEATED_SOURCE
+      0.00 -> [q17] Read (inspect initial portion of source file),DISCOVERY_SOURCE
+      0.00 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+      0.00 -> [q5] Search (locate class definition in source file),INFO_SOURCE
+      0.00 -> [q43] Run (execute test suite in repository),ERROR_NONE
+      0.00 -> [q61] Modify (replace line range in source file),PROGRESS_SOURCE
+      0.00 -> [q39] Search (locate class definition in source file),REPEATED_SOURCE
+      0.00 -> [q82] Modify (restore source file in repository),PROGRESS_PATCH
+      0.00 -> [q83] Search (locate test file in repository),EMPTY_TEST
+      0.00 -> [q33] Run (execute test suite in repository),ERROR_TEST
+      0.00 -> [q94] Read (inspect specified line range in source file),DISCOVERY_SOURCE__fail
+      0.00 -> [q11] Search (locate usage references in source file),DISCOVERY_SOURCE
+      0.00 -> [q88] Read (inspect initial portion of source file),DISCOVERY_SOURCE__fail
+      0.00 -> [q29] Read (inspect initial portion of test file),DISCOVERY_TEST
+      0.00 -> [q91] Read (inspect method implementation in source file),REPEATED_SOURCE__fail
+      0.00 -> [q64] Run (execute test suite in repository),PROGRESS_TEST
+[q35] Read (inspect method implementation in source file),ERROR_SOURCE
+      1.00 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+[q36] Run (execute isolated test script),DISCOVERY_SOURCE
+      0.50 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+      0.50 -> [q33] Run (execute test suite in repository),ERROR_TEST
+[q37] Search (locate method implementation in source file),EMPTY_SOURCE
+      0.50 -> [q28] Search (locate method implementation in source file),INFO_SOURCE
+      0.50 -> [q27] Read (inspect initial portion of test file),INFO_TEST
+[q38] Search (locate usage references in source file),DISCOVERY_TEST
+      0.25 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.25 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.12 -> [q41] Search (locate usage references in source file),EMPTY_TEST
+      0.12 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+      0.12 -> [q56] Read (inspect specified line range in test file),DISCOVERY_TEST
+      0.12 -> [q23] Read (inspect filtered portion of test file),INFO_TEST
+[q39] Search (locate class definition in source file),REPEATED_SOURCE
+      0.27 -> [q39] Search (locate class definition in source file),REPEATED_SOURCE
+      0.20 -> [q53] Search (locate method implementation in source file),DISCOVERY_SOURCE
+      0.07 -> [q47] Search (locate usage references in source file),EMPTY_SOURCE
+      0.07 -> [q13] Read (inspect specified line range in source file),ERROR_SOURCE
+      0.07 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+      0.07 -> [q30] Read (inspect filtered portion of test file),DISCOVERY_TEST
+      0.07 -> [q14] Search (locate usage references in source file),INFO_SOURCE
+      0.07 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+      0.07 -> [q24] Read (inspect method implementation in source file),REPEATED_SOURCE
+      0.07 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+[q40] Search (locate executable script in repository),DISCOVERY_TEST
+      1.00 -> [q46] Modify (run script in repository),PROGRESS_PATCH
+[q41] Search (locate usage references in source file),EMPTY_TEST
+      0.38 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.12 -> [q23] Read (inspect filtered portion of test file),INFO_TEST
+      0.12 -> [q24] Read (inspect method implementation in source file),REPEATED_SOURCE
+      0.12 -> [q47] Search (locate usage references in source file),EMPTY_SOURCE
+      0.12 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.12 -> [q76] Search (locate usage references in source file),REPEATED_TEST
+[q42] Read (inspect method implementation in source file),EMPTY_SOURCE
+      0.40 -> [q42] Read (inspect method implementation in source file),EMPTY_SOURCE
+      0.20 -> [q17] Read (inspect initial portion of source file),DISCOVERY_SOURCE
+      0.20 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+      0.20 -> [q39] Search (locate class definition in source file),REPEATED_SOURCE
+[q43] Run (execute test suite in repository),ERROR_NONE
+      0.33 -> [q48] Run (execute isolated test script),EMPTY_NONE
+      0.33 -> [q33] Run (execute test suite in repository),ERROR_TEST
+      0.33 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+[q44] Read (inspect specified line range in test file),INFO_TEST
+      0.60 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.10 -> [q14] Search (locate usage references in source file),INFO_SOURCE
+      0.10 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.10 -> [q24] Read (inspect method implementation in source file),REPEATED_SOURCE
+      0.10 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+[q45] Search (locate test file in repository),DISCOVERY_TEST
+      0.20 -> [q33] Run (execute test suite in repository),ERROR_TEST
+      0.20 -> [q29] Read (inspect initial portion of test file),DISCOVERY_TEST
+      0.20 -> [q52] Submit (apply patch to repository),PROGRESS_TEST__success
+      0.20 -> [q45] Search (locate test file in repository),DISCOVERY_TEST
+      0.20 -> [q64] Run (execute test suite in repository),PROGRESS_TEST
+[q46] Modify (run script in repository),PROGRESS_PATCH
+      0.20 -> [q15] Read (inspect initial portion of source file),INFO_SOURCE
+      0.20 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.20 -> [q42] Read (inspect method implementation in source file),EMPTY_SOURCE
+      0.20 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.20 -> [q78] Run (execute isolated test script),PROGRESS_PATCH
+[q47] Search (locate usage references in source file),EMPTY_SOURCE
+      0.27 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.18 -> [q47] Search (locate usage references in source file),EMPTY_SOURCE
+      0.18 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.09 -> [q11] Search (locate usage references in source file),DISCOVERY_SOURCE
+      0.09 -> [q23] Read (inspect filtered portion of test file),INFO_TEST
+      0.09 -> [q24] Read (inspect method implementation in source file),REPEATED_SOURCE
+      0.09 -> [q4] Search (locate class definition in source file),DISCOVERY_SOURCE
+[q48] Run (execute isolated test script),EMPTY_NONE
+      1.00 -> [q49] Run (execute isolated test script),ERROR_NONE
+[q49] Run (execute isolated test script),ERROR_NONE
+      0.50 -> [q36] Run (execute isolated test script),DISCOVERY_SOURCE
+      0.50 -> [q65] Run (execute isolated test script),PROGRESS_TEST
+[q50] Search (locate usage references in source file),INFO_TEST
+      0.57 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.14 -> [q14] Search (locate usage references in source file),INFO_SOURCE
+      0.14 -> [q19] Read (inspect method implementation in source file),INFO_SOURCE
+      0.14 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+[q51] Search (locate usage references in source file),REPEATED_SOURCE
+      1.00 -> [q19] Read (inspect method implementation in source file),INFO_SOURCE
+[q52] Submit (apply patch to repository),PROGRESS_TEST__success
+[q53] Search (locate method implementation in source file),DISCOVERY_SOURCE
+      0.25 -> [q39] Search (locate class definition in source file),REPEATED_SOURCE
+      0.25 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.25 -> [q74] Search (locate method implementation in source file),REPEATED_SOURCE
+      0.25 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+[q54] Read (inspect specified line range in source file),EMPTY_SOURCE
+      0.33 -> [q54] Read (inspect specified line range in source file),EMPTY_SOURCE
+      0.11 -> [q17] Read (inspect initial portion of source file),DISCOVERY_SOURCE
+      0.11 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.11 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.11 -> [q37] Search (locate method implementation in source file),EMPTY_SOURCE
+      0.11 -> [q39] Search (locate class definition in source file),REPEATED_SOURCE
+      0.11 -> [q53] Search (locate method implementation in source file),DISCOVERY_SOURCE
+[q55] Read (inspect filtered portion of test file),EMPTY_TEST
+      0.25 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+      0.25 -> [q15] Read (inspect initial portion of source file),INFO_SOURCE
+      0.25 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.25 -> [q33] Run (execute test suite in repository),ERROR_TEST
+[q56] Read (inspect specified line range in test file),DISCOVERY_TEST
+      0.33 -> [q24] Read (inspect method implementation in source file),REPEATED_SOURCE
+      0.17 -> [q67] Read (inspect specified line range in test file),EMPTY_TEST
+      0.17 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.17 -> [q23] Read (inspect filtered portion of test file),INFO_TEST
+      0.17 -> [q58] Read (inspect specified line range in source file),ERROR_NONE
+[q57] Search (locate configuration files in repository),DISCOVERY_REPO
+      1.00 -> [q33] Run (execute test suite in repository),ERROR_TEST
+[q58] Read (inspect specified line range in source file),ERROR_NONE
+      0.25 -> [q58] Read (inspect specified line range in source file),ERROR_NONE
+      0.25 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.25 -> [q18] Read (inspect method implementation in source file),DISCOVERY_SOURCE
+      0.25 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+[q59] Modify (insert lines into source file),PROGRESS_SOURCE
+      1.00 -> [q62] Read (inspect specified line range in source file),PROGRESS_SOURCE
+[q60] Read (inspect filtered portion of test file),ERROR_TEST
+      1.00 -> [q41] Search (locate usage references in source file),EMPTY_TEST
+[q61] Modify (replace line range in source file),PROGRESS_SOURCE
+      0.67 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.33 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+[q62] Read (inspect specified line range in source file),PROGRESS_SOURCE
+      1.00 -> [q52] Submit (apply patch to repository),PROGRESS_TEST__success
+[q63] Run (execute isolated test script),ERROR_TEST
+      0.30 -> [q63] Run (execute isolated test script),ERROR_TEST
+      0.20 -> [q65] Run (execute isolated test script),PROGRESS_TEST
+      0.10 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+      0.10 -> [q64] Run (execute test suite in repository),PROGRESS_TEST
+      0.10 -> [q55] Read (inspect filtered portion of test file),EMPTY_TEST
+      0.10 -> [q15] Read (inspect initial portion of source file),INFO_SOURCE
+      0.10 -> [q92] Run (execute isolated test script),ERROR_TEST__fail
+[q64] Run (execute test suite in repository),PROGRESS_TEST
+      0.60 -> [q52] Submit (apply patch to repository),PROGRESS_TEST__success
+      0.40 -> [q69] Submit (apply patch to repository),PROGRESS_PATCH__success
+[q65] Run (execute isolated test script),PROGRESS_TEST
+      0.50 -> [q69] Submit (apply patch to repository),PROGRESS_PATCH__success
+      0.25 -> [q52] Submit (apply patch to repository),PROGRESS_TEST__success
+      0.25 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+[q66] Modify (run script in repository),ERROR_SOURCE
+      0.20 -> [q46] Modify (run script in repository),PROGRESS_PATCH
+      0.20 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.20 -> [q13] Read (inspect specified line range in source file),ERROR_SOURCE
+      0.20 -> [q66] Modify (run script in repository),ERROR_SOURCE
+      0.20 -> [q91] Read (inspect method implementation in source file),REPEATED_SOURCE__fail
+[q67] Read (inspect specified line range in test file),EMPTY_TEST
+      0.33 -> [q67] Read (inspect specified line range in test file),EMPTY_TEST
+      0.33 -> [q24] Read (inspect method implementation in source file),REPEATED_SOURCE
+      0.33 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+[q68] Read (read entire test file in repository),INFO_TEST
+      1.00 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+[q69] Submit (apply patch to repository),PROGRESS_PATCH__success
+[q70] Search (locate test file in repository),INFO_TEST
+      1.00 -> [q23] Read (inspect filtered portion of test file),INFO_TEST
+[q71] Read (inspect specified line range in source file),PROGRESS_PATCH
+      0.33 -> [q33] Run (execute test suite in repository),ERROR_TEST
+      0.33 -> [q71] Read (inspect specified line range in source file),PROGRESS_PATCH
+      0.17 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.17 -> [q89] Read (inspect specified line range in source file),PROGRESS_PATCH__fail
+[q72] Run (execute isolated test script),INFO_NONE
+      1.00 -> [q63] Run (execute isolated test script),ERROR_TEST
+[q73] Submit (apply patch to repository),ERROR_TEST
+      1.00 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+[q74] Search (locate method implementation in source file),REPEATED_SOURCE
+      1.00 -> [q54] Read (inspect specified line range in source file),EMPTY_SOURCE
+[q75] Modify (restore source file in repository),PROGRESS_SOURCE
+      1.00 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+[q76] Search (locate usage references in source file),REPEATED_TEST
+      0.50 -> [q76] Search (locate usage references in source file),REPEATED_TEST
+      0.50 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+[q77] Read (inspect specified line range in test file),REPEATED_TEST
+      1.00 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+[q78] Run (execute isolated test script),PROGRESS_PATCH
+      1.00 -> [q69] Submit (apply patch to repository),PROGRESS_PATCH__success
+[q79] Search (locate executable script in repository),DISCOVERY_REPO
+      1.00 -> [q64] Run (execute test suite in repository),PROGRESS_TEST
+[q80] Modify (run script in repository),PROGRESS_SOURCE
+      1.00 -> [q16] Read (inspect specified line range in source file),DISCOVERY_SOURCE
+[q81] Modify (insert lines into source file),PROGRESS_PATCH
+      0.50 -> [q71] Read (inspect specified line range in source file),PROGRESS_PATCH
+      0.25 -> [q34] Read (inspect specified line range in source file),REPEATED_SOURCE
+      0.25 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+[q82] Modify (restore source file in repository),PROGRESS_PATCH
+      1.00 -> [q24] Read (inspect method implementation in source file),REPEATED_SOURCE
+[q83] Search (locate test file in repository),EMPTY_TEST
+      1.00 -> [q25] Read (inspect specified line range in source file),INFO_SOURCE
+[q84] Run (execute test suite in repository),REPEATED_TEST
+      1.00 -> [q64] Run (execute test suite in repository),PROGRESS_TEST
+[q85] Run (execute test suite in repository),ERROR_SOURCE
+      1.00 -> [q63] Run (execute isolated test script),ERROR_TEST
+[q86] Search (locate configuration files in repository),INFO_REPO
+      1.00 -> [q63] Run (execute isolated test script),ERROR_TEST
+[q87] Read (inspect filtered portion of test file),REPEATED_TEST
+      1.00 -> [q90] Read (inspect specified line range in source file),REPEATED_SOURCE__fail
+[q88] Read (inspect initial portion of source file),DISCOVERY_SOURCE__fail
+[q89] Read (inspect specified line range in source file),PROGRESS_PATCH__fail
+[q90] Read (inspect specified line range in source file),REPEATED_SOURCE__fail
+[q91] Read (inspect method implementation in source file),REPEATED_SOURCE__fail
+[q92] Run (execute isolated test script),ERROR_TEST__fail
+[q93] Read (inspect specified line range in source file),INFO_SOURCE__fail
+[q94] Read (inspect specified line range in source file),DISCOVERY_SOURCE__fail
+[q95] Search (locate usage references in source file),DISCOVERY_TEST__fail
+[q96] Run (execute isolated test script),PROGRESS_TEST__fail
+[q97] Run (execute test suite in repository),ERROR_TEST__fail
+[__start0] 
+      0.00 -> [q0] init

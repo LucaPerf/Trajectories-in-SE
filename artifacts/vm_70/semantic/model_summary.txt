@@ -1,0 +1,133 @@
+29 states, 102 transitions
+
+[q0] init
+      0.82 -> [q2] Search (file pattern search in repository),DISCOVERY_SOURCE
+      0.07 -> [q3] Search (file pattern search in repository),INFO_REPO
+      0.05 -> [q4] Search (file pattern search in repository),INFO_SOURCE
+      0.03 -> [q5] Search,INFO_REPO
+      0.03 -> [q1] Execute (shell command execution),DISCOVERY_SOURCE
+[q1] Execute (shell command execution),DISCOVERY_SOURCE
+      0.25 -> [q6] Execute (shell command execution),INFO_SOURCE
+      0.25 -> [q8] Read (line range in source file),DISCOVERY_SOURCE
+      0.25 -> [q7] Edit (text replacement in source file),PROGRESS_PATCH
+      0.25 -> [q18] Submit (submit patch to repository),PROGRESS_TEST__success
+[q2] Search (file pattern search in repository),DISCOVERY_SOURCE
+      0.30 -> [q10] Read (line range in source file),INFO_SOURCE
+      0.24 -> [q2] Search (file pattern search in repository),DISCOVERY_SOURCE
+      0.16 -> [q7] Edit (text replacement in source file),PROGRESS_PATCH
+      0.10 -> [q8] Read (line range in source file),DISCOVERY_SOURCE
+      0.04 -> [q4] Search (file pattern search in repository),INFO_SOURCE
+      0.03 -> [q6] Execute (shell command execution),INFO_SOURCE
+      0.03 -> [q11] Search (file pattern search in repository),REPEATED_SOURCE
+      0.03 -> [q18] Submit (submit patch to repository),PROGRESS_TEST__success
+      0.01 -> [q9] Read (line range in source file),EMPTY_SOURCE
+      0.01 -> [q1] Execute (shell command execution),DISCOVERY_SOURCE
+      0.01 -> [q16] Search (file pattern search in repository),EMPTY_SOURCE
+      0.01 -> [q14] Edit (text replacement in source file),PROGRESS_SOURCE
+[q3] Search (file pattern search in repository),INFO_REPO
+      0.50 -> [q2] Search (file pattern search in repository),DISCOVERY_SOURCE
+      0.25 -> [q4] Search (file pattern search in repository),INFO_SOURCE
+      0.25 -> [q21] Execute (empty command),EMPTY_NONE
+[q4] Search (file pattern search in repository),INFO_SOURCE
+      0.35 -> [q10] Read (line range in source file),INFO_SOURCE
+      0.12 -> [q4] Search (file pattern search in repository),INFO_SOURCE
+      0.12 -> [q7] Edit (text replacement in source file),PROGRESS_PATCH
+      0.12 -> [q18] Submit (submit patch to repository),PROGRESS_TEST__success
+      0.06 -> [q2] Search (file pattern search in repository),DISCOVERY_SOURCE
+      0.06 -> [q8] Read (line range in source file),DISCOVERY_SOURCE
+      0.06 -> [q16] Search (file pattern search in repository),EMPTY_SOURCE
+      0.06 -> [q19] Execute (shell command execution),ERROR_NONE
+      0.06 -> [q14] Edit (text replacement in source file),PROGRESS_SOURCE
+[q5] Search,INFO_REPO
+      1.00 -> [q12] Read,INFO_SOURCE
+[q6] Execute (shell command execution),INFO_SOURCE
+      0.25 -> [q6] Execute (shell command execution),INFO_SOURCE
+      0.25 -> [q10] Read (line range in source file),INFO_SOURCE
+      0.25 -> [q18] Submit (submit patch to repository),PROGRESS_TEST__success
+      0.12 -> [q1] Execute (shell command execution),DISCOVERY_SOURCE
+      0.12 -> [q7] Edit (text replacement in source file),PROGRESS_PATCH
+[q7] Edit (text replacement in source file),PROGRESS_PATCH
+      0.28 -> [q18] Submit (submit patch to repository),PROGRESS_TEST__success
+      0.23 -> [q10] Read (line range in source file),INFO_SOURCE
+      0.17 -> [q7] Edit (text replacement in source file),PROGRESS_PATCH
+      0.12 -> [q2] Search (file pattern search in repository),DISCOVERY_SOURCE
+      0.07 -> [q4] Search (file pattern search in repository),INFO_SOURCE
+      0.03 -> [q22] Read (line range in source file),ERROR_SOURCE
+      0.02 -> [q13] Read (line range in source file),PROGRESS_PATCH
+      0.02 -> [q1] Execute (shell command execution),DISCOVERY_SOURCE
+      0.02 -> [q15] Read (line range in source file),REPEATED_SOURCE
+      0.02 -> [q16] Search (file pattern search in repository),EMPTY_SOURCE
+      0.02 -> [q6] Execute (shell command execution),INFO_SOURCE
+      0.02 -> [q24] Run (test suite execution),ERROR_TEST
+[q8] Read (line range in source file),DISCOVERY_SOURCE
+      0.53 -> [q7] Edit (text replacement in source file),PROGRESS_PATCH
+      0.26 -> [q8] Read (line range in source file),DISCOVERY_SOURCE
+      0.05 -> [q2] Search (file pattern search in repository),DISCOVERY_SOURCE
+      0.05 -> [q4] Search (file pattern search in repository),INFO_SOURCE
+      0.05 -> [q19] Execute (shell command execution),ERROR_NONE
+      0.05 -> [q3] Search (file pattern search in repository),INFO_REPO
+[q9] Read (line range in source file),EMPTY_SOURCE
+      1.00 -> [q8] Read (line range in source file),DISCOVERY_SOURCE
+[q10] Read (line range in source file),INFO_SOURCE
+      0.38 -> [q7] Edit (text replacement in source file),PROGRESS_PATCH
+      0.15 -> [q10] Read (line range in source file),INFO_SOURCE
+      0.15 -> [q18] Submit (submit patch to repository),PROGRESS_TEST__success
+      0.05 -> [q8] Read (line range in source file),DISCOVERY_SOURCE
+      0.05 -> [q15] Read (line range in source file),REPEATED_SOURCE
+      0.04 -> [q2] Search (file pattern search in repository),DISCOVERY_SOURCE
+      0.04 -> [q4] Search (file pattern search in repository),INFO_SOURCE
+      0.04 -> [q6] Execute (shell command execution),INFO_SOURCE
+      0.02 -> [q16] Search (file pattern search in repository),EMPTY_SOURCE
+      0.02 -> [q14] Edit (text replacement in source file),PROGRESS_SOURCE
+      0.02 -> [q25] Search (file pattern search in repository),ERROR_SOURCE
+      0.02 -> [q26] Search (file pattern search in repository),EMPTY_NONE
+      0.02 -> [q27] Execute (shell command execution),EMPTY_SOURCE
+      0.02 -> [q24] Run (test suite execution),ERROR_TEST
+[q11] Search (file pattern search in repository),REPEATED_SOURCE
+      0.50 -> [q2] Search (file pattern search in repository),DISCOVERY_SOURCE
+      0.25 -> [q11] Search (file pattern search in repository),REPEATED_SOURCE
+      0.25 -> [q16] Search (file pattern search in repository),EMPTY_SOURCE
+[q12] Read,INFO_SOURCE
+      1.00 -> [q17] Search,INFO_SOURCE
+[q13] Read (line range in source file),PROGRESS_PATCH
+      1.00 -> [q18] Submit (submit patch to repository),PROGRESS_TEST__success
+[q14] Edit (text replacement in source file),PROGRESS_SOURCE
+      0.50 -> [q18] Submit (submit patch to repository),PROGRESS_TEST__success
+      0.25 -> [q4] Search (file pattern search in repository),INFO_SOURCE
+      0.25 -> [q14] Edit (text replacement in source file),PROGRESS_SOURCE
+[q15] Read (line range in source file),REPEATED_SOURCE
+      0.60 -> [q18] Submit (submit patch to repository),PROGRESS_TEST__success
+      0.20 -> [q7] Edit (text replacement in source file),PROGRESS_PATCH
+      0.20 -> [q2] Search (file pattern search in repository),DISCOVERY_SOURCE
+[q16] Search (file pattern search in repository),EMPTY_SOURCE
+      0.40 -> [q7] Edit (text replacement in source file),PROGRESS_PATCH
+      0.20 -> [q15] Read (line range in source file),REPEATED_SOURCE
+      0.20 -> [q11] Search (file pattern search in repository),REPEATED_SOURCE
+      0.20 -> [q10] Read (line range in source file),INFO_SOURCE
+[q17] Search,INFO_SOURCE
+      0.50 -> [q17] Search,INFO_SOURCE
+      0.50 -> [q20] Edit,EMPTY_SOURCE
+[q18] Submit (submit patch to repository),PROGRESS_TEST__success
+[q19] Execute (shell command execution),ERROR_NONE
+      0.50 -> [q8] Read (line range in source file),DISCOVERY_SOURCE
+      0.50 -> [q4] Search (file pattern search in repository),INFO_SOURCE
+[q20] Edit,EMPTY_SOURCE
+      1.00 -> [q23] Submit,PROGRESS_PATCH__success
+[q21] Execute (empty command),EMPTY_NONE
+      1.00 -> [q7] Edit (text replacement in source file),PROGRESS_PATCH
+[q22] Read (line range in source file),ERROR_SOURCE
+      0.50 -> [q10] Read (line range in source file),INFO_SOURCE
+      0.50 -> [q2] Search (file pattern search in repository),DISCOVERY_SOURCE
+[q23] Submit,PROGRESS_PATCH__success
+[q24] Run (test suite execution),ERROR_TEST
+      0.33 -> [q24] Run (test suite execution),ERROR_TEST
+      0.33 -> [q18] Submit (submit patch to repository),PROGRESS_TEST__success
+      0.33 -> [q10] Read (line range in source file),INFO_SOURCE
+[q25] Search (file pattern search in repository),ERROR_SOURCE
+      1.00 -> [q2] Search (file pattern search in repository),DISCOVERY_SOURCE
+[q26] Search (file pattern search in repository),EMPTY_NONE
+      1.00 -> [q10] Read (line range in source file),INFO_SOURCE
+[q27] Execute (shell command execution),EMPTY_SOURCE
+      1.00 -> [q10] Read (line range in source file),INFO_SOURCE
+[__start0] 
+      0.00 -> [q0] init

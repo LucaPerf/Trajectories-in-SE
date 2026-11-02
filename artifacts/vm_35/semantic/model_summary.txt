@@ -1,0 +1,156 @@
+33 states, 121 transitions
+
+[q0] init
+      0.23 -> [q8] Inspect (read whole file),INFO_SOURCE
+      0.18 -> [q4] Edit (wrap statement with context wrapper),PROGRESS_PATCH
+      0.14 -> [q6] Inspect (read line range),INFO_SOURCE
+      0.11 -> [q7] Inspect (read whole file),DISCOVERY_SOURCE
+      0.09 -> [q3] Edit (replace code block in file),PROGRESS_PATCH
+      0.09 -> [q5] Inspect (read line range),DISCOVERY_SOURCE
+      0.07 -> [q2] Edit (apply patch to file),PROGRESS_PATCH
+      0.04 -> [q10] Inspect (search for pattern in file),DISCOVERY_SOURCE
+      0.04 -> [q1] Edit (apply patch to file),ERROR_PATCH
+      0.02 -> [q9] Inspect (search for method in file),DISCOVERY_SOURCE
+[q1] Edit (apply patch to file),ERROR_PATCH
+      0.60 -> [q6] Inspect (read line range),INFO_SOURCE
+      0.40 -> [q8] Inspect (read whole file),INFO_SOURCE
+[q2] Edit (apply patch to file),PROGRESS_PATCH
+      0.17 -> [q12] Submit (apply patch to whole repository),ERROR_TEST
+      0.17 -> [q11] Run (execute test suite),ERROR_TEST
+      0.17 -> [q14] Submit (apply patch to whole repository),PROGRESS_TEST__success
+      0.17 -> [q6] Inspect (read line range),INFO_SOURCE
+      0.08 -> [q10] Inspect (search for pattern in file),DISCOVERY_SOURCE
+      0.08 -> [q19] Edit (apply patch to file),REPEATED_SOURCE
+      0.08 -> [q2] Edit (apply patch to file),PROGRESS_PATCH
+      0.08 -> [q8] Inspect (read whole file),INFO_SOURCE
+[q3] Edit (replace code block in file),PROGRESS_PATCH
+      0.44 -> [q6] Inspect (read line range),INFO_SOURCE
+      0.16 -> [q12] Submit (apply patch to whole repository),ERROR_TEST
+      0.12 -> [q3] Edit (replace code block in file),PROGRESS_PATCH
+      0.06 -> [q22] Inspect (search for method in file),INFO_SOURCE
+      0.06 -> [q2] Edit (apply patch to file),PROGRESS_PATCH
+      0.03 -> [q14] Submit (apply patch to whole repository),PROGRESS_TEST__success
+      0.03 -> [q8] Inspect (read whole file),INFO_SOURCE
+      0.03 -> [q20] Edit (modify line in file),PROGRESS_PATCH
+      0.03 -> [q16] Inspect (search for pattern in file),INFO_SOURCE
+      0.03 -> [q30] Edit (replace code block in file),INFO_SOURCE
+[q4] Edit (wrap statement with context wrapper),PROGRESS_PATCH
+      0.64 -> [q14] Submit (apply patch to whole repository),PROGRESS_TEST__success
+      0.16 -> [q6] Inspect (read line range),INFO_SOURCE
+      0.11 -> [q12] Submit (apply patch to whole repository),ERROR_TEST
+      0.02 -> [q13] Inspect (read line range),PROGRESS_PATCH
+      0.02 -> [q3] Edit (replace code block in file),PROGRESS_PATCH
+      0.02 -> [q4] Edit (wrap statement with context wrapper),PROGRESS_PATCH
+      0.02 -> [q21] Inspect (read line range),REPEATED_SOURCE
+[q5] Inspect (read line range),DISCOVERY_SOURCE
+      0.56 -> [q4] Edit (wrap statement with context wrapper),PROGRESS_PATCH
+      0.11 -> [q3] Edit (replace code block in file),PROGRESS_PATCH
+      0.11 -> [q10] Inspect (search for pattern in file),DISCOVERY_SOURCE
+      0.11 -> [q6] Inspect (read line range),INFO_SOURCE
+      0.11 -> [q14] Submit (apply patch to whole repository),PROGRESS_TEST__success
+[q6] Inspect (read line range),INFO_SOURCE
+      0.25 -> [q6] Inspect (read line range),INFO_SOURCE
+      0.15 -> [q14] Submit (apply patch to whole repository),PROGRESS_TEST__success
+      0.12 -> [q3] Edit (replace code block in file),PROGRESS_PATCH
+      0.11 -> [q4] Edit (wrap statement with context wrapper),PROGRESS_PATCH
+      0.10 -> [q20] Edit (modify line in file),PROGRESS_PATCH
+      0.06 -> [q21] Inspect (read line range),REPEATED_SOURCE
+      0.05 -> [q8] Inspect (read whole file),INFO_SOURCE
+      0.04 -> [q25] Inspect (read line range),ERROR_NONE
+      0.02 -> [q2] Edit (apply patch to file),PROGRESS_PATCH
+      0.02 -> [q1] Edit (apply patch to file),ERROR_PATCH
+      0.02 -> [q22] Inspect (search for method in file),INFO_SOURCE
+      0.02 -> [q12] Submit (apply patch to whole repository),ERROR_TEST
+      0.01 -> [q18] Edit (wrap statement with context wrapper),ERROR_PATCH
+      0.01 -> [q11] Run (execute test suite),ERROR_TEST
+[q7] Inspect (read whole file),DISCOVERY_SOURCE
+      0.83 -> [q4] Edit (wrap statement with context wrapper),PROGRESS_PATCH
+      0.17 -> [q2] Edit (apply patch to file),PROGRESS_PATCH
+[q8] Inspect (read whole file),INFO_SOURCE
+      0.29 -> [q4] Edit (wrap statement with context wrapper),PROGRESS_PATCH
+      0.14 -> [q10] Inspect (search for pattern in file),DISCOVERY_SOURCE
+      0.11 -> [q3] Edit (replace code block in file),PROGRESS_PATCH
+      0.11 -> [q6] Inspect (read line range),INFO_SOURCE
+      0.11 -> [q14] Submit (apply patch to whole repository),PROGRESS_TEST__success
+      0.04 -> [q15] Edit (apply patch to file),ERROR_NONE
+      0.04 -> [q2] Edit (apply patch to file),PROGRESS_PATCH
+      0.04 -> [q16] Inspect (search for pattern in file),INFO_SOURCE
+      0.04 -> [q22] Inspect (search for method in file),INFO_SOURCE
+      0.04 -> [q8] Inspect (read whole file),INFO_SOURCE
+      0.04 -> [q5] Inspect (read line range),DISCOVERY_SOURCE
+      0.04 -> [q1] Edit (apply patch to file),ERROR_PATCH
+[q9] Inspect (search for method in file),DISCOVERY_SOURCE
+      0.67 -> [q4] Edit (wrap statement with context wrapper),PROGRESS_PATCH
+      0.33 -> [q21] Inspect (read line range),REPEATED_SOURCE
+[q10] Inspect (search for pattern in file),DISCOVERY_SOURCE
+      0.44 -> [q6] Inspect (read line range),INFO_SOURCE
+      0.33 -> [q4] Edit (wrap statement with context wrapper),PROGRESS_PATCH
+      0.11 -> [q20] Edit (modify line in file),PROGRESS_PATCH
+      0.11 -> [q14] Submit (apply patch to whole repository),PROGRESS_TEST__success
+[q11] Run (execute test suite),ERROR_TEST
+      0.33 -> [q6] Inspect (read line range),INFO_SOURCE
+      0.33 -> [q8] Inspect (read whole file),INFO_SOURCE
+      0.33 -> [q12] Submit (apply patch to whole repository),ERROR_TEST
+[q12] Submit (apply patch to whole repository),ERROR_TEST
+      0.27 -> [q6] Inspect (read line range),INFO_SOURCE
+      0.27 -> [q8] Inspect (read whole file),INFO_SOURCE
+      0.13 -> [q3] Edit (replace code block in file),PROGRESS_PATCH
+      0.07 -> [q2] Edit (apply patch to file),PROGRESS_PATCH
+      0.07 -> [q17] Edit (replace code block in file),ERROR_PATCH
+      0.07 -> [q4] Edit (wrap statement with context wrapper),PROGRESS_PATCH
+      0.07 -> [q23] Inspect (read whole file),REPEATED_SOURCE
+      0.07 -> [q31] Inspect (read line range),INFO_SOURCE__fail
+[q13] Inspect (read line range),PROGRESS_PATCH
+      1.00 -> [q14] Submit (apply patch to whole repository),PROGRESS_TEST__success
+[q14] Submit (apply patch to whole repository),PROGRESS_TEST__success
+[q15] Edit (apply patch to file),ERROR_NONE
+      1.00 -> [q8] Inspect (read whole file),INFO_SOURCE
+[q16] Inspect (search for pattern in file),INFO_SOURCE
+      0.50 -> [q9] Inspect (search for method in file),DISCOVERY_SOURCE
+      0.50 -> [q22] Inspect (search for method in file),INFO_SOURCE
+[q17] Edit (replace code block in file),ERROR_PATCH
+      1.00 -> [q6] Inspect (read line range),INFO_SOURCE
+[q18] Edit (wrap statement with context wrapper),ERROR_PATCH
+      1.00 -> [q4] Edit (wrap statement with context wrapper),PROGRESS_PATCH
+[q19] Edit (apply patch to file),REPEATED_SOURCE
+      1.00 -> [q9] Inspect (search for method in file),DISCOVERY_SOURCE
+[q20] Edit (modify line in file),PROGRESS_PATCH
+      0.46 -> [q6] Inspect (read line range),INFO_SOURCE
+      0.15 -> [q5] Inspect (read line range),DISCOVERY_SOURCE
+      0.08 -> [q24] Run (execute test suite),PROGRESS_TEST__success
+      0.08 -> [q26] Edit (replace code block in file),DISCOVERY_SOURCE
+      0.08 -> [q27] Edit (replace line range with context wrapper),PROGRESS_PATCH
+      0.08 -> [q14] Submit (apply patch to whole repository),PROGRESS_TEST__success
+      0.08 -> [q21] Inspect (read line range),REPEATED_SOURCE
+[q21] Inspect (read line range),REPEATED_SOURCE
+      0.33 -> [q21] Inspect (read line range),REPEATED_SOURCE
+      0.25 -> [q20] Edit (modify line in file),PROGRESS_PATCH
+      0.17 -> [q3] Edit (replace code block in file),PROGRESS_PATCH
+      0.08 -> [q6] Inspect (read line range),INFO_SOURCE
+      0.08 -> [q10] Inspect (search for pattern in file),DISCOVERY_SOURCE
+      0.08 -> [q29] Edit (delete line in file),PROGRESS_PATCH
+[q22] Inspect (search for method in file),INFO_SOURCE
+      0.33 -> [q3] Edit (replace code block in file),PROGRESS_PATCH
+      0.33 -> [q6] Inspect (read line range),INFO_SOURCE
+      0.17 -> [q28] Inspect (search for method in file),REPEATED_SOURCE
+      0.17 -> [q14] Submit (apply patch to whole repository),PROGRESS_TEST__success
+[q23] Inspect (read whole file),REPEATED_SOURCE
+      1.00 -> [q5] Inspect (read line range),DISCOVERY_SOURCE
+[q24] Run (execute test suite),PROGRESS_TEST__success
+[q25] Inspect (read line range),ERROR_NONE
+      0.67 -> [q6] Inspect (read line range),INFO_SOURCE
+      0.33 -> [q3] Edit (replace code block in file),PROGRESS_PATCH
+[q26] Edit (replace code block in file),DISCOVERY_SOURCE
+      1.00 -> [q14] Submit (apply patch to whole repository),PROGRESS_TEST__success
+[q27] Edit (replace line range with context wrapper),PROGRESS_PATCH
+      1.00 -> [q14] Submit (apply patch to whole repository),PROGRESS_TEST__success
+[q28] Inspect (search for method in file),REPEATED_SOURCE
+      0.67 -> [q28] Inspect (search for method in file),REPEATED_SOURCE
+      0.33 -> [q3] Edit (replace code block in file),PROGRESS_PATCH
+[q29] Edit (delete line in file),PROGRESS_PATCH
+      1.00 -> [q6] Inspect (read line range),INFO_SOURCE
+[q30] Edit (replace code block in file),INFO_SOURCE
+      1.00 -> [q6] Inspect (read line range),INFO_SOURCE
+[q31] Inspect (read line range),INFO_SOURCE__fail
+[__start0] 
+      0.00 -> [q0] init

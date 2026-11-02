@@ -1,0 +1,102 @@
+25 states, 75 transitions
+
+[q0] init
+      0.62 -> [q5] Search (find format literal in whole repository),DISCOVERY_SOURCE
+      0.17 -> [q2] Search (find code symbol in whole repository),DISCOVERY_SOURCE
+      0.05 -> [q8] Search (find format literal in whole repository),INFO_SOURCE
+      0.03 -> [q9] Submit (apply patch to repository),ERROR_TEST
+      0.03 -> [q1] Read (list directory contents in repository),INFO_REPO
+      0.03 -> [q4] Search (find format literal in single file),EMPTY_SOURCE
+      0.03 -> [q3] Search (find code symbol in whole repository),INFO_SOURCE
+      0.03 -> [q6] Search (find format literal in whole repository),EMPTY_SOURCE
+      0.03 -> [q7] Search (find format literal in whole repository),ERROR_TEST
+[q1] Read (list directory contents in repository),INFO_REPO
+      1.00 -> [q5] Search (find format literal in whole repository),DISCOVERY_SOURCE
+[q2] Search (find code symbol in whole repository),DISCOVERY_SOURCE
+      0.71 -> [q5] Search (find format literal in whole repository),DISCOVERY_SOURCE
+      0.14 -> [q10] Read (extract line range from single file),DISCOVERY_SOURCE
+      0.14 -> [q8] Search (find format literal in whole repository),INFO_SOURCE
+[q3] Search (find code symbol in whole repository),INFO_SOURCE
+      1.00 -> [q5] Search (find format literal in whole repository),DISCOVERY_SOURCE
+[q4] Search (find format literal in single file),EMPTY_SOURCE
+      0.20 -> [q5] Search (find format literal in whole repository),DISCOVERY_SOURCE
+      0.20 -> [q11] Apply (replace string in file),PROGRESS_SOURCE
+      0.20 -> [q19] Search (find format literal in single file),PROGRESS_SOURCE
+      0.20 -> [q15] Search (find format literal in single file),INFO_SOURCE
+      0.20 -> [q16] Submit (apply patch to repository),PROGRESS_TEST__success
+[q5] Search (find format literal in whole repository),DISCOVERY_SOURCE
+      0.38 -> [q11] Apply (replace string in file),PROGRESS_SOURCE
+      0.32 -> [q12] Read (extract line range from single file),INFO_SOURCE
+      0.11 -> [q14] Search (find format literal in single file),DISCOVERY_SOURCE
+      0.05 -> [q5] Search (find format literal in whole repository),DISCOVERY_SOURCE
+      0.05 -> [q15] Search (find format literal in single file),INFO_SOURCE
+      0.05 -> [q10] Read (extract line range from single file),DISCOVERY_SOURCE
+      0.03 -> [q13] Read (extract line range from single file),PROGRESS_SOURCE
+[q6] Search (find format literal in whole repository),EMPTY_SOURCE
+      0.50 -> [q16] Submit (apply patch to repository),PROGRESS_TEST__success
+      0.17 -> [q5] Search (find format literal in whole repository),DISCOVERY_SOURCE
+      0.17 -> [q19] Search (find format literal in single file),PROGRESS_SOURCE
+      0.17 -> [q6] Search (find format literal in whole repository),EMPTY_SOURCE
+[q7] Search (find format literal in whole repository),ERROR_TEST
+      1.00 -> [q12] Read (extract line range from single file),INFO_SOURCE
+[q8] Search (find format literal in whole repository),INFO_SOURCE
+      1.00 -> [q12] Read (extract line range from single file),INFO_SOURCE
+[q9] Submit (apply patch to repository),ERROR_TEST
+      0.33 -> [q5] Search (find format literal in whole repository),DISCOVERY_SOURCE
+      0.33 -> [q11] Apply (replace string in file),PROGRESS_SOURCE
+      0.33 -> [q12] Read (extract line range from single file),INFO_SOURCE
+[q10] Read (extract line range from single file),DISCOVERY_SOURCE
+      1.00 -> [q11] Apply (replace string in file),PROGRESS_SOURCE
+[q11] Apply (replace string in file),PROGRESS_SOURCE
+      0.61 -> [q16] Submit (apply patch to repository),PROGRESS_TEST__success
+      0.17 -> [q13] Read (extract line range from single file),PROGRESS_SOURCE
+      0.07 -> [q4] Search (find format literal in single file),EMPTY_SOURCE
+      0.04 -> [q6] Search (find format literal in whole repository),EMPTY_SOURCE
+      0.04 -> [q9] Submit (apply patch to repository),ERROR_TEST
+      0.02 -> [q19] Search (find format literal in single file),PROGRESS_SOURCE
+      0.02 -> [q11] Apply (replace string in file),PROGRESS_SOURCE
+      0.02 -> [q20] Search (find format literal in single file),REPEATED_SOURCE
+[q12] Read (extract line range from single file),INFO_SOURCE
+      0.65 -> [q11] Apply (replace string in file),PROGRESS_SOURCE
+      0.12 -> [q18] Read (extract line range from single file),REPEATED_SOURCE
+      0.04 -> [q17] Apply (replace string in file),EMPTY_SOURCE
+      0.04 -> [q15] Search (find format literal in single file),INFO_SOURCE
+      0.04 -> [q16] Submit (apply patch to repository),PROGRESS_TEST__success
+      0.04 -> [q12] Read (extract line range from single file),INFO_SOURCE
+      0.04 -> [q4] Search (find format literal in single file),EMPTY_SOURCE
+      0.04 -> [q19] Search (find format literal in single file),PROGRESS_SOURCE
+[q13] Read (extract line range from single file),PROGRESS_SOURCE
+      0.56 -> [q16] Submit (apply patch to repository),PROGRESS_TEST__success
+      0.22 -> [q11] Apply (replace string in file),PROGRESS_SOURCE
+      0.22 -> [q12] Read (extract line range from single file),INFO_SOURCE
+[q14] Search (find format literal in single file),DISCOVERY_SOURCE
+      0.50 -> [q11] Apply (replace string in file),PROGRESS_SOURCE
+      0.25 -> [q12] Read (extract line range from single file),INFO_SOURCE
+      0.25 -> [q10] Read (extract line range from single file),DISCOVERY_SOURCE
+[q15] Search (find format literal in single file),INFO_SOURCE
+      0.50 -> [q12] Read (extract line range from single file),INFO_SOURCE
+      0.25 -> [q11] Apply (replace string in file),PROGRESS_SOURCE
+      0.25 -> [q21] Submit (apply patch to repository),PROGRESS_PATCH__success
+[q16] Submit (apply patch to repository),PROGRESS_TEST__success
+[q17] Apply (replace string in file),EMPTY_SOURCE
+      1.00 -> [q12] Read (extract line range from single file),INFO_SOURCE
+[q18] Read (extract line range from single file),REPEATED_SOURCE
+      0.67 -> [q12] Read (extract line range from single file),INFO_SOURCE
+      0.33 -> [q11] Apply (replace string in file),PROGRESS_SOURCE
+[q19] Search (find format literal in single file),PROGRESS_SOURCE
+      0.20 -> [q6] Search (find format literal in whole repository),EMPTY_SOURCE
+      0.20 -> [q20] Search (find format literal in single file),REPEATED_SOURCE
+      0.20 -> [q16] Submit (apply patch to repository),PROGRESS_TEST__success
+      0.20 -> [q11] Apply (replace string in file),PROGRESS_SOURCE
+      0.20 -> [q22] Read (extract line range from single file),EMPTY_SOURCE
+[q20] Search (find format literal in single file),REPEATED_SOURCE
+      0.60 -> [q20] Search (find format literal in single file),REPEATED_SOURCE
+      0.20 -> [q19] Search (find format literal in single file),PROGRESS_SOURCE
+      0.20 -> [q11] Apply (replace string in file),PROGRESS_SOURCE
+[q21] Submit (apply patch to repository),PROGRESS_PATCH__success
+[q22] Read (extract line range from single file),EMPTY_SOURCE
+      1.00 -> [q23] Search (find format literal in whole repository),PROGRESS_SOURCE
+[q23] Search (find format literal in whole repository),PROGRESS_SOURCE
+      1.00 -> [q6] Search (find format literal in whole repository),EMPTY_SOURCE
+[__start0] 
+      0.00 -> [q0] init

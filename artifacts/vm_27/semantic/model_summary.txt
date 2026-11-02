@@ -1,0 +1,359 @@
+68 states, 289 transitions
+
+[q0] init
+      0.62 -> [q2] Inspect (list directory contents),INFO_REPO
+      0.10 -> [q8] Search (find source file),DISCOVERY_SOURCE
+      0.05 -> [q7] Search (class definition),INFO_SOURCE
+      0.05 -> [q11] Search (keyword in source),DISCOVERY_SOURCE
+      0.03 -> [q6] Search (class definition),DISCOVERY_SOURCE
+      0.03 -> [q9] Search (find source file),EMPTY_NONE
+      0.03 -> [q5] Read (whole file),ERROR_SOURCE
+      0.03 -> [q1] Inspect (list directory contents),ERROR_NONE
+      0.03 -> [q4] Read (whole file),DISCOVERY_SOURCE
+      0.03 -> [q10] Search (find source file),INFO_REPO
+      0.03 -> [q3] Inspect,INFO_REPO
+[q1] Inspect (list directory contents),ERROR_NONE
+      1.00 -> [q11] Search (keyword in source),DISCOVERY_SOURCE
+[q2] Inspect (list directory contents),INFO_REPO
+      0.27 -> [q6] Search (class definition),DISCOVERY_SOURCE
+      0.23 -> [q5] Read (whole file),ERROR_SOURCE
+      0.15 -> [q11] Search (keyword in source),DISCOVERY_SOURCE
+      0.12 -> [q13] Read (whole file),INFO_SOURCE
+      0.08 -> [q15] Search (keyword in source),EMPTY_SOURCE
+      0.04 -> [q12] Read (partial file content),INFO_SOURCE
+      0.04 -> [q14] Search (find source file),INFO_SOURCE
+      0.04 -> [q16] Search (method definition in source),EMPTY_SOURCE
+      0.04 -> [q4] Read (whole file),DISCOVERY_SOURCE
+[q3] Inspect,INFO_REPO
+      1.00 -> [q17] Search (find source file),EMPTY_SOURCE
+[q4] Read (whole file),DISCOVERY_SOURCE
+      0.27 -> [q18] Modify (replace text in file),PROGRESS_PATCH
+      0.09 -> [q20] Edit (insert lines in source file),PROGRESS_PATCH
+      0.09 -> [q26] Modify (rewrite entire file),PROGRESS_PATCH
+      0.09 -> [q31] Read (partial file content),DISCOVERY_SOURCE
+      0.09 -> [q6] Search (class definition),DISCOVERY_SOURCE
+      0.09 -> [q34] Search (test file references),INFO_REPO
+      0.09 -> [q11] Search (keyword in source),DISCOVERY_SOURCE
+      0.09 -> [q21] Submit (submit patch for verification),PROGRESS_TEST__success
+      0.09 -> [q27] Read (line range),INFO_SOURCE
+[q5] Read (whole file),ERROR_SOURCE
+      0.30 -> [q8] Search (find source file),DISCOVERY_SOURCE
+      0.20 -> [q11] Search (keyword in source),DISCOVERY_SOURCE
+      0.20 -> [q13] Read (whole file),INFO_SOURCE
+      0.10 -> [q17] Search (find source file),EMPTY_SOURCE
+      0.10 -> [q4] Read (whole file),DISCOVERY_SOURCE
+      0.10 -> [q6] Search (class definition),DISCOVERY_SOURCE
+[q6] Search (class definition),DISCOVERY_SOURCE
+      0.41 -> [q13] Read (whole file),INFO_SOURCE
+      0.09 -> [q4] Read (whole file),DISCOVERY_SOURCE
+      0.09 -> [q15] Search (keyword in source),EMPTY_SOURCE
+      0.09 -> [q36] Search (method definition in source),DISCOVERY_SOURCE
+      0.09 -> [q16] Search (method definition in source),EMPTY_SOURCE
+      0.09 -> [q6] Search (class definition),DISCOVERY_SOURCE
+      0.05 -> [q5] Read (whole file),ERROR_SOURCE
+      0.05 -> [q11] Search (keyword in source),DISCOVERY_SOURCE
+      0.05 -> [q48] Search (test file references),DISCOVERY_SOURCE
+[q7] Search (class definition),INFO_SOURCE
+      0.21 -> [q13] Read (whole file),INFO_SOURCE
+      0.17 -> [q27] Read (line range),INFO_SOURCE
+      0.12 -> [q7] Search (class definition),INFO_SOURCE
+      0.12 -> [q25] Search (method definition in source),INFO_SOURCE
+      0.08 -> [q16] Search (method definition in source),EMPTY_SOURCE
+      0.08 -> [q28] Read (whole file),REPEATED_SOURCE
+      0.04 -> [q45] Search (class definition),REPEATED_SOURCE
+      0.04 -> [q19] Search (keyword in source),INFO_SOURCE
+      0.04 -> [q50] Search (class definition),ERROR_SOURCE
+      0.04 -> [q15] Search (keyword in source),EMPTY_SOURCE
+      0.04 -> [q12] Read (partial file content),INFO_SOURCE
+[q8] Search (find source file),DISCOVERY_SOURCE
+      0.33 -> [q13] Read (whole file),INFO_SOURCE
+      0.22 -> [q4] Read (whole file),DISCOVERY_SOURCE
+      0.11 -> [q2] Inspect (list directory contents),INFO_REPO
+      0.11 -> [q9] Search (find source file),EMPTY_NONE
+      0.11 -> [q27] Read (line range),INFO_SOURCE
+      0.11 -> [q5] Read (whole file),ERROR_SOURCE
+[q9] Search (find source file),EMPTY_NONE
+      0.50 -> [q9] Search (find source file),EMPTY_NONE
+      0.25 -> [q13] Read (whole file),INFO_SOURCE
+      0.25 -> [q8] Search (find source file),DISCOVERY_SOURCE
+[q10] Search (find source file),INFO_REPO
+      1.00 -> [q8] Search (find source file),DISCOVERY_SOURCE
+[q11] Search (keyword in source),DISCOVERY_SOURCE
+      0.44 -> [q13] Read (whole file),INFO_SOURCE
+      0.06 -> [q4] Read (whole file),DISCOVERY_SOURCE
+      0.06 -> [q12] Read (partial file content),INFO_SOURCE
+      0.06 -> [q25] Search (method definition in source),INFO_SOURCE
+      0.06 -> [q36] Search (method definition in source),DISCOVERY_SOURCE
+      0.06 -> [q40] Modify (replace text in file),PROGRESS_SOURCE
+      0.06 -> [q16] Search (method definition in source),EMPTY_SOURCE
+      0.06 -> [q11] Search (keyword in source),DISCOVERY_SOURCE
+      0.06 -> [q28] Read (whole file),REPEATED_SOURCE
+      0.06 -> [q6] Search (class definition),DISCOVERY_SOURCE
+[q12] Read (partial file content),INFO_SOURCE
+      0.27 -> [q13] Read (whole file),INFO_SOURCE
+      0.13 -> [q19] Search (keyword in source),INFO_SOURCE
+      0.13 -> [q56] Execute,INFO_SOURCE
+      0.07 -> [q30] Modify (replace text in file),ERROR_SOURCE
+      0.07 -> [q35] Search (class definition),EMPTY_SOURCE
+      0.07 -> [q27] Read (line range),INFO_SOURCE
+      0.07 -> [q26] Modify (rewrite entire file),PROGRESS_PATCH
+      0.07 -> [q25] Search (method definition in source),INFO_SOURCE
+      0.07 -> [q28] Read (whole file),REPEATED_SOURCE
+      0.07 -> [q23] Search (test file references),INFO_SOURCE
+[q13] Read (whole file),INFO_SOURCE
+      0.14 -> [q26] Modify (rewrite entire file),PROGRESS_PATCH
+      0.13 -> [q18] Modify (replace text in file),PROGRESS_PATCH
+      0.12 -> [q13] Read (whole file),INFO_SOURCE
+      0.08 -> [q12] Read (partial file content),INFO_SOURCE
+      0.07 -> [q27] Read (line range),INFO_SOURCE
+      0.05 -> [q24] Modify (rewrite entire file),EMPTY_NONE
+      0.04 -> [q20] Edit (insert lines in source file),PROGRESS_PATCH
+      0.04 -> [q21] Submit (submit patch for verification),PROGRESS_TEST__success
+      0.04 -> [q7] Search (class definition),INFO_SOURCE
+      0.02 -> [q22] Modify (rewrite entire file),PROGRESS_SOURCE
+      0.02 -> [q19] Search (keyword in source),INFO_SOURCE
+      0.02 -> [q11] Search (keyword in source),DISCOVERY_SOURCE
+      0.02 -> [q25] Search (method definition in source),INFO_SOURCE
+      0.02 -> [q49] Execute (run verification script),INFO_SOURCE
+      0.02 -> [q36] Search (method definition in source),DISCOVERY_SOURCE
+      0.02 -> [q28] Read (whole file),REPEATED_SOURCE
+      0.01 -> [q23] Search (test file references),INFO_SOURCE
+      0.01 -> [q33] Read (partial file content),REPEATED_SOURCE
+      0.01 -> [q29] Execute (run verification script),PROGRESS_PATCH
+      0.01 -> [q30] Modify (replace text in file),ERROR_SOURCE
+      0.01 -> [q32] Submit (submit patch for verification),ERROR_TEST
+      0.01 -> [q39] Search (keyword in source),ERROR_SOURCE
+      0.01 -> [q16] Search (method definition in source),EMPTY_SOURCE
+      0.01 -> [q44] Execute (run verification script),ERROR_SOURCE
+      0.01 -> [q15] Search (keyword in source),EMPTY_SOURCE
+      0.01 -> [q6] Search (class definition),DISCOVERY_SOURCE
+      0.01 -> [q42] Execute,ERROR_NONE
+      0.01 -> [q65] Search (method definition in source),DISCOVERY_SOURCE__fail
+[q14] Search (find source file),INFO_SOURCE
+      1.00 -> [q13] Read (whole file),INFO_SOURCE
+[q15] Search (keyword in source),EMPTY_SOURCE
+      0.15 -> [q6] Search (class definition),DISCOVERY_SOURCE
+      0.15 -> [q19] Search (keyword in source),INFO_SOURCE
+      0.15 -> [q27] Read (line range),INFO_SOURCE
+      0.08 -> [q15] Search (keyword in source),EMPTY_SOURCE
+      0.08 -> [q4] Read (whole file),DISCOVERY_SOURCE
+      0.08 -> [q26] Modify (rewrite entire file),PROGRESS_PATCH
+      0.08 -> [q5] Read (whole file),ERROR_SOURCE
+      0.08 -> [q11] Search (keyword in source),DISCOVERY_SOURCE
+      0.08 -> [q16] Search (method definition in source),EMPTY_SOURCE
+      0.08 -> [q7] Search (class definition),INFO_SOURCE
+[q16] Search (method definition in source),EMPTY_SOURCE
+      0.21 -> [q15] Search (keyword in source),EMPTY_SOURCE
+      0.14 -> [q13] Read (whole file),INFO_SOURCE
+      0.07 -> [q18] Modify (replace text in file),PROGRESS_PATCH
+      0.07 -> [q27] Read (line range),INFO_SOURCE
+      0.07 -> [q19] Search (keyword in source),INFO_SOURCE
+      0.07 -> [q16] Search (method definition in source),EMPTY_SOURCE
+      0.07 -> [q28] Read (whole file),REPEATED_SOURCE
+      0.07 -> [q7] Search (class definition),INFO_SOURCE
+      0.07 -> [q25] Search (method definition in source),INFO_SOURCE
+      0.07 -> [q55] Read (line range),DISCOVERY_SOURCE
+      0.07 -> [q6] Search (class definition),DISCOVERY_SOURCE
+[q17] Search (find source file),EMPTY_SOURCE
+      1.00 -> [q6] Search (class definition),DISCOVERY_SOURCE
+[q18] Modify (replace text in file),PROGRESS_PATCH
+      0.31 -> [q13] Read (whole file),INFO_SOURCE
+      0.19 -> [q21] Submit (submit patch for verification),PROGRESS_TEST__success
+      0.14 -> [q18] Modify (replace text in file),PROGRESS_PATCH
+      0.14 -> [q28] Read (whole file),REPEATED_SOURCE
+      0.06 -> [q26] Modify (rewrite entire file),PROGRESS_PATCH
+      0.06 -> [q32] Submit (submit patch for verification),ERROR_TEST
+      0.03 -> [q19] Search (keyword in source),INFO_SOURCE
+      0.03 -> [q37] Execute (run verification script),PROGRESS_TEST
+      0.03 -> [q51] Modify (replace text in file),INFO_SOURCE
+      0.03 -> [q58] Read (line range),PROGRESS_PATCH
+[q19] Search (keyword in source),INFO_SOURCE
+      0.21 -> [q25] Search (method definition in source),INFO_SOURCE
+      0.14 -> [q26] Modify (rewrite entire file),PROGRESS_PATCH
+      0.14 -> [q13] Read (whole file),INFO_SOURCE
+      0.14 -> [q28] Read (whole file),REPEATED_SOURCE
+      0.07 -> [q33] Read (partial file content),REPEATED_SOURCE
+      0.07 -> [q35] Search (class definition),EMPTY_SOURCE
+      0.07 -> [q19] Search (keyword in source),INFO_SOURCE
+      0.07 -> [q7] Search (class definition),INFO_SOURCE
+      0.07 -> [q15] Search (keyword in source),EMPTY_SOURCE
+[q20] Edit (insert lines in source file),PROGRESS_PATCH
+      0.40 -> [q26] Modify (rewrite entire file),PROGRESS_PATCH
+      0.20 -> [q32] Submit (submit patch for verification),ERROR_TEST
+      0.20 -> [q18] Modify (replace text in file),PROGRESS_PATCH
+      0.20 -> [q28] Read (whole file),REPEATED_SOURCE
+[q21] Submit (submit patch for verification),PROGRESS_TEST__success
+[q22] Modify (rewrite entire file),PROGRESS_SOURCE
+      1.00 -> [q21] Submit (submit patch for verification),PROGRESS_TEST__success
+[q23] Search (test file references),INFO_SOURCE
+      0.33 -> [q15] Search (keyword in source),EMPTY_SOURCE
+      0.33 -> [q27] Read (line range),INFO_SOURCE
+      0.33 -> [q56] Execute,INFO_SOURCE
+[q24] Modify (rewrite entire file),EMPTY_NONE
+      0.33 -> [q24] Modify (rewrite entire file),EMPTY_NONE
+      0.22 -> [q12] Read (partial file content),INFO_SOURCE
+      0.11 -> [q32] Submit (submit patch for verification),ERROR_TEST
+      0.11 -> [q42] Execute,ERROR_NONE
+      0.11 -> [q13] Read (whole file),INFO_SOURCE
+      0.11 -> [q25] Search (method definition in source),INFO_SOURCE
+[q25] Search (method definition in source),INFO_SOURCE
+      0.24 -> [q25] Search (method definition in source),INFO_SOURCE
+      0.19 -> [q7] Search (class definition),INFO_SOURCE
+      0.14 -> [q27] Read (line range),INFO_SOURCE
+      0.14 -> [q13] Read (whole file),INFO_SOURCE
+      0.10 -> [q28] Read (whole file),REPEATED_SOURCE
+      0.05 -> [q38] Execute,ERROR_SOURCE
+      0.05 -> [q26] Modify (rewrite entire file),PROGRESS_PATCH
+      0.05 -> [q16] Search (method definition in source),EMPTY_SOURCE
+      0.05 -> [q56] Execute,INFO_SOURCE
+[q26] Modify (rewrite entire file),PROGRESS_PATCH
+      0.32 -> [q26] Modify (rewrite entire file),PROGRESS_PATCH
+      0.25 -> [q21] Submit (submit patch for verification),PROGRESS_TEST__success
+      0.14 -> [q13] Read (whole file),INFO_SOURCE
+      0.07 -> [q28] Read (whole file),REPEATED_SOURCE
+      0.05 -> [q32] Submit (submit patch for verification),ERROR_TEST
+      0.02 -> [q16] Search (method definition in source),EMPTY_SOURCE
+      0.02 -> [q12] Read (partial file content),INFO_SOURCE
+      0.02 -> [q4] Read (whole file),DISCOVERY_SOURCE
+      0.02 -> [q25] Search (method definition in source),INFO_SOURCE
+      0.02 -> [q19] Search (keyword in source),INFO_SOURCE
+      0.02 -> [q61] Modify (rewrite entire file),PROGRESS_PATCH__fail
+      0.02 -> [q33] Read (partial file content),REPEATED_SOURCE
+      0.02 -> [q7] Search (class definition),INFO_SOURCE
+[q27] Read (line range),INFO_SOURCE
+      0.20 -> [q27] Read (line range),INFO_SOURCE
+      0.17 -> [q13] Read (whole file),INFO_SOURCE
+      0.15 -> [q52] Read (line range),REPEATED_SOURCE
+      0.07 -> [q28] Read (whole file),REPEATED_SOURCE
+      0.07 -> [q7] Search (class definition),INFO_SOURCE
+      0.05 -> [q16] Search (method definition in source),EMPTY_SOURCE
+      0.03 -> [q18] Modify (replace text in file),PROGRESS_PATCH
+      0.03 -> [q21] Submit (submit patch for verification),PROGRESS_TEST__success
+      0.03 -> [q15] Search (keyword in source),EMPTY_SOURCE
+      0.03 -> [q45] Search (class definition),REPEATED_SOURCE
+      0.03 -> [q47] Search (method definition in source),REPEATED_SOURCE
+      0.03 -> [q44] Execute (run verification script),ERROR_SOURCE
+      0.03 -> [q26] Modify (rewrite entire file),PROGRESS_PATCH
+      0.03 -> [q53] Search (test file references),EMPTY_SOURCE
+      0.03 -> [q46] Execute (run verification script),ERROR_NONE
+      0.03 -> [q57] Execute (run verification script),DISCOVERY_SOURCE
+      0.03 -> [q63] Search (keyword in source),INFO_SOURCE__fail
+[q28] Read (whole file),REPEATED_SOURCE
+      0.50 -> [q28] Read (whole file),REPEATED_SOURCE
+      0.07 -> [q21] Submit (submit patch for verification),PROGRESS_TEST__success
+      0.06 -> [q18] Modify (replace text in file),PROGRESS_PATCH
+      0.04 -> [q26] Modify (rewrite entire file),PROGRESS_PATCH
+      0.04 -> [q19] Search (keyword in source),INFO_SOURCE
+      0.03 -> [q7] Search (class definition),INFO_SOURCE
+      0.03 -> [q27] Read (line range),INFO_SOURCE
+      0.03 -> [q45] Search (class definition),REPEATED_SOURCE
+      0.01 -> [q31] Read (partial file content),DISCOVERY_SOURCE
+      0.01 -> [q37] Execute (run verification script),PROGRESS_TEST
+      0.01 -> [q25] Search (method definition in source),INFO_SOURCE
+      0.01 -> [q20] Edit (insert lines in source file),PROGRESS_PATCH
+      0.01 -> [q46] Execute (run verification script),ERROR_NONE
+      0.01 -> [q48] Search (test file references),DISCOVERY_SOURCE
+      0.01 -> [q4] Read (whole file),DISCOVERY_SOURCE
+      0.01 -> [q55] Read (line range),DISCOVERY_SOURCE
+      0.01 -> [q54] Execute,DISCOVERY_SOURCE
+      0.01 -> [q64] Read (whole file),REPEATED_SOURCE__fail
+      0.01 -> [q12] Read (partial file content),INFO_SOURCE
+      0.01 -> [q52] Read (line range),REPEATED_SOURCE
+      0.01 -> [q63] Search (keyword in source),INFO_SOURCE__fail
+      0.01 -> [q62] Read (partial file content),REPEATED_SOURCE__fail
+[q29] Execute (run verification script),PROGRESS_PATCH
+      1.00 -> [q13] Read (whole file),INFO_SOURCE
+[q30] Modify (replace text in file),ERROR_SOURCE
+      1.00 -> [q18] Modify (replace text in file),PROGRESS_PATCH
+[q31] Read (partial file content),DISCOVERY_SOURCE
+      1.00 -> [q28] Read (whole file),REPEATED_SOURCE
+[q32] Submit (submit patch for verification),ERROR_TEST
+      0.62 -> [q18] Modify (replace text in file),PROGRESS_PATCH
+      0.25 -> [q26] Modify (rewrite entire file),PROGRESS_PATCH
+      0.12 -> [q24] Modify (rewrite entire file),EMPTY_NONE
+[q33] Read (partial file content),REPEATED_SOURCE
+      0.67 -> [q28] Read (whole file),REPEATED_SOURCE
+      0.33 -> [q16] Search (method definition in source),EMPTY_SOURCE
+[q34] Search (test file references),INFO_REPO
+      1.00 -> [q25] Search (method definition in source),INFO_SOURCE
+[q35] Search (class definition),EMPTY_SOURCE
+      0.50 -> [q18] Modify (replace text in file),PROGRESS_PATCH
+      0.50 -> [q6] Search (class definition),DISCOVERY_SOURCE
+[q36] Search (method definition in source),DISCOVERY_SOURCE
+      0.29 -> [q36] Search (method definition in source),DISCOVERY_SOURCE
+      0.29 -> [q6] Search (class definition),DISCOVERY_SOURCE
+      0.29 -> [q13] Read (whole file),INFO_SOURCE
+      0.14 -> [q28] Read (whole file),REPEATED_SOURCE
+[q37] Execute (run verification script),PROGRESS_TEST
+      0.50 -> [q21] Submit (submit patch for verification),PROGRESS_TEST__success
+      0.50 -> [q13] Read (whole file),INFO_SOURCE
+[q38] Execute,ERROR_SOURCE
+      1.00 -> [q28] Read (whole file),REPEATED_SOURCE
+[q39] Search (keyword in source),ERROR_SOURCE
+      1.00 -> [q11] Search (keyword in source),DISCOVERY_SOURCE
+[q40] Modify (replace text in file),PROGRESS_SOURCE
+      1.00 -> [q41] Read (whole file),PROGRESS_SOURCE
+[q41] Read (whole file),PROGRESS_SOURCE
+      1.00 -> [q43] Submit (submit patch for verification),PROGRESS_PATCH__success
+[q42] Execute,ERROR_NONE
+      0.50 -> [q24] Modify (rewrite entire file),EMPTY_NONE
+      0.50 -> [q7] Search (class definition),INFO_SOURCE
+[q43] Submit (submit patch for verification),PROGRESS_PATCH__success
+[q44] Execute (run verification script),ERROR_SOURCE
+      0.33 -> [q32] Submit (submit patch for verification),ERROR_TEST
+      0.33 -> [q27] Read (line range),INFO_SOURCE
+      0.33 -> [q52] Read (line range),REPEATED_SOURCE
+[q45] Search (class definition),REPEATED_SOURCE
+      0.40 -> [q27] Read (line range),INFO_SOURCE
+      0.20 -> [q7] Search (class definition),INFO_SOURCE
+      0.20 -> [q54] Execute,DISCOVERY_SOURCE
+      0.20 -> [q45] Search (class definition),REPEATED_SOURCE
+[q46] Execute (run verification script),ERROR_NONE
+      0.50 -> [q7] Search (class definition),INFO_SOURCE
+      0.50 -> [q28] Read (whole file),REPEATED_SOURCE
+[q47] Search (method definition in source),REPEATED_SOURCE
+      1.00 -> [q23] Search (test file references),INFO_SOURCE
+[q48] Search (test file references),DISCOVERY_SOURCE
+      0.50 -> [q28] Read (whole file),REPEATED_SOURCE
+      0.50 -> [q13] Read (whole file),INFO_SOURCE
+[q49] Execute (run verification script),INFO_SOURCE
+      0.50 -> [q18] Modify (replace text in file),PROGRESS_PATCH
+      0.50 -> [q13] Read (whole file),INFO_SOURCE
+[q50] Search (class definition),ERROR_SOURCE
+      1.00 -> [q25] Search (method definition in source),INFO_SOURCE
+[q51] Modify (replace text in file),INFO_SOURCE
+      1.00 -> [q26] Modify (rewrite entire file),PROGRESS_PATCH
+[q52] Read (line range),REPEATED_SOURCE
+      0.40 -> [q27] Read (line range),INFO_SOURCE
+      0.20 -> [q52] Read (line range),REPEATED_SOURCE
+      0.10 -> [q26] Modify (rewrite entire file),PROGRESS_PATCH
+      0.10 -> [q28] Read (whole file),REPEATED_SOURCE
+      0.10 -> [q44] Execute (run verification script),ERROR_SOURCE
+      0.10 -> [q60] Execute (run verification script),DISCOVERY_SOURCE__fail
+[q53] Search (test file references),EMPTY_SOURCE
+      1.00 -> [q27] Read (line range),INFO_SOURCE
+[q54] Execute,DISCOVERY_SOURCE
+      0.67 -> [q28] Read (whole file),REPEATED_SOURCE
+      0.33 -> [q54] Execute,DISCOVERY_SOURCE
+[q55] Read (line range),DISCOVERY_SOURCE
+      1.00 -> [q27] Read (line range),INFO_SOURCE
+[q56] Execute,INFO_SOURCE
+      0.40 -> [q13] Read (whole file),INFO_SOURCE
+      0.20 -> [q12] Read (partial file content),INFO_SOURCE
+      0.20 -> [q56] Execute,INFO_SOURCE
+      0.20 -> [q59] Search (method definition in source),EMPTY_NONE
+[q57] Execute (run verification script),DISCOVERY_SOURCE
+      1.00 -> [q18] Modify (replace text in file),PROGRESS_PATCH
+[q58] Read (line range),PROGRESS_PATCH
+      1.00 -> [q28] Read (whole file),REPEATED_SOURCE
+[q59] Search (method definition in source),EMPTY_NONE
+      1.00 -> [q66] Execute,ERROR_NONE__fail
+[q60] Execute (run verification script),DISCOVERY_SOURCE__fail
+[q61] Modify (rewrite entire file),PROGRESS_PATCH__fail
+[q62] Read (partial file content),REPEATED_SOURCE__fail
+[q63] Search (keyword in source),INFO_SOURCE__fail
+[q64] Read (whole file),REPEATED_SOURCE__fail
+[q65] Search (method definition in source),DISCOVERY_SOURCE__fail
+[q66] Execute,ERROR_NONE__fail
+[__start0] 
+      0.00 -> [q0] init
