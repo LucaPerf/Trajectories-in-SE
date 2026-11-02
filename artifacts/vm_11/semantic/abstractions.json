@@ -1,0 +1,1042 @@
+{
+  "act_categories": [
+    "Apply (replace string in file)",
+    "Read (extract line range from single file)",
+    "Read (list directory contents in repository)",
+    "Search (find code symbol in whole repository)",
+    "Search (find format literal in single file)",
+    "Search (find format literal in whole repository)",
+    "Submit (apply patch to repository)"
+  ],
+  "out_categories": [
+    "DISCOVERY_SOURCE",
+    "EMPTY_SOURCE",
+    "ERROR_TEST",
+    "INFO_REPO",
+    "INFO_SOURCE",
+    "PROGRESS_PATCH",
+    "PROGRESS_SOURCE",
+    "PROGRESS_TEST",
+    "REPEATED_SOURCE"
+  ],
+  "traces": [
+    {
+      "0": [
+        "Search (find code symbol in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Search (find format literal in single file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (extract line range from single file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "4": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "5": [
+        "Read (extract line range from single file)",
+        "PROGRESS_SOURCE"
+      ],
+      "6": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Search (find format literal in single file)",
+        "EMPTY_SOURCE"
+      ],
+      "8": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "9": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Search (find format literal in single file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "4": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "2": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "3": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (extract line range from single file)",
+        "PROGRESS_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Read (extract line range from single file)",
+        "PROGRESS_SOURCE"
+      ],
+      "4": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "2": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "3": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "2": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "3": "success"
+    },
+    {
+      "0": [
+        "Search (find code symbol in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (extract line range from single file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "4": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "2": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "3": "success"
+    },
+    {
+      "0": [
+        "Submit (apply patch to repository)",
+        "ERROR_TEST"
+      ],
+      "1": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Read (list directory contents in repository)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Read (extract line range from single file)",
+        "REPEATED_SOURCE"
+      ],
+      "4": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Read (extract line range from single file)",
+        "REPEATED_SOURCE"
+      ],
+      "7": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "8": [
+        "Read (extract line range from single file)",
+        "PROGRESS_SOURCE"
+      ],
+      "9": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "10": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "2": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "3": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "2": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "3": "success"
+    },
+    {
+      "0": [
+        "Search (find code symbol in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find format literal in single file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "4": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find code symbol in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Read (extract line range from single file)",
+        "REPEATED_SOURCE"
+      ],
+      "4": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "6": [
+        "Read (extract line range from single file)",
+        "PROGRESS_SOURCE"
+      ],
+      "7": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "Search (find format literal in single file)",
+        "PROGRESS_SOURCE"
+      ],
+      "9": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "10": [
+        "Search (find format literal in whole repository)",
+        "EMPTY_SOURCE"
+      ],
+      "11": [
+        "Search (find format literal in single file)",
+        "PROGRESS_SOURCE"
+      ],
+      "12": [
+        "Read (extract line range from single file)",
+        "EMPTY_SOURCE"
+      ],
+      "13": [
+        "Search (find format literal in whole repository)",
+        "PROGRESS_SOURCE"
+      ],
+      "14": [
+        "Search (find format literal in whole repository)",
+        "EMPTY_SOURCE"
+      ],
+      "15": [
+        "Search (find format literal in whole repository)",
+        "EMPTY_SOURCE"
+      ],
+      "16": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "17": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find format literal in single file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Search (find format literal in single file)",
+        "EMPTY_SOURCE"
+      ],
+      "4": [
+        "Search (find format literal in single file)",
+        "PROGRESS_SOURCE"
+      ],
+      "5": [
+        "Search (find format literal in single file)",
+        "REPEATED_SOURCE"
+      ],
+      "6": [
+        "Search (find format literal in single file)",
+        "REPEATED_SOURCE"
+      ],
+      "7": [
+        "Search (find format literal in single file)",
+        "PROGRESS_SOURCE"
+      ],
+      "8": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "9": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Search (find format literal in single file)",
+        "EMPTY_SOURCE"
+      ],
+      "4": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "5": [
+        "Search (find format literal in single file)",
+        "REPEATED_SOURCE"
+      ],
+      "6": [
+        "Search (find format literal in single file)",
+        "REPEATED_SOURCE"
+      ],
+      "7": [
+        "Search (find format literal in single file)",
+        "REPEATED_SOURCE"
+      ],
+      "8": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "9": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "10": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find format literal in single file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Search (find format literal in single file)",
+        "EMPTY_SOURCE"
+      ],
+      "4": [
+        "Search (find format literal in single file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_PATCH"
+      ],
+      "6": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "2": [
+        "Search (find format literal in whole repository)",
+        "EMPTY_SOURCE"
+      ],
+      "3": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in single file)",
+        "EMPTY_SOURCE"
+      ],
+      "1": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "4": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find code symbol in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "4": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "INFO_SOURCE"
+      ],
+      "1": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "EMPTY_SOURCE"
+      ],
+      "3": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find code symbol in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (extract line range from single file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Submit (apply patch to repository)",
+        "ERROR_TEST"
+      ],
+      "4": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "5": [
+        "Submit (apply patch to repository)",
+        "ERROR_TEST"
+      ],
+      "6": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "8": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "9": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find code symbol in whole repository)",
+        "INFO_SOURCE"
+      ],
+      "1": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "INFO_SOURCE"
+      ],
+      "1": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Read (extract line range from single file)",
+        "PROGRESS_SOURCE"
+      ],
+      "4": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "EMPTY_SOURCE"
+      ],
+      "1": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "ERROR_TEST"
+      ],
+      "1": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (extract line range from single file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Search (find format literal in single file)",
+        "PROGRESS_SOURCE"
+      ],
+      "4": [
+        "Search (find format literal in whole repository)",
+        "EMPTY_SOURCE"
+      ],
+      "5": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "6": "success"
+    },
+    {
+      "0": [
+        "Search (find code symbol in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find format literal in whole repository)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Search (find format literal in single file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "6": [
+        "Read (extract line range from single file)",
+        "PROGRESS_SOURCE"
+      ],
+      "7": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "8": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "2": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "3": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find format literal in single file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Read (extract line range from single file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "4": [
+        "Read (extract line range from single file)",
+        "PROGRESS_SOURCE"
+      ],
+      "5": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "6": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "7": [
+        "Read (extract line range from single file)",
+        "PROGRESS_SOURCE"
+      ],
+      "8": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "9": "success"
+    },
+    {
+      "0": [
+        "Search (find format literal in whole repository)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Apply (replace string in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "2": [
+        "Submit (apply patch to repository)",
+        "PROGRESS_TEST"
+      ],
+      "3": "success"
+    }
+  ],
+  "run_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40
+  ],
+  "source": {
+    "db": "job_logs/django__django-11049.sqlite3",
+    "tag": "vm_11_iter_0"
+  }
+}

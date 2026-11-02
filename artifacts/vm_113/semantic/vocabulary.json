@@ -1,0 +1,46 @@
+{
+  "exec_actions": [
+    "Modify (insert lines into source file)",
+    "Modify (replace line range in source file)",
+    "Modify (restore source file in repository)",
+    "Modify (run script in repository)",
+    "Read (inspect directory contents in repository)",
+    "Read (inspect filtered portion of test file)",
+    "Read (inspect initial portion of source file)",
+    "Read (inspect method implementation in source file)",
+    "Read (inspect specified line range in source file)",
+    "Read (inspect specified line range in test file)",
+    "Read (read entire test file in repository)",
+    "Run (execute isolated test script)",
+    "Run (execute test suite in repository)",
+    "Search (locate class definition in source file)",
+    "Search (locate configuration files in repository)",
+    "Search (locate executable script in repository)",
+    "Search (locate source file in repository)",
+    "Search (locate test file in repository)",
+    "Search (locate usage references in source file)"
+  ],
+  "submit_actions": [
+    "Edit (insert conditional check in source file)",
+    "Submit (apply patch to repository)"
+  ],
+  "outputs": [
+    "DISCOVERY_REPO",
+    "DISCOVERY_SOURCE",
+    "DISCOVERY_TEST",
+    "EMPTY_NONE",
+    "EMPTY_SOURCE",
+    "EMPTY_TEST",
+    "ERROR_NONE",
+    "ERROR_SOURCE",
+    "ERROR_TEST",
+    "INFO_NONE",
+    "INFO_REPO",
+    "INFO_SOURCE",
+    "INFO_TEST",
+    "PROGRESS_PATCH",
+    "PROGRESS_TEST",
+    "REPEATED_SOURCE",
+    "REPEATED_TEST"
+  ]
+}

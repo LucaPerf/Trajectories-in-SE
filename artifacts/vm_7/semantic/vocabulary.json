@@ -1,0 +1,38 @@
+{
+  "exec_actions": [
+    "Edit (replace string pattern in source file)",
+    "Execute (run shell command in repository)",
+    "Read (view class definition lines in file)",
+    "Read (view directory contents in directory)",
+    "Read (view line range in file)",
+    "Read (view single file in directory)",
+    "Search (list Python files in repository)",
+    "Search (locate class definitions across repository)",
+    "Search (locate class definitions in source file)",
+    "Search (locate file by pattern in repository)",
+    "Search (locate string pattern in source file)",
+    "Test (run test suite with command)"
+  ],
+  "submit_actions": [
+    "Modify (apply patch to source code)",
+    "Submit (submit patch for verification)"
+  ],
+  "outputs": [
+    "DISCOVERY_REPO",
+    "DISCOVERY_SOURCE",
+    "DISCOVERY_TEST",
+    "EMPTY_SOURCE",
+    "EMPTY_TEST",
+    "ERROR_NONE",
+    "ERROR_SOURCE",
+    "ERROR_TEST",
+    "INFO_NONE",
+    "INFO_REPO",
+    "INFO_SOURCE",
+    "INFO_TEST",
+    "PROGRESS_PATCH",
+    "PROGRESS_SOURCE",
+    "PROGRESS_TEST",
+    "REPEATED_SOURCE"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "exec_actions": [
+    "Modify (apply text replacement in single file)",
+    "Read (extract line range from single file)",
+    "Read (list directory contents in repository)",
+    "Search (find code symbol in whole repository)",
+    "Search (find format literal in single file)",
+    "Search (find format literal in whole repository)"
+  ],
+  "submit_actions": [
+    "Apply (replace string in file)",
+    "Submit (apply patch to repository)"
+  ],
+  "outputs": [
+    "DISCOVERY_SOURCE",
+    "EMPTY_SOURCE",
+    "ERROR_TEST",
+    "INFO_REPO",
+    "INFO_SOURCE",
+    "PROGRESS_PATCH",
+    "PROGRESS_SOURCE",
+    "PROGRESS_TEST",
+    "REPEATED_SOURCE"
+  ]
+}

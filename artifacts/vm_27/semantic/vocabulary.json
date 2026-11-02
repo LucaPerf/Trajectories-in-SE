@@ -1,0 +1,35 @@
+{
+  "exec_actions": [
+    "Execute (run script)",
+    "Execute (run verification script)",
+    "Inspect (list directory contents)",
+    "Modify (insert lines in entire file)",
+    "Modify (replace text in file)",
+    "Modify (rewrite entire file)",
+    "Read (line range)",
+    "Read (partial file content)",
+    "Read (whole file)",
+    "Search (class definition)",
+    "Search (find source file)",
+    "Search (keyword in source)",
+    "Search (method definition in source)",
+    "Search (test file references)"
+  ],
+  "submit_actions": [
+    "Edit (insert lines in source file)",
+    "Submit (submit patch for verification)"
+  ],
+  "outputs": [
+    "DISCOVERY_SOURCE",
+    "EMPTY_NONE",
+    "EMPTY_SOURCE",
+    "ERROR_NONE",
+    "ERROR_SOURCE",
+    "ERROR_TEST",
+    "INFO_REPO",
+    "INFO_SOURCE",
+    "PROGRESS_PATCH",
+    "PROGRESS_TEST",
+    "REPEATED_SOURCE"
+  ]
+}

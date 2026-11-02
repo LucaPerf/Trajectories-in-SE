@@ -1,0 +1,2655 @@
+{
+  "act_categories": [
+    "Edit (insert lines in source file)",
+    "Execute (run verification script)",
+    "Inspect (list directory contents)",
+    "Modify (replace text in file)",
+    "Modify (rewrite entire file)",
+    "Read (line range)",
+    "Read (partial file content)",
+    "Read (whole file)",
+    "Search (class definition)",
+    "Search (find source file)",
+    "Search (keyword in source)",
+    "Search (method definition in source)",
+    "Search (test file references)",
+    "Submit (submit patch for verification)"
+  ],
+  "out_categories": [
+    "DISCOVERY_SOURCE",
+    "EMPTY_NONE",
+    "EMPTY_SOURCE",
+    "ERROR_NONE",
+    "ERROR_SOURCE",
+    "ERROR_TEST",
+    "INFO_REPO",
+    "INFO_SOURCE",
+    "PROGRESS_PATCH",
+    "PROGRESS_TEST",
+    "REPEATED_SOURCE"
+  ],
+  "traces": [
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Read (whole file)",
+        "ERROR_SOURCE"
+      ],
+      "2": [
+        "Search (keyword in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Read (partial file content)",
+        "REPEATED_SOURCE"
+      ],
+      "5": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "6": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "7": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "8": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "9": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "10": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "11": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "12": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "13": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "14": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "15": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "16": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "17": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "18": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "19": [
+        "Edit (insert lines in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "20": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "21": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "22": [
+        "Read (line range)",
+        "REPEATED_SOURCE"
+      ],
+      "23": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "24": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "25": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "26": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "27": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "28": "success"
+    },
+    {
+      "0": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "1": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Search (test file references)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Search (keyword in source)",
+        "EMPTY_SOURCE"
+      ],
+      "4": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Search (method definition in source)",
+        "EMPTY_SOURCE"
+      ],
+      "8": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "9": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "10": "success"
+    },
+    {
+      "0": [
+        "Search (find source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Read (whole file)",
+        "ERROR_SOURCE"
+      ],
+      "2": [
+        "Search (find source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Submit (submit patch for verification)",
+        "ERROR_TEST"
+      ],
+      "6": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "7": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "9": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "11": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "12": [
+        "Read (partial file content)",
+        "INFO_SOURCE"
+      ],
+      "13": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "14": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "15": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "16": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "17": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "18": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "19": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "20": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "21": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "22": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "23": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "24": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (keyword in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Read (partial file content)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Search (keyword in source)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "7": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "9": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "10": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "11": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "12": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "13": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "14": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "15": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "16": [
+        "Search (test file references)",
+        "DISCOVERY_SOURCE"
+      ],
+      "17": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "18": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "19": [
+        "Read (whole file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "20": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "21": [
+        "Execute (run verification script)",
+        "ERROR_NONE"
+      ],
+      "22": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "23": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "24": [
+        "Search (keyword in source)",
+        "INFO_SOURCE"
+      ],
+      "25": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "26": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "27": [
+        "Read (partial file content)",
+        "REPEATED_SOURCE"
+      ],
+      "28": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "29": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "30": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "31": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "32": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "33": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "34": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "35": [
+        "Search (class definition)",
+        "REPEATED_SOURCE"
+      ],
+      "36": [
+        "Search (class definition)",
+        "REPEATED_SOURCE"
+      ],
+      "37": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "38": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "39": [
+        "Read (partial file content)",
+        "REPEATED_SOURCE"
+      ],
+      "40": "fail"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Read (partial file content)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Search (keyword in source)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "9": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "Search (keyword in source)",
+        "EMPTY_SOURCE"
+      ],
+      "11": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "12": [
+        "Search (class definition)",
+        "REPEATED_SOURCE"
+      ],
+      "13": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "14": [
+        "Search (method definition in source)",
+        "REPEATED_SOURCE"
+      ],
+      "15": [
+        "Search (test file references)",
+        "INFO_SOURCE"
+      ],
+      "16": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "17": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "18": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "19": [
+        "Read (line range)",
+        "REPEATED_SOURCE"
+      ],
+      "20": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "21": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "22": [
+        "Search (test file references)",
+        "EMPTY_SOURCE"
+      ],
+      "23": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "24": [
+        "Read (line range)",
+        "REPEATED_SOURCE"
+      ],
+      "25": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "26": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "27": [
+        "Read (line range)",
+        "REPEATED_SOURCE"
+      ],
+      "28": [
+        "Read (line range)",
+        "REPEATED_SOURCE"
+      ],
+      "29": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "30": [
+        "Read (line range)",
+        "REPEATED_SOURCE"
+      ],
+      "31": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "32": [
+        "Read (line range)",
+        "REPEATED_SOURCE"
+      ],
+      "33": [
+        "Execute (run verification script)",
+        "ERROR_SOURCE"
+      ],
+      "34": [
+        "Read (line range)",
+        "REPEATED_SOURCE"
+      ],
+      "35": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "36": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "37": [
+        "Read (line range)",
+        "REPEATED_SOURCE"
+      ],
+      "38": [
+        "Read (line range)",
+        "REPEATED_SOURCE"
+      ],
+      "39": [
+        "Execute (run verification script)",
+        "DISCOVERY_SOURCE"
+      ],
+      "40": "fail"
+    },
+    {
+      "0": [
+        "Search (keyword in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Submit (submit patch for verification)",
+        "ERROR_TEST"
+      ],
+      "6": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "7": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "8": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "9": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "10": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (whole file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "6": [
+        "Execute (run verification script)",
+        "PROGRESS_TEST"
+      ],
+      "7": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "8": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (find source file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Execute (run verification script)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "6": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "7": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "6": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Modify (replace text in file)",
+        "ERROR_SOURCE"
+      ],
+      "8": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "9": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "Execute (run verification script)",
+        "ERROR_SOURCE"
+      ],
+      "11": [
+        "Submit (submit patch for verification)",
+        "ERROR_TEST"
+      ],
+      "12": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "13": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "14": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "15": [
+        "Read (partial file content)",
+        "INFO_SOURCE"
+      ],
+      "16": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "17": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "18": [
+        "Execute (run verification script)",
+        "ERROR_SOURCE"
+      ],
+      "19": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "20": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "21": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "22": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "23": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "24": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "25": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "26": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "27": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "28": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "29": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "30": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "31": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "32": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "33": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "34": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "35": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "36": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "37": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "38": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "39": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "40": "fail"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (method definition in source)",
+        "EMPTY_SOURCE"
+      ],
+      "2": [
+        "Search (keyword in source)",
+        "EMPTY_SOURCE"
+      ],
+      "3": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "4": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Search (keyword in source)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Search (class definition)",
+        "EMPTY_SOURCE"
+      ],
+      "7": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "8": [
+        "Search (keyword in source)",
+        "EMPTY_SOURCE"
+      ],
+      "9": [
+        "Search (keyword in source)",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "Search (keyword in source)",
+        "INFO_SOURCE"
+      ],
+      "11": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "12": [
+        "Search (keyword in source)",
+        "INFO_SOURCE"
+      ],
+      "13": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "14": [
+        "Search (keyword in source)",
+        "INFO_SOURCE"
+      ],
+      "15": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "16": [
+        "Search (keyword in source)",
+        "INFO_SOURCE"
+      ],
+      "17": [
+        "Search (keyword in source)",
+        "EMPTY_SOURCE"
+      ],
+      "18": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "19": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "20": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "21": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "22": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "23": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "24": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "25": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "26": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "27": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "28": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "29": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "30": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "31": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "32": [
+        "Search (keyword in source)",
+        "EMPTY_SOURCE"
+      ],
+      "33": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "34": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "35": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "36": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "37": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "38": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "39": [
+        "Search (keyword in source)",
+        "INFO_SOURCE"
+      ],
+      "40": "fail"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Read (whole file)",
+        "ERROR_SOURCE"
+      ],
+      "2": [
+        "Search (keyword in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "6": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (keyword in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Read (whole file)",
+        "ERROR_SOURCE"
+      ],
+      "2": [
+        "Search (find source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Submit (submit patch for verification)",
+        "ERROR_TEST"
+      ],
+      "6": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "7": [
+        "Execute (run verification script)",
+        "PROGRESS_TEST"
+      ],
+      "8": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "9": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "10": "success"
+    },
+    {
+      "0": [
+        "Search (keyword in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_SOURCE"
+      ],
+      "3": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Read (whole file)",
+        "ERROR_SOURCE"
+      ],
+      "2": [
+        "Read (whole file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "4": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Read (whole file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Edit (insert lines in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Search (find source file)",
+        "EMPTY_NONE"
+      ],
+      "1": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Modify (rewrite entire file)",
+        "EMPTY_NONE"
+      ],
+      "3": [
+        "Modify (rewrite entire file)",
+        "EMPTY_NONE"
+      ],
+      "4": [
+        "Modify (rewrite entire file)",
+        "EMPTY_NONE"
+      ],
+      "5": [
+        "Submit (submit patch for verification)",
+        "ERROR_TEST"
+      ],
+      "6": [
+        "Modify (rewrite entire file)",
+        "EMPTY_NONE"
+      ],
+      "7": [
+        "Modify (rewrite entire file)",
+        "EMPTY_NONE"
+      ],
+      "8": [
+        "Execute",
+        "ERROR_NONE"
+      ],
+      "9": [
+        "Modify (rewrite entire file)",
+        "EMPTY_NONE"
+      ],
+      "10": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "11": [
+        "Read (partial file content)",
+        "INFO_SOURCE"
+      ],
+      "12": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "13": [
+        "Modify (rewrite entire file)",
+        "EMPTY_NONE"
+      ],
+      "14": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "15": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "16": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "17": [
+        "Modify (rewrite entire file)",
+        "EMPTY_NONE"
+      ],
+      "18": [
+        "Read (partial file content)",
+        "INFO_SOURCE"
+      ],
+      "19": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "20": [
+        "Read (partial file content)",
+        "INFO_SOURCE"
+      ],
+      "21": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "22": [
+        "Modify (rewrite entire file)",
+        "EMPTY_NONE"
+      ],
+      "23": [
+        "Read (partial file content)",
+        "INFO_SOURCE"
+      ],
+      "24": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "25": [
+        "Execute",
+        "INFO_SOURCE"
+      ],
+      "26": [
+        "Read (partial file content)",
+        "INFO_SOURCE"
+      ],
+      "27": [
+        "Execute",
+        "INFO_SOURCE"
+      ],
+      "28": [
+        "Execute",
+        "INFO_SOURCE"
+      ],
+      "29": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "30": [
+        "Execute",
+        "ERROR_NONE"
+      ],
+      "31": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "32": [
+        "Read (partial file content)",
+        "INFO_SOURCE"
+      ],
+      "33": [
+        "Search (test file references)",
+        "INFO_SOURCE"
+      ],
+      "34": [
+        "Execute",
+        "INFO_SOURCE"
+      ],
+      "35": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "36": [
+        "Read (partial file content)",
+        "INFO_SOURCE"
+      ],
+      "37": [
+        "Execute",
+        "INFO_SOURCE"
+      ],
+      "38": [
+        "Search (method definition in source)",
+        "EMPTY_NONE"
+      ],
+      "39": [
+        "Execute",
+        "ERROR_NONE"
+      ],
+      "40": "fail"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (whole file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "5": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "6": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "7": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "8": "success"
+    },
+    {
+      "0": [
+        "Read (whole file)",
+        "ERROR_SOURCE"
+      ],
+      "1": [
+        "Search (find source file)",
+        "EMPTY_SOURCE"
+      ],
+      "2": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "6": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Read (whole file)",
+        "ERROR_SOURCE"
+      ],
+      "2": [
+        "Search (find source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (whole file)",
+        "ERROR_SOURCE"
+      ],
+      "4": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "6": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Submit (submit patch for verification)",
+        "ERROR_TEST"
+      ],
+      "8": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "9": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "11": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "4": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "ERROR_NONE"
+      ],
+      "1": [
+        "Search (keyword in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Edit (insert lines in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "6": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "7": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "4": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "6": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Search (keyword in source)",
+        "EMPTY_SOURCE"
+      ],
+      "3": [
+        "Read (whole file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "4": [
+        "Search (test file references)",
+        "INFO_REPO"
+      ],
+      "5": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "8": [
+        "Search (method definition in source)",
+        "EMPTY_SOURCE"
+      ],
+      "9": [
+        "Search (keyword in source)",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "11": [
+        "Search (method definition in source)",
+        "EMPTY_SOURCE"
+      ],
+      "12": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "13": [
+        "Execute (run verification script)",
+        "ERROR_NONE"
+      ],
+      "14": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "15": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "16": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "17": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "18": [
+        "Search (class definition)",
+        "ERROR_SOURCE"
+      ],
+      "19": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "20": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "21": [
+        "Search (method definition in source)",
+        "EMPTY_SOURCE"
+      ],
+      "22": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "23": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "24": [
+        "Read (line range)",
+        "DISCOVERY_SOURCE"
+      ],
+      "25": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "26": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "27": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "28": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "29": [
+        "Search (method definition in source)",
+        "EMPTY_SOURCE"
+      ],
+      "30": [
+        "Read (line range)",
+        "DISCOVERY_SOURCE"
+      ],
+      "31": [
+        "Read (line range)",
+        "INFO_SOURCE"
+      ],
+      "32": [
+        "Execute (run verification script)",
+        "DISCOVERY_SOURCE"
+      ],
+      "33": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "34": [
+        "Read (line range)",
+        "PROGRESS_PATCH"
+      ],
+      "35": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "36": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "37": "success"
+    },
+    {
+      "0": [
+        "Search (find source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "2": [
+        "Search (keyword in source)",
+        "EMPTY_SOURCE"
+      ],
+      "3": [
+        "Search (keyword in source)",
+        "EMPTY_SOURCE"
+      ],
+      "4": [
+        "Read (whole file)",
+        "ERROR_SOURCE"
+      ],
+      "5": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "6": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "7": [
+        "Search (keyword in source)",
+        "ERROR_SOURCE"
+      ],
+      "8": [
+        "Search (keyword in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "9": [
+        "Search (method definition in source)",
+        "EMPTY_SOURCE"
+      ],
+      "10": [
+        "Search (keyword in source)",
+        "EMPTY_SOURCE"
+      ],
+      "11": [
+        "Search (keyword in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "12": [
+        "Search (keyword in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "13": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "14": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "15": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "16": [
+        "Execute (run verification script)",
+        "INFO_SOURCE"
+      ],
+      "17": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "18": [
+        "Modify (replace text in file)",
+        "INFO_SOURCE"
+      ],
+      "19": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "20": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "21": [
+        "Search (method definition in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "22": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "23": [
+        "Search (keyword in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "24": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "25": [
+        "Search (method definition in source)",
+        "EMPTY_SOURCE"
+      ],
+      "26": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "27": [
+        "Search (method definition in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "28": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "29": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "30": [
+        "Search (method definition in source)",
+        "EMPTY_SOURCE"
+      ],
+      "31": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "32": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "33": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "34": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "35": [
+        "Search (test file references)",
+        "DISCOVERY_SOURCE"
+      ],
+      "36": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "37": [
+        "Search (method definition in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "38": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "39": [
+        "Search (method definition in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "40": "fail"
+    },
+    {
+      "0": [
+        "Read (whole file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "2": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "3": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (keyword in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (whole file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (partial file content)",
+        "DISCOVERY_SOURCE"
+      ],
+      "4": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "5": [
+        "Read (partial file content)",
+        "DISCOVERY_SOURCE"
+      ],
+      "6": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "7": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "8": [
+        "Submit (submit patch for verification)",
+        "ERROR_TEST"
+      ],
+      "9": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "10": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "11": [
+        "Read (whole file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "12": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "13": "success"
+    },
+    {
+      "0": [
+        "Search (find source file)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (find source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (whole file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "4": [
+        "Search (keyword in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "5": [
+        "Search (method definition in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "6": [
+        "Search (method definition in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "7": [
+        "Search (method definition in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "8": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "9": [
+        "Search (method definition in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "10": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "11": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "12": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "13": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "14": "success"
+    },
+    {
+      "0": [
+        "Search (find source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "1": [
+        "Search (find source file)",
+        "EMPTY_NONE"
+      ],
+      "2": [
+        "Search (find source file)",
+        "EMPTY_NONE"
+      ],
+      "3": [
+        "Search (find source file)",
+        "EMPTY_NONE"
+      ],
+      "4": [
+        "Search (find source file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "5": [
+        "Read (whole file)",
+        "DISCOVERY_SOURCE"
+      ],
+      "6": [
+        "Search (keyword in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "7": [
+        "Modify (replace text in file)",
+        "PROGRESS_SOURCE"
+      ],
+      "8": [
+        "Read (whole file)",
+        "PROGRESS_SOURCE"
+      ],
+      "9": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_PATCH"
+      ],
+      "10": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (keyword in source)",
+        "EMPTY_SOURCE"
+      ],
+      "2": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Edit (insert lines in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "6": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "7": "success"
+    },
+    {
+      "0": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "1": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "2": [
+        "Edit (insert lines in source file)",
+        "PROGRESS_PATCH"
+      ],
+      "3": [
+        "Submit (submit patch for verification)",
+        "ERROR_TEST"
+      ],
+      "4": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "7": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "8": [
+        "Search (method definition in source)",
+        "EMPTY_SOURCE"
+      ],
+      "9": [
+        "Search (method definition in source)",
+        "EMPTY_SOURCE"
+      ],
+      "10": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "11": [
+        "Read (partial file content)",
+        "INFO_SOURCE"
+      ],
+      "12": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "13": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "14": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "15": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "16": [
+        "Search (keyword in source)",
+        "EMPTY_SOURCE"
+      ],
+      "17": [
+        "Search (method definition in source)",
+        "EMPTY_SOURCE"
+      ],
+      "18": [
+        "Search (keyword in source)",
+        "EMPTY_SOURCE"
+      ],
+      "19": [
+        "Search (keyword in source)",
+        "INFO_SOURCE"
+      ],
+      "20": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "21": [
+        "Execute (run verification script)",
+        "INFO_SOURCE"
+      ],
+      "22": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "23": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "24": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "25": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "26": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "27": [
+        "Search (keyword in source)",
+        "INFO_SOURCE"
+      ],
+      "28": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "29": [
+        "Read (partial file content)",
+        "INFO_SOURCE"
+      ],
+      "30": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "31": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "32": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_PATCH"
+      ],
+      "33": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "34": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "35": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "36": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "37": [
+        "Search (keyword in source)",
+        "INFO_SOURCE"
+      ],
+      "38": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "39": [
+        "Search (keyword in source)",
+        "INFO_SOURCE"
+      ],
+      "40": "fail"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (keyword in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (partial file content)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Modify (replace text in file)",
+        "ERROR_SOURCE"
+      ],
+      "4": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "5": [
+        "Search (keyword in source)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Read (partial file content)",
+        "REPEATED_SOURCE"
+      ],
+      "7": [
+        "Search (method definition in source)",
+        "EMPTY_SOURCE"
+      ],
+      "8": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "9": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "10": "success"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "3": [
+        "Modify (rewrite entire file)",
+        "PROGRESS_SOURCE"
+      ],
+      "4": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "5": "success"
+    },
+    {
+      "0": [
+        "Inspect",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (find source file)",
+        "EMPTY_SOURCE"
+      ],
+      "2": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "3": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Search (keyword in source)",
+        "DISCOVERY_SOURCE"
+      ],
+      "5": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "6": [
+        "Execute",
+        "ERROR_SOURCE"
+      ],
+      "7": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "8": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "9": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "10": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "11": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "12": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "13": [
+        "Search (class definition)",
+        "REPEATED_SOURCE"
+      ],
+      "14": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "15": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "16": [
+        "Search (method definition in source)",
+        "INFO_SOURCE"
+      ],
+      "17": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "18": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "19": [
+        "Search (method definition in source)",
+        "EMPTY_SOURCE"
+      ],
+      "20": [
+        "Search (class definition)",
+        "INFO_SOURCE"
+      ],
+      "21": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "22": [
+        "Search (class definition)",
+        "REPEATED_SOURCE"
+      ],
+      "23": [
+        "Execute",
+        "DISCOVERY_SOURCE"
+      ],
+      "24": [
+        "Execute",
+        "DISCOVERY_SOURCE"
+      ],
+      "25": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "26": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "27": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "28": [
+        "Execute",
+        "DISCOVERY_SOURCE"
+      ],
+      "29": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "30": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "31": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "32": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "33": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "34": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "35": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "36": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "37": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "38": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "39": [
+        "Read (whole file)",
+        "REPEATED_SOURCE"
+      ],
+      "40": "fail"
+    },
+    {
+      "0": [
+        "Inspect (list directory contents)",
+        "INFO_REPO"
+      ],
+      "1": [
+        "Search (class definition)",
+        "DISCOVERY_SOURCE"
+      ],
+      "2": [
+        "Read (whole file)",
+        "ERROR_SOURCE"
+      ],
+      "3": [
+        "Read (whole file)",
+        "INFO_SOURCE"
+      ],
+      "4": [
+        "Read (partial file content)",
+        "INFO_SOURCE"
+      ],
+      "5": [
+        "Search (class definition)",
+        "EMPTY_SOURCE"
+      ],
+      "6": [
+        "Modify (replace text in file)",
+        "PROGRESS_PATCH"
+      ],
+      "7": [
+        "Submit (submit patch for verification)",
+        "PROGRESS_TEST"
+      ],
+      "8": "success"
+    }
+  ],
+  "run_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40
+  ],
+  "source": {
+    "db": "job_logs/django__django-11964.sqlite3",
+    "tag": "vm_27_iter_0"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "exec_actions": [
+    "Edit (text replacement in source file)",
+    "Execute (empty command)",
+    "Execute (shell command execution)",
+    "Read (line range in source file)",
+    "Run (test suite execution)",
+    "Search (file pattern search in repository)",
+    "Search (identifier search in repository)",
+    "Search (pattern search in source code)"
+  ],
+  "submit_actions": [
+    "Edit (modify implementation in source file)",
+    "Submit (submit patch to repository)"
+  ],
+  "outputs": [
+    "DISCOVERY_SOURCE",
+    "EMPTY_NONE",
+    "EMPTY_SOURCE",
+    "ERROR_NONE",
+    "ERROR_SOURCE",
+    "ERROR_TEST",
+    "INFO_REPO",
+    "INFO_SOURCE",
+    "PROGRESS_PATCH",
+    "PROGRESS_TEST",
+    "REPEATED_SOURCE"
+  ]
+}
