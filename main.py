@@ -28,7 +28,7 @@ import re
 API_URL = "https://aqueduct.ai.datalab.tuwien.ac.at"  # the default path /v1/chat/completions is appended
 #MODEL = "deepseek-v4-vision-exp-284b"
 #MODEL = "glm-5.3-744b-experimental"
-MODEL = "qwen-3.6-35b"
+MODEL = "qwen-3.8-27b"
 API_KEY_ENV = "AQUEDUCT_API_KEY"  # name of the environment variable holding the key
 # ---------------------------------------------------------------------------
 
