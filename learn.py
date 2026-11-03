@@ -236,6 +236,7 @@ def main() -> None:
     abstract.add_argument("--min-run", type=int, default=0, help="ignore runs with an id below this (e.g. earlier runs with other settings)")
     abstract.add_argument("--out", required=True, help="output folder, e.g. artifacts\\vm_0")
     abstract.add_argument("--keep-empty", action="store_true", help="keep interactions where the model sent no command")
+    abstract.add_argument("--force", action="store_true", help="overwrite an existing abstractions.json in --out")
     abstract.set_defaults(func=cmd_abstract)
 
     learn = sub.add_parser("learn", help="step 3: learn the automaton with Alergia (offline)")
