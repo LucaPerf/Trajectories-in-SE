@@ -110,7 +110,10 @@ An action category is the executed shell command in which every parameter is rep
 - Use the same NAME and the same wording of the abstract value for the same kind of parameter every time.
 - Keep the tool and its flags as in the command, so that the pattern stays recognizable.
 - For a multi-line command or an inline script, keep only its overall shape, never its content.
-- NEVER write commas, braces, quotes, arrows (->) or nested parentheses inside a category.
+- Write the pattern WITHOUT quotes: a quoted value is replaced entirely by its placeholder.
+  A placeholder swallows everything inside it, including commas, so the pattern itself never contains a comma, a brace or an arrow (->).
+- Braces that belong to the command itself, for example the {{}} of find -exec, are replaced by a placeholder as well.
+- An action category is a command pattern, never a label of the form <VALUE>_<TARGET>. That form is only for output categories.
 
 Granularity:
 - Prefer reusing existing categories. Only introduce a new one if none fits semantically.
@@ -154,6 +157,7 @@ EMPTY is only for searches or reads that found nothing.
 Return EXACTLY (comma-separated lists in curly braces):
 {{action categories}}
 {{output categories}}
+The first set contains command patterns, the second set contains <VALUE>_<TARGET> categories.
 Do not include any additional text.
 
 Actions performed by the agent with results:

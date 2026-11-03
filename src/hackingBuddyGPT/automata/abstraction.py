@@ -138,23 +138,11 @@ def normalize_categories(
     Raises:
         ValueError: If the LLM output cannot be parsed.
     """
-    # If there are very many categories the prompt overflows context and the
-    # LLM returns empty.  Cap to a representative sample (the sorted order is
-    # stable, so repeated runs with the same categories get the same sample).
-    MAX_CATS_FOR_NORMALIZE = 40
+    # All categories are sent: the result replaces the whole set, so sampling
+    # only some of them (as done before) silently dropped the others.
     sorted_act = sorted(list(act_categories))
     sorted_out = sorted(list(out_categories))
-    total_cats = len(sorted_act) + len(sorted_out)
-    if total_cats > MAX_CATS_FOR_NORMALIZE:
-        # Sample evenly from both lists
-        max_each = MAX_CATS_FOR_NORMALIZE // 2
-        if len(sorted_act) > max_each:
-            step = len(sorted_act) / max_each
-            sorted_act = [sorted_act[int(i * step)] for i in range(max_each)]
-        if len(sorted_out) > max_each:
-            step = len(sorted_out) / max_each
-            sorted_out = [sorted_out[int(i * step)] for i in range(max_each)]
-        print(f"Normalize: capped {total_cats} categories to {len(sorted_act) + len(sorted_out)} for LLM call")
+    print(f"Normalize: sending {len(sorted_act)} action and {len(sorted_out)} output categories to the LLM")
 
     prompt = f"""Normalize the following categories by merging duplicates and semantically equivalent ones.
 The categories were produced independently on different runs of the same kind of agent,
