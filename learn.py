@@ -211,6 +211,31 @@ def describe_dot(dot_path: Path) -> str:
     return "\n".join(lines)
 
 
+def pair_frequencies(abstractions: dict) -> str:
+    """Count how often every (action, output) pair occurs in the traces, and in how many runs."""
+    from collections import Counter
+
+    occurrences, runs = Counter(), Counter()
+    for trace in abstractions["traces"]:
+        pairs = [tuple(value) for value in trace.values() if isinstance(value, list)]
+        occurrences.update(pairs)
+        runs.update(set(pairs))
+
+    distinct = max(len(occurrences), 1)
+    lines = [
+        f"{sum(occurrences.values())} interactions in {len(abstractions['traces'])} runs, "
+        f"{len({action for action, _ in occurrences})} distinct actions, "
+        f"{len(occurrences)} distinct (action, output) pairs"
+    ]
+    for limit in (1, 2, 5):
+        n = sum(1 for count in occurrences.values() if count <= limit)
+        lines.append(f"pairs seen at most {limit} time(s): {n} ({100 * n / distinct:.0f}%)")
+    lines += ["", f"{'count':>5} {'runs':>4}  action -> output"]
+    for (action, output), count in occurrences.most_common():
+        lines.append(f"{count:>5} {runs[(action, output)]:>4}  {action} -> {output}")
+    return "\n".join(lines)
+
+
 def cmd_learn(args) -> None:
     from hackingBuddyGPT.automata.automaton_learning import learn_and_save
 
@@ -224,6 +249,10 @@ def cmd_learn(args) -> None:
     summary = describe_dot(dot_path)
     (out_dir / "model_summary.txt").write_text(summary, encoding="utf-8")
     print(f"\n{summary}\n\nWrote {dot_path} and {out_dir / 'model_summary.txt'}")
+
+    frequencies = pair_frequencies(json.loads(abstractions_path.read_text(encoding="utf-8")))
+    (out_dir / "pair_frequencies.txt").write_text(frequencies, encoding="utf-8")
+    print("\n" + "\n".join(frequencies.splitlines()[:4]) + f"\n\nWrote {out_dir / 'pair_frequencies.txt'}")
 
 
 def main() -> None:

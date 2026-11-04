@@ -240,6 +240,11 @@ def _parse_assignments(text: str) -> dict[int, tuple[str, str]]:
     result: dict[int, tuple[str, str]] = {}
     for line in block.splitlines():
         line = line.strip()
+        # the model sometimes copies the (...)* of the syntax in the prompt and wraps each line in parentheses
+        if line.startswith("("):
+            line = line[1:].strip()
+            if line.endswith(")"):
+                line = line[:-1].strip()
         if not line or ":" not in line:
             continue
         id_str, category = line.split(":", 1)

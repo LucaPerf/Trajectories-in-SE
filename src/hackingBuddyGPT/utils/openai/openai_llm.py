@@ -127,6 +127,11 @@ class OpenAIConnection(LLM):
         tok_res = usage.get("completion_tokens", 0)
         duration = datetime.datetime.now() - tic
 
+        if not result.strip():
+            # finish_reason "length" means the token budget ran out (e.g. spent on reasoning) before any answer
+            print(f"[RestAPI-Connector] empty response: finish_reason={response['choices'][0].get('finish_reason')}, "
+                  f"completion_tokens={tok_res}, max_tokens={self.max_tokens}, reasoning_chars={len(reasoning)}")
+
         return LLMResult(result, prompt, result, duration, tok_query, tok_res, reasoning_content=reasoning)
 
     def encode(self, query) -> list[int]:
