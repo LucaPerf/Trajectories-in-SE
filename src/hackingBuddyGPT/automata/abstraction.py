@@ -134,9 +134,7 @@ def normalize_categories(
 
     Returns:
         Tuple of (normalized act_categories, normalized out_categories).
-
-    Raises:
-        ValueError: If the LLM output cannot be parsed.
+        If no valid answer is obtained after all retries, the input categories are returned unchanged.
     """
     # All categories are sent: the result replaces the whole set, so sampling
     # only some of them (as done before) silently dropped the others.
@@ -144,7 +142,11 @@ def normalize_categories(
     sorted_out = sorted(list(out_categories))
     print(f"Normalize: sending {len(sorted_act)} action and {len(sorted_out)} output categories to the LLM")
 
-    prompt = f"""Normalize the following categories by merging duplicates and semantically equivalent ones.
+    def _listing(categories: list[str]) -> str:
+        # one per line, without the quotes and escaping of a Python list
+        return "\n".join(f"- {c}" for c in categories)
+
+    base_prompt = f"""Normalize the following categories by merging duplicates and semantically equivalent ones.
 The categories were produced independently on different runs of the same kind of agent,
 so many of them describe the same step in different words.
 Do NOT over-merge. The categories are used to abstractly reason about the strategy of a software-engineering
@@ -171,62 +173,50 @@ $START$
 $END$
 
 Action categories:
-{sorted_act}
+{_listing(sorted_act)}
 
 Output categories:
-{sorted_out}
+{_listing(sorted_out)}
 """
 
+    def _clean(item: str) -> str:
+        return item.strip().strip("'\"")
+
+    prompt = base_prompt
     for attempt in range(MAX_ABSTRACTION_RETRIES + 1):
-        response = llm.get_response(prompt).result
+        response = llm.get_response(prompt).result or ""
 
         print(f"Normalization response (attempt {attempt + 1}): {response}")
 
-        # Extract the $START$...$END$ block
+        problem = None
         match = re.search(r"\$START\$(.*?)\$END\$", response, re.DOTALL)
         if not match:
-            if attempt < MAX_ABSTRACTION_RETRIES:
-                prompt = (
-                    f"Your last response was malformed — it did not contain the required "
-                    f"$START$ and $END$ delimiters.  You MUST return EXACTLY:\n"
-                    f"$START$\n"
-                    f"{{action1, action2, ...}}\n"
-                    f"{{output1, output2, ...}}\n"
-                    f"$END$\n\n"
-                    f"Now re-examine and normalize these categories:\n"
-                    f"Action categories:\n{sorted(list(act_categories))}\n\n"
-                    f"Output categories:\n{sorted(list(out_categories))}"
-                )
-                continue
-            raise ValueError("Invalid LLM output format: missing $START$...$END$ delimiters")
+            problem = "it was empty or did not contain the required $START$ and $END$ delimiters"
+        else:
+            sets = re.findall(r"\{([^}]*)\}", match.group(1))
+            if len(sets) < 2:
+                problem = "it did not contain both category sets"
+            else:
+                new_act_categories = {c for c in map(_clean, sets[0].split(",")) if c}
+                new_out_categories = {c for c in map(_clean, sets[1].split(",")) if c}
+                # the prompt asks to choose among the input categories: anything else was invented
+                invented = (new_act_categories - act_categories) | (new_out_categories - out_categories)
+                if invented:
+                    problem = f"it contained categories that are not among the given ones: {sorted(invented)}"
+                elif (act_categories and not new_act_categories) or (out_categories and not new_out_categories):
+                    problem = "one of the two sets was empty"
+                else:
+                    return new_act_categories, new_out_categories
 
-        block = match.group(1)
-        sets = re.findall(r"\{([^}]*)\}", block)
+        print(f"Normalization response rejected (attempt {attempt + 1}): {problem}")
+        # the retry repeats the full prompt, so it is never less strict than the first attempt
+        prompt = (
+            f"Your previous answer was rejected because {problem}.\n"
+            f"Answer again, following all the instructions below.\n\n{base_prompt}"
+        )
 
-        if len(sets) < 2:
-            if attempt < MAX_ABSTRACTION_RETRIES:
-                prompt = (
-                    f"Your last response was malformed — could not find both category sets. "
-                    f"You MUST return EXACTLY two curly-brace sets after $START$:\n"
-                    f"$START$\n"
-                    f"{{action1, action2, ...}}\n"
-                    f"{{output1, output2, ...}}\n"
-                    f"$END$\n\n"
-                    f"Now re-examine these categories:\n"
-                    f"Action categories:\n{sorted(list(act_categories))}\n\n"
-                    f"Output categories:\n{sorted(list(out_categories))}"
-                )
-                continue
-            raise ValueError("Could not extract both category sets from LLM output")
-
-        def _clean(item: str) -> str:
-            return item.strip().strip("'\"")
-
-        new_act_categories = {c for c in map(_clean, sets[0].split(",")) if c}
-        new_out_categories = {c for c in map(_clean, sets[1].split(",")) if c}
-        return new_act_categories, new_out_categories
-
-    raise ValueError("All normalization retries exhausted")
+    print("WARNING: normalization failed after all retries, keeping the categories unchanged")
+    return set(act_categories), set(out_categories)
 
 
 def _clean_cat(s: str) -> str:
