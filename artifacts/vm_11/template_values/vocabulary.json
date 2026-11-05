@@ -1,0 +1,53 @@
+{
+  "exec_actions": [
+    "cat [PATH: target source file] | grep -n -A [COUNT: context lines] -B [COUNT: context lines] [TERM: target format string]",
+    "cat [PATH: target source file] | head -n [COUNT: line limit] | tail -n [COUNT: small limit]",
+    "cat [PATH: target source file] | sed -n [RANGE: surrounding lines]",
+    "find [PATH: repository root] -type f -name [PATTERN: Python source files] | xargs grep -l [TERM: target class name] | head [COUNT: small limit]",
+    "find [PATH: repository root] -type f -name [PATTERN: Python source files] | xargs grep -l [TERM: target format string] | head [COUNT: small limit]",
+    "git checkout -- [PATH: target source file] && python3 -c [SCRIPT: fix format string]",
+    "git checkout -- [PATH: target source file] && sed -i [SCRIPT: fix format string] [PATH: target source file] && grep -n [TERM: target format string] [PATH: target source file]",
+    "grep -A [COUNT: context lines] [TERM: target class name] [PATH: target source file]",
+    "grep -n -B [COUNT: context lines] -A [COUNT: context lines] [TERM: target format string] [PATH: target source file]",
+    "grep -n [TERM: target format string] [PATH: target source file]",
+    "grep -n [TERM: target format string] [PATH: target source file] | grep -i [TERM: issue keyword]",
+    "grep -n [TERM: target format string] [PATH: target source file] | grep -i [TERM: issue keyword] -A [COUNT: context lines] -B [COUNT: context lines]",
+    "grep -nF [TERM: target format string] [PATH: target source file]",
+    "grep -r [TERM: target format string] [PATH: repository root]",
+    "grep -r [TERM: target format string] [PATH: repository root] --include=[PATTERN: Python source files]",
+    "grep -r [TERM: target format string] [PATH: top-level package]",
+    "grep -r [TERM: target format string] [PATH: top-level package] --include=[PATTERN: Python source files]",
+    "grep -r [TERM: target format string] [PATH: top-level package] --include=[PATTERN: Python source files] | head [COUNT: small limit]",
+    "grep -rn [TERM: target format string] [PATH: repository root]",
+    "grep -rn [TERM: target format string] [PATH: repository root] --include=[PATTERN: Python source files]",
+    "grep -rn [TERM: target format string] [PATH: repository root] | grep -i [TERM: issue keyword]",
+    "grep -rn [TERM: target format string] [PATH: repository root] | head [COUNT: small limit]",
+    "grep -rn [TERM: target format string] [PATH: top-level package]",
+    "grep -rn [TERM: target format string] [PATH: top-level package] --include=[PATTERN: Python source files]",
+    "grep -rn [TERM: target format string] [PATH: top-level package] | grep -v [PATTERN: Python cache files]",
+    "grep -rnF [TERM: target format string] [PATH: repository root]",
+    "head -n [COUNT: found line] [PATH: target source file] | tail -n [COUNT: small limit]",
+    "head -n [COUNT: line limit] [PATH: target source file] | grep -A [COUNT: context lines] [TERM: target class name]",
+    "head -n [COUNT: line limit] [PATH: target source file] | tail -n [COUNT: small limit]",
+    "ls -la [PATH: repository root]",
+    "python -c [SCRIPT: fix format string]",
+    "python3 -c [SCRIPT: fix format string]",
+    "python3 << [SCRIPT: fix format string]",
+    "sed -i [SCRIPT: fix format string] [PATH: target source file]",
+    "sed -i [SCRIPT: fix format string] [PATH: target source file]; find [PATH: repository root] -type f -name [PATTERN: locale files] -exec sed -i [SCRIPT: fix format string] [EXEC: find exec placeholder] +",
+    "sed -n [RANGE: surrounding lines] [PATH: target source file]"
+  ],
+  "submit_actions": [
+    "submit_patch [SUMMARY: error message format fix]"
+  ],
+  "outputs": [
+    "DISCOVERY_REPO",
+    "DISCOVERY_SOURCE",
+    "EMPTY_NONE",
+    "ERROR_NONE",
+    "ERROR_TEST",
+    "PROGRESS_PATCH",
+    "PROGRESS_TEST",
+    "REPEATED_SOURCE"
+  ]
+}
