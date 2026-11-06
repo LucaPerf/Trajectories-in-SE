@@ -1,0 +1,81 @@
+310 interactions in 40 runs, 43 distinct actions, 75 distinct (action, output) pairs
+pairs seen at most 1 time(s): 40 (53%)
+pairs seen at most 2 time(s): 52 (69%)
+pairs seen at most 5 time(s): 62 (83%)
+
+count runs  action -> output
+   52   36  sed -i [EXPR: substitution expression] [PATH: source file] -> PROGRESS_PATCH
+   38   38  submit_patch [PATCH: fix subclass check] -> PROGRESS_TEST
+   20   17  grep -n [TERM: code search term] [PATH: source file] -> DISCOVERY_SOURCE
+   20   15  sed -n [RANGE: line range] [PATH: source file] -> DISCOVERY_SOURCE
+   17   13  grep -n -A [COUNT: context lines] [TERM: code search term] [PATH: source file] -> DISCOVERY_SOURCE
+   10    8  sed -n [RANGE: line range] [PATH: source file] -> REPEATED_SOURCE
+   10    7  grep -A [COUNT: context lines] [TERM: code search term] [PATH: source file] -> DISCOVERY_SOURCE
+    9    8  grep -n [TERM: code search term] [PATH: source file] | head [COUNT: line limit] -> DISCOVERY_SOURCE
+    8    5  cat -n [PATH: source file] | sed -n [RANGE: line range] -> DISCOVERY_SOURCE
+    8    6  python3 << [SCRIPT: edit source file] -> PROGRESS_PATCH
+    6    6  grep -n -A [COUNT: context lines] [TERM: code search term] [PATH: source file] -> PROGRESS_PATCH
+    6    6  grep -rn [TERM: code search term] [PATH: repository directory] -> DISCOVERY_SOURCE
+    6    6  find [PATH: repository root] -type f -name [GLOB: python source files] | xargs grep -l [TERM: code search term] | head [COUNT: line limit] -> DISCOVERY_SOURCE
+    4    4  python3 -c [SCRIPT: edit source file] -> PROGRESS_PATCH
+    4    3  cat -n [PATH: source file] | sed -n [RANGE: line range] -> PROGRESS_PATCH
+    4    4  grep -r [TERM: code search term] [PATH: repository directory] -> DISCOVERY_SOURCE
+    4    1  grep -B [COUNT: context lines] -A [COUNT: context lines] [TERM: code search term] [PATH: source file] -> REPEATED_SOURCE
+    4    3  grep -A [COUNT: context lines] [TERM: code search term] [PATH: source file] -> PROGRESS_PATCH
+    4    1  grep -B [COUNT: context lines] -A [COUNT: context lines] [TERM: code search term] [PATH: source file] -> PROGRESS_PATCH
+    3    3  grep -n [TERM: code search term] [PATH: source file] -> EMPTY_SOURCE
+    3    3  grep -r [TERM: code search term] [PATH: repository directory] --include=[GLOB: python source files] | head [COUNT: line limit] -> DISCOVERY_SOURCE
+    3    2  sed -n [RANGE: line range] [PATH: source file] -> PROGRESS_PATCH
+    3    3  find [PATH: repository root] -type f -name [GLOB: python source files] -exec grep -l [TERM: code search term] [ARG: find placeholder] \; -> DISCOVERY_SOURCE
+    2    2  sed -n [RANGE: line range] [PATH: source file] -> INFO_SOURCE
+    2    2  cat -n [PATH: source file] | sed -n [RANGE: line range] -> REPEATED_SOURCE
+    2    2  cat [PATH: source file] | head [COUNT: line limit] | tail [COUNT: line limit] -> DISCOVERY_SOURCE
+    2    2  sed -n [RANGE: line range] [PATH: source file] -> ERROR_SOURCE
+    2    2  cd [PATH: repository root] && python -m pytest [PATH: issue test file] -v 2>&1 | head [COUNT: line limit] -> ERROR_TEST
+    2    2  python3 << [SCRIPT: inspect source file] -> REPEATED_SOURCE
+    2    2  find [PATH: repository root] -type f -name [GLOB: python source files] | head [COUNT: line limit] -> DISCOVERY_REPO
+    2    2  grep -r [TERM: code search term] [PATH: repository directory] --include=[GLOB: python source files] -> DISCOVERY_SOURCE
+    2    2  grep -B [COUNT: context lines] -A [COUNT: context lines] [TERM: code search term] [PATH: source file] -> DISCOVERY_SOURCE
+    2    2  grep -rn [TERM: code search term] [PATH: repository directory] --include=[GLOB: python source files] -> DISCOVERY_SOURCE
+    2    2  find [PATH: repository root] -type f -name [GLOB: python source files] | xargs grep -l [TERM: code search term] | head [COUNT: line limit] -> DISCOVERY_REPO
+    2    2  grep -r [TERM: code search term] [PATH: repository directory] -> DISCOVERY_REPO
+    1    1  find [PATH: repository root] -type f -name [GLOB: python source files] -exec grep -l [TERM: code search term] [ARG: find placeholder] \; -> DISCOVERY_REPO
+    1    1  grep -n [TERM: code search term] [PATH: source file] -> REPEATED_SOURCE
+    1    1  grep -n [TERM: code search term] [PATH: source file] 2>&1; echo [STRING: exit status] -> REPEATED_SOURCE
+    1    1  grep -n -B [COUNT: context lines] -A [COUNT: context lines] [TERM: code search term] [PATH: source file] 2>&1; echo [STRING: exit status] -> REPEATED_SOURCE
+    1    1  grep -rn [TERM: code search term] [PATH: repository directory] -> REPEATED_SOURCE
+    1    1  grep -rn [TERM: code search term] [PATH: repository directory] -> ERROR_SOURCE
+    1    1  head -n [COUNT: line limit] [PATH: source file] | grep -n [TERM: code search term] -> EMPTY_SOURCE
+    1    1  cat [PATH: source file] | head [COUNT: line limit] -> INFO_SOURCE
+    1    1  grep -r [TERM: code search term] [PATH: repository directory] --include=[GLOB: python source files] -> ERROR_NONE
+    1    1  cat [PATH: source file] | grep -n -A [COUNT: context lines] -B [COUNT: context lines] [TERM: code search term] -> DISCOVERY_SOURCE
+    1    1  grep -r [TERM: code search term] [PATH: repository directory] -> DISCOVERY_TEST
+    1    1  python3 -c [SCRIPT: inspect source file] -> EMPTY_SOURCE
+    1    1  cd [PATH: repository root] && cat [PATH: source file] | sed -n [RANGE: line range] -> REPEATED_SOURCE
+    1    1  grep -rn [TERM: code search term] [PATH: repository directory] -> EMPTY_SOURCE
+    1    1  grep -r [TERM: code search term] [PATH: repository directory] --include=[GLOB: python source files] -l -> DISCOVERY_REPO
+    1    1  sed -n [RANGE: line range] [PATH: source file] | grep -A [COUNT: context lines] [TERM: code search term] -> ERROR_NONE
+    1    1  grep -r [TERM: code search term] [PATH: repository directory] --include=[GLOB: python source files] -> DISCOVERY_TEST
+    1    1  python3 -c [SCRIPT: inspect source file] -> EMPTY_NONE
+    1    1  cd [PATH: repository root] && python [PATH: test runner script] [ARG: issue test module] 2>&1 | tail [COUNT: line limit] -> ERROR_TEST
+    1    1  submit_patch [PATCH: fix subclass check] -> PROGRESS_PATCH
+    1    1  exec_command grep -n -B [COUNT: context lines] -A [COUNT: context lines] [TERM: code search term] [PATH: source file] -> ERROR_NONE
+    1    1  cat [PATH: source file] | head -n [COUNT: line limit] | grep -n [TERM: code search term] -> EMPTY_SOURCE
+    1    1  grep -n [TERM: code search term] [PATH: repository directory] -> ERROR_SOURCE
+    1    1  cat [PATH: source file] | grep -B [COUNT: context lines] -A [COUNT: context lines] [TERM: code search term] -> REPEATED_SOURCE
+    1    1  head -n [COUNT: line limit] [PATH: source file] | tail -n [COUNT: line limit] -> DISCOVERY_SOURCE
+    1    1  sed -i [EXPR: substitution expression] [PATH: source file] -> PROGRESS_SOURCE
+    1    1  grep -n [TERM: code search term] [PATH: source file] -> PROGRESS_SOURCE
+    1    1  submit_patch [PATCH: fix subclass check] -> PROGRESS_TEST)
+    1    1  grep -n -A [COUNT: context lines] [TERM: code search term] [PATH: source file] | head [COUNT: line limit] -> DISCOVERY_SOURCE
+    1    1  grep -r [TERM: code search term] [PATH: source file] -A [COUNT: context lines] -B [COUNT: context lines] -> DISCOVERY_SOURCE
+    1    1  cat [PATH: source file] | grep -A [COUNT: context lines] [TERM: code search term] -> PROGRESS_PATCH
+    1    1  head -n [COUNT: line limit] [PATH: source file] | tail -n [COUNT: line limit] -> INFO_SOURCE
+    1    1  head -n [COUNT: line limit] [PATH: source file] | grep -n [TERM: code search term] -> DISCOVERY_SOURCE
+    1    1  grep -r [TERM: code search term] [PATH: repository directory] --include=[GLOB: python source files] -l -> DISCOVERY_SOURCE
+    1    1  grep -n -A [COUNT: context lines] [TERM: code search term] [PATH: source file] -> ERROR_NONE
+    1    1  find [PATH: repository root] -type f -name [GLOB: python source files] | xargs grep -l [TERM: code search term] 2>/dev/null -> DISCOVERY_SOURCE
+    1    1  grep -n -B [COUNT: context lines] -A [COUNT: context lines] [TERM: code search term] [PATH: source file] -> DISCOVERY_SOURCE
+    1    1  cat [PATH: source file] | grep -A [COUNT: context lines] [TERM: code search term] -> DISCOVERY_SOURCE
+    1    1  cat -n [PATH: source file] | sed -n [RANGE: line range] -> INFO_SOURCE
+    1    1  grep -n [TERM: code search term] [PATH: source file] | tail [COUNT: line limit] -> DISCOVERY_SOURCE

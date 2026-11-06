@@ -1,0 +1,123 @@
+574 interactions in 40 runs, 55 distinct actions, 117 distinct (action, output) pairs
+pairs seen at most 1 time(s): 48 (41%)
+pairs seen at most 2 time(s): 68 (58%)
+pairs seen at most 5 time(s): 103 (88%)
+
+count runs  action -> output
+  121   22  cat [FILE: choices file] -> REPEATED_SOURCE
+   56   22  cat > [FILE: choices file] << [SCRIPT: patch choices file] -> PROGRESS_PATCH
+   32   32  cat [FILE: choices file] -> DISCOVERY_SOURCE
+   29   29  submit_patch -> PROGRESS_TEST
+   28   16  python3 << [SCRIPT: patch choices file] -> PROGRESS_PATCH
+   15    1  sed -n [RANGE: line range] [FILE: source file] -> REPEATED_SOURCE
+   14    4  grep -n [PATTERN: code symbols] [FILE: source file] | head [COUNT: line limit] -> INFO_SOURCE
+   13   13  ls [PATH: repository root] -> DISCOVERY_REPO
+   12    4  grep -n [PATTERN: code symbols] [FILE: source file] | head [COUNT: line limit] -> DISCOVERY_SOURCE
+   10    2  sed -n [RANGE: line range] [FILE: source file] -> DISCOVERY_SOURCE
+    9    3  grep -n [PATTERN: code symbols] [FILE: source file] -A [COUNT: context] | head [COUNT: line limit] -> INFO_SOURCE
+    7    7  submit_patch -> ERROR_TEST
+    7    4  cat > [FILE: patch script] << [SCRIPT: patch choices file] ; python3 [FILE: patch script] -> PROGRESS_PATCH
+    6    2  cat [FILE: choices file] | grep -A [COUNT: context] [PATTERN: class name] -> INFO_SOURCE
+    5    5  cat [FILE: choices file] -> ERROR_SOURCE
+    5    5  grep -r [PATTERN: choices class] [PATH: source package] --include [GLOB: Python files] -> DISCOVERY_SOURCE
+    5    3  grep -n [PATTERN: code symbols] [FILE: source file] -> EMPTY_SOURCE
+    5    5  find [PATH: repository root] -name [GLOB: Python files] | xargs grep -l [PATTERN: choices class] | head [COUNT: line limit] -> DISCOVERY_SOURCE
+    5    2  cat > [FILE: patch script] << [SCRIPT: patch choices file] ; python [FILE: patch script] -> PROGRESS_PATCH
+    5    1  cat [FILE: choices file] | head [COUNT: line limit] -> INFO_SOURCE
+    4    4  cat [FILE: choices file] | head [COUNT: line limit] -> REPEATED_SOURCE
+    4    4  cat [FILE: choices test] | head [COUNT: line limit] -> DISCOVERY_TEST
+    4    2  cat [FILE: source file] | sed -n [RANGE: line range] -> DISCOVERY_SOURCE
+    4    4  ls [PATH: repository root] -> INFO_REPO
+    4    2  grep -n [PATTERN: code symbols] [FILE: source file] | head [COUNT: line limit] -> REPEATED_SOURCE
+    4    4  ls -la [PATH: repository root] -> INFO_REPO
+    4    3  python3 -c [SCRIPT: patch choices file] -> PROGRESS_PATCH
+    4    1  cat [FILE: source file] | sed -n [RANGE: line range] -> REPEATED_SOURCE
+    4    4  cat [FILE: source file] -> DISCOVERY_SOURCE
+    4    4  grep -r [PATTERN: choices class] [PATH: repository root] --include [GLOB: Python files] -> DISCOVERY_SOURCE
+    3    3  sed -i [SCRIPT: patch choices file] [FILE: choices file] -> PROGRESS_PATCH
+    3    2  cat [FILE: choices file] | tail [COUNT: line limit] -> REPEATED_SOURCE
+    3    3  cat [FILE: choices test] -> DISCOVERY_TEST
+    3    3  find [PATH: repository root] -type f -name [GLOB: Python files] | head [COUNT: line limit] -> DISCOVERY_REPO
+    3    3  cat [FILE: source file] | head [COUNT: line limit] -> INFO_SOURCE
+    3    3  python3 -c [SCRIPT: inline test] -> ERROR_TEST
+    3    3  grep -rn [PATTERN: choices class] [PATH: source package] | head [COUNT: line limit] -> DISCOVERY_SOURCE
+    3    3  python3 -c [SCRIPT: inline test] -> PROGRESS_TEST
+    3    1  sed -n [RANGE: line range] [FILE: source file] -> REPEATED_TEST
+    3    1  cat [FILE: source file] | sed -n [RANGE: line range] -> REPEATED_TEST
+    3    2  grep -n [PATTERN: code symbols] [FILE: source file] | head [COUNT: line limit] -> EMPTY_SOURCE
+    3    2  grep -n [PATTERN: code symbols] [FILE: source file] | grep -A [COUNT: context] -B [COUNT: context] [PATTERN: line numbers] | head [COUNT: line limit] -> EMPTY_SOURCE
+    3    3  submit_patch -> PROGRESS_PATCH
+    3    2  find [PATH: repository root] -name [GLOB: filename] -path [GLOB: source package path] | head [COUNT: line limit] -> EMPTY_SOURCE
+    3    2  grep -n [PATTERN: dunder methods] [FILE: choices file] -> INFO_SOURCE
+    3    2  grep -n [PATTERN: code symbols] [FILE: source file] -A [COUNT: context] | grep -A [COUNT: context] [PATTERN: line numbers] -> INFO_SOURCE
+    3    1  sed -n [RANGE: line range] [FILE: source file] -> INFO_SOURCE
+    3    1  cat [FILE: choices test] -> REPEATED_TEST
+    3    1  grep -n [PATTERN: choices class] [FILE: choices file] -A [COUNT: context] -> REPEATED_SOURCE
+    2    2  ls -la [PATH: repository root] -> DISCOVERY_REPO
+    2    2  grep -r [PATTERN: choices class] [PATH: source package] -> DISCOVERY_SOURCE
+    2    2  cat [FILE: choices file] | tail [COUNT: line limit] -> DISCOVERY_SOURCE
+    2    2  find [PATH: repository root] -type f -name [GLOB: Python files] -exec grep -l [PATTERN: choices class] [EXEC: find replacement] \; -> DISCOVERY_SOURCE
+    2    2  find [PATH: repository root] -type f -name [GLOB: Python files] -path [GLOB: test path] -exec grep -l [PATTERN: choices class] [EXEC: find replacement] \; | head [COUNT: line limit] -> DISCOVERY_TEST
+    2    2  cat [FILE: choices test] | head [COUNT: line limit] -> REPEATED_TEST
+    2    2  find [PATH: source package] -name [GLOB: Python files] -exec grep -l [PATTERN: choices class] [EXEC: find replacement] \; -> DISCOVERY_SOURCE
+    2    2  grep -n [PATTERN: code symbols] [FILE: source file] -A [COUNT: context] | head [COUNT: line limit] -> DISCOVERY_SOURCE
+    2    1  cat [FILE: choices file] | grep -A [COUNT: context] [PATTERN: class name] -> REPEATED_SOURCE
+    2    2  grep -n [PATTERN: dunder methods] [FILE: choices file] -> EMPTY_SOURCE
+    2    2  grep -r [PATTERN: choices class] [PATH: source package] --include [GLOB: Python files] -l -> DISCOVERY_SOURCE
+    2    2  cat [FILE: source file] -> ERROR_SOURCE
+    2    2  find [PATH: repository root] -name [GLOB: filename] -type f -> EMPTY_SOURCE
+    2    2  cat [FILE: choices file] -> ERROR_NONE
+    2    2  find [PATH: repository root] -type f -name [GLOB: Python files] | head [COUNT: line limit] -> DISCOVERY_TEST
+    2    2  cat [FILE: choices file] -> INFO_SOURCE
+    2    1  grep -n [PATTERN: code symbols] [FILE: source file] -> INFO_SOURCE
+    2    1  grep -r [PATTERN: code symbols] [FILE: source file] | head [COUNT: line limit] -> DISCOVERY_SOURCE
+    2    1  grep -r [PATTERN: code symbols] [FILE: source file] -A [COUNT: context] | head [COUNT: line limit] -> DISCOVERY_SOURCE
+    2    1  grep -n [PATTERN: choices class] [FILE: choices file] -A [COUNT: context] -> INFO_SOURCE
+    1    1  grep -rn [PATTERN: choices class] [PATH: source package] --include [GLOB: Python files] -> EMPTY_SOURCE
+    1    1  grep -rn [PATTERN: dunder methods] [FILE: choices file] -> EMPTY_SOURCE
+    1    1  grep -rn [PATTERN: choices class] [PATH: source package] | head [COUNT: line limit] -> DISCOVERY_TEST
+    1    1  sed -n [RANGE: line range] [FILE: source file] -> DISCOVERY_TEST
+    1    1  grep -n [PATTERN: code symbols] [FILE: source file] -A [COUNT: context] | head [COUNT: line limit] -> EMPTY_SOURCE
+    1    1  python3 -c [SCRIPT: inline test] -> ERROR_NONE
+    1    1  python3 -c [SCRIPT: inline test] -> DISCOVERY_ISSUE
+    1    1  grep -rn [PATTERN: choices class] [PATH: source package] --include [GLOB: Python files] -> DISCOVERY_SOURCE
+    1    1  grep -r [PATTERN: choices class] [PATH: source package] --include [GLOB: Python files] -> ERROR_SOURCE
+    1    1  sed -i [SCRIPT: patch choices file] [FILE: choices file] -> ERROR_SOURCE
+    1    1  python3 << [SCRIPT: patch choices file] -> ERROR_TEST
+    1    1  grep -n [PATTERN: choices class] [FILE: choices file] -> REPEATED_SOURCE
+    1    1  cat [FILE: source file] | grep -n [PATTERN: class name] | head [COUNT: line limit] -> INFO_SOURCE
+    1    1  grep -n [PATTERN: code symbols] [FILE: source file] -A [COUNT: context] | head [COUNT: line limit] -> REPEATED_SOURCE
+    1    1  cat [FILE: source file] | sed -n [RANGE: line range] -> INFO_SOURCE
+    1    1  find [PATH: repository root] -name [GLOB: filename] -type f -> DISCOVERY_SOURCE
+    1    1  cd [PATH: repository root] && python [FILE: test runner] [TEST: test module] -> PROGRESS_TEST
+    1    1  grep -rn [PATTERN: choices class] [PATH: repository root] --include [GLOB: Python files] -> DISCOVERY_SOURCE
+    1    1  submit_patch -> DISCOVERY_ISSUE
+    1    1  cd [PATH: repository root] && python [FILE: test runner] [TEST: test module] -> ERROR_TEST
+    1    1  cat [FILE: choices file] | head [COUNT: line limit] -> ERROR_SOURCE
+    1    1  cat [FILE: choices file] | grep -A [COUNT: context] [PATTERN: class name] -> EMPTY_SOURCE
+    1    1  grep -n [PATTERN: dunder methods] [FILE: choices file] -> ERROR_SOURCE
+    1    1  ls [PATH: repository root] -> ERROR_NONE
+    1    1  grep -r [PATTERN: choices class] [PATH: source package] --include [GLOB: Python files] -l -> DISCOVERY_TEST
+    1    1  grep -n [PATTERN: code symbols] [FILE: source file] | grep -A [COUNT: context] -B [COUNT: context] [PATTERN: line numbers] | head [COUNT: line limit] -> INFO_SOURCE
+    1    1  grep -n [PATTERN: choices class] [FILE: choices file] -A [COUNT: context] -> ERROR_SOURCE
+    1    1  grep -n [PATTERN: code symbols] [FILE: source file] -A [COUNT: context] | grep -A [COUNT: context] [PATTERN: line numbers] -> ERROR_NONE
+    1    1  grep -n [PATTERN: dunder methods] [FILE: choices file] -> ERROR_NONE
+    1    1  sed -n [RANGE: line range] [FILE: source file] -> PROGRESS_PATCH
+    1    1  find [PATH: repository root] -type f -name [GLOB: Python files] | head [COUNT: line limit] -> INFO_REPO
+    1    1  grep -r [PATTERN: choices class] [PATH: source package] --include [GLOB: Python files] -A [COUNT: context] -> DISCOVERY_SOURCE
+    1    1  grep -r [PATTERN: code symbols] [FILE: source file] -A [COUNT: context] | grep -A [COUNT: context] [PATTERN: class name] | head [COUNT: line limit] -> DISCOVERY_SOURCE
+    1    1  find [PATH: repository root] -name [GLOB: filename] | head [COUNT: line limit] -> EMPTY_SOURCE
+    1    1  find [PATH: repository root] -path [GLOB: source package path] -name [GLOB: Python files] | grep -i [PATTERN: code symbols] -> DISCOVERY_SOURCE
+    1    1  grep -rn [PATTERN: choices class] [FILE: source file] | head [COUNT: line limit] -> EMPTY_SOURCE
+    1    1  cat [FILE: choices test] -> ERROR_TEST
+    1    1  grep -r [PATTERN: code symbols] [FILE: source file] | head [COUNT: line limit] -> INFO_SOURCE
+    1    1  grep -r [PATTERN: code symbols] [FILE: source file] | head [COUNT: line limit] -> REPEATED_TEST
+    1    1  grep -n [PATTERN: dunder methods] [FILE: choices file] -> REPEATED_SOURCE
+    1    1  grep -r [PATTERN: choices class] [PATH: source package] -> ERROR_SOURCE
+    1    1  python3 << [SCRIPT: patch choices file] -> ERROR_SOURCE
+    1    1  grep -r [PATTERN: choices class] [PATH: source package] --include [GLOB: Python files] -> REPEATED_SOURCE
+    1    1  find [PATH: repository root] -name [GLOB: Python files] | xargs grep -l [PATTERN: code symbols] | grep -E [PATTERN: relevant modules] | head [COUNT: line limit] -> DISCOVERY_SOURCE
+    1    1  cd [PATH: repository root] && python -c [SCRIPT: inline test] -> ERROR_TEST
+    1    1  grep -n [PATTERN: choices class] [FILE: choices file] -B [COUNT: context] -A [COUNT: context] -> REPEATED_SOURCE
+    1    1  cd [PATH: repository root] && python -c [SCRIPT: inline test] -> PROGRESS_TEST
+    1    1  cd [PATH: repository root] && python -c [SCRIPT: inline test] -> REPEATED_TEST

@@ -1,0 +1,194 @@
+979 interactions in 40 runs, 116 distinct actions, 188 distinct (action, output) pairs
+pairs seen at most 1 time(s): 103 (55%)
+pairs seen at most 2 time(s): 126 (67%)
+pairs seen at most 5 time(s): 160 (85%)
+
+count runs  action -> output
+  242   17  sed -n [RANGE: relevant lines] [PATH: source file] -> REPEATED_SOURCE
+  101   12  cat -n [PATH: source file] | sed -n [RANGE: relevant lines] -> REPEATED_SOURCE
+   46   10  cat [PATH: source file] | sed -n [RANGE: relevant lines] -> REPEATED_SOURCE
+   34   23  cat [PATH: source file] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+   29   11  sed -n [RANGE: relevant lines] [PATH: source file] -> DISCOVERY_SOURCE
+   23    9  cat -n [PATH: source file] | sed -n [RANGE: relevant lines] -> DISCOVERY_SOURCE
+   23    3  REPEATED_SOURCE -> REPEATED_SOURCE
+   18    2  ERROR_NONE -> ERROR_NONE
+   15   15  find [PATH: repository root] -type f -name [PATTERN: python files] | xargs grep -l [PATTERN: class definition] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+   15   11  cat [PATH: source file] -> DISCOVERY_SOURCE
+   15    3  sed -n [RANGE: relevant lines] [PATH: source file] -> REPEATED_PATCH
+   14    4  DISCOVERY_SOURCE -> DISCOVERY_SOURCE
+   12    8  sed -i [SCRIPT: apply fix] [PATH: source file] -> PROGRESS_PATCH
+   10   10  grep -n [PATTERN: class name] [PATH: test file] | head -[COUNT: display limit] -> DISCOVERY_TEST
+   10    6  cat [PATH: source file] | sed -n [RANGE: relevant lines] -> DISCOVERY_SOURCE
+    9    9  submit_patch [PATCH_SUMMARY: reduce repeated field migrations] -> PROGRESS_PATCH
+    9    7  grep -n -A [COUNT: context lines] [PATTERN: class definition] [PATH: source file] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    8    8  cat [PATH: test file] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    8    7  find [PATH: repository root] -type f -name [PATTERN: python files] | xargs grep -l [PATTERN: class definition] | head -[COUNT: display limit] -> DISCOVERY_REPO
+    8    7  grep -n [PATTERN: method definition] [PATH: source file] -> DISCOVERY_SOURCE
+    8    7  sed -n [RANGE: relevant lines] [PATH: source file] -> PROGRESS_PATCH
+    7    5  cat [PATH: source file] | head -[COUNT: display limit] | tail -[COUNT: display limit] -> DISCOVERY_SOURCE
+    7    6  cat [PATH: source file] | grep -n -A [COUNT: context lines] [PATTERN: class definition] | head -[COUNT: display limit] -> REPEATED_SOURCE
+    7    7  find [PATH: repository root] -type f -name [PATTERN: python files] | head -[COUNT: display limit] -> DISCOVERY_REPO
+    7    3  grep -n -A [COUNT: context lines] [PATTERN: method definition] [PATH: source file] | head -[COUNT: display limit] -> REPEATED_SOURCE
+    6    6  cat [PATH: source file] | head -[COUNT: display limit] -> REPEATED_SOURCE
+    6    2  grep -n -A [COUNT: context lines] [PATTERN: method definition] [PATH: source file] | grep -B [COUNT: context lines] -A [COUNT: context lines] [PATTERN: class name] | head -[COUNT: display limit] -> REPEATED_SOURCE
+    6    2  cat -n [PATH: source file] | sed -n [RANGE: relevant lines] -> REPEATED_PATCH
+    5    4  cat [PATH: source file] | tail -[COUNT: display limit] -> DISCOVERY_SOURCE
+    5    5  python3 << [MARKER: script end] [SCRIPT: apply fix] -> PROGRESS_PATCH
+    5    4  python -m django test [MODULE: test module] --settings=[SETTINGS: settings module] 2>&1 | head -[COUNT: display limit] -> ERROR_TEST
+    5    3  grep -n -A [COUNT: context lines] [PATTERN: class definition] [PATH: source file] | head -[COUNT: display limit] -> REPEATED_SOURCE
+    5    5  grep -n [PATTERN: method definition] [PATH: source file] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    5    4  cat [PATH: source file] | grep -n -A [COUNT: context lines] [PATTERN: class definition] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    5    4  cat [PATH: test file] | grep -n -A [COUNT: context lines] [PATTERN: test method] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    5    5  sed -n [RANGE: relevant lines] [PATH: test file] -> DISCOVERY_TEST
+    5    4  grep -n -A [COUNT: context lines] [PATTERN: method definition] [PATH: source file] -> DISCOVERY_SOURCE
+    4    4  cat [PATH: source file] | grep -A [COUNT: context lines] [PATTERN: class definition] -> DISCOVERY_SOURCE
+    4    1  DISCOVERY_SOURCE -> ERROR_NONE
+    4    4  submit_patch [PATCH_SUMMARY: reduce repeated field migrations] -> PROGRESS_TEST
+    4    3  cat -n [PATH: source file] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    4    4  grep -rn [PATTERN: class and method] [PATH: tests directory] | head -[COUNT: display limit] -> EMPTY_TEST
+    4    4  grep -n -A [COUNT: context lines] [PATTERN: method definition] [PATH: source file] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    4    1  REPEATED_SOURCE -> EMPTY_NONE
+    3    3  grep -A [COUNT: context lines] [PATTERN: method definition] [PATH: source file] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    3    3  find [PATH: repository root] -type f -name [PATTERN: python files] | xargs grep -l [PATTERN: optimization keywords] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    3    3  python -m pytest [PATH: test file] -v 2>&1 | head -[COUNT: display limit] -> ERROR_TEST
+    3    3  grep -n [PATTERN: class and method] [PATH: source file] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    3    3  grep -A [COUNT: context lines] [PATTERN: class definition] [PATH: source file] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    3    3  cat -n [PATH: source file] | sed -n [RANGE: relevant lines] -> PROGRESS_PATCH
+    3    3  find [PATH: repository root] -type f -name [PATTERN: python files] | xargs grep -l [PATTERN: optimization keywords] | head -[COUNT: display limit] -> EMPTY_NONE
+    3    3  grep -n -A [COUNT: context lines] [PATTERN: method definition] [PATH: source file] | grep -A [COUNT: context lines] [PATTERN: class definition] -A [COUNT: context lines] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    3    3  grep -n -i [PATTERN: test method] [PATH: test file] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    3    2  grep -n [PATTERN: class name] [PATH: test file] | head -[COUNT: display limit] -> REPEATED_TEST
+    3    2  cat [PATH: source file] | grep -A [COUNT: context lines] [PATTERN: class definition] -> REPEATED_SOURCE
+    3    2  cat -n [PATH: source file] | head -[COUNT: display limit] | tail -[COUNT: display limit] -> DISCOVERY_SOURCE
+    3    3  cat [PATH: test file] | grep -n -B [COUNT: context lines] -A [COUNT: context lines] [PATTERN: class name] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    3    2  cat -n [PATH: source file] | sed -n [RANGE: relevant lines] -> ERROR_PATCH
+    3    3  python3 -c [SCRIPT: apply fix] -> PROGRESS_PATCH
+    3    3  python -m pytest [PATH: test file] -xvs 2>&1 | head -[COUNT: display limit] -> ERROR_TEST
+    3    3  find [PATH: tests directory] -type f -name [PATTERN: python files] | xargs grep -l [PATTERN: optimization keywords] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    3    2  cd [PATH: repository root] && python -c [SCRIPT: reproduce optimizer issue] -> ERROR_NONE
+    2    2  python3 -m pytest [PATH: test file] -v 2>&1 | head -[COUNT: display limit] -> ERROR_TEST
+    2    2  python3 [PATH: test runner] [MODULE: test module] --verbosity=[COUNT: verbosity] 2>&1 | head -[COUNT: display limit] -> ERROR_TEST
+    2    2  cat [PATH: source file] | grep -A [COUNT: context lines] [PATTERN: method definition] -> DISCOVERY_SOURCE
+    2    2  grep -n -B [COUNT: context lines] -A [COUNT: context lines] [PATTERN: class and method] [PATH: test file] | head -[COUNT: display limit] -> EMPTY_TEST
+    2    1  grep -n -A [COUNT: context lines] [PATTERN: test method] [PATH: test file] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    2    2  grep -n [PATTERN: method definition] [PATH: source file] | head -[COUNT: display limit] -> EMPTY_NONE
+    2    2  find [PATH: repository root] -type f -name [PATTERN: python files] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    2    2  grep -rn [PATTERN: optimization keywords] [PATH: test file] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    2    2  grep -n [PATTERN: test method] [PATH: test file] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    2    2  sed -n [RANGE: relevant lines] [PATH: test file] -> REPEATED_TEST
+    2    2  ERROR_PATCH -> ERROR_PATCH
+    2    1  PROGRESS_PATCH -> PROGRESS_PATCH
+    2    2  grep -n [PATTERN: class definition] [PATH: source file] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    2    2  grep -n -B [COUNT: context lines] -A [COUNT: context lines] [PATTERN: class and method] [PATH: test file] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    2    2  cd [PATH: repository root] && python [PATH: test runner] [MODULE: test module] -v [COUNT: verbosity] 2>&1 | head -[COUNT: display limit] -> PROGRESS_TEST
+    2    1  grep -n [PATTERN: method name] [PATH: source file] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    2    1  DISCOVERY_TEST -> DISCOVERY_TEST
+    2    1  PROGRESS_TEST -> ERROR_TEST
+    2    2  DISCOVERY_REPO -> DISCOVERY_REPO
+    2    2  grep -rn [PATTERN: method definition] [PATH: source directory] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    2    2  grep -rn [PATTERN: class and method] [PATH: tests directory] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    2    2  ls [PATH: repository root] -> DISCOVERY_REPO
+    2    2  head -[COUNT: display limit] [PATH: source file] -> REPEATED_SOURCE
+    1    1  python3 -c [SCRIPT: reproduce optimizer issue] -> PROGRESS_ISSUE
+    1    1  DISCOVERY_SOURCE -> EMPTY_NONE
+    1    1  cat -n [PATH: source file] | grep -n -A [COUNT: context lines] [PATTERN: class definition] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    1    1  python [PATH: test runner] [MODULE: test module] -v [COUNT: verbosity] 2>&1 | tail -[COUNT: display limit] -> ERROR_TEST
+    1    1  python -m django test [MODULE: test module] --settings=[SETTINGS: settings module] -v [COUNT: verbosity] 2>&1 | tail -[COUNT: display limit] -> ERROR_TEST
+    1    1  find [PATH: repository root] -name [FILE: test runner] -o -name [FILE: setup file] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    1    1  python [PATH: test runner] [MODULE: test module] -v [COUNT: verbosity] 2>&1 | tail -[COUNT: display limit] -> PROGRESS_TEST
+    1    1  cat > [PATH: temporary script] << [MARKER: script end] [SCRIPT: apply fix] python3 [PATH: temporary script] -> PROGRESS_PATCH
+    1    1  python3 << [MARKER: script end] [SCRIPT: inspect source] -> DISCOVERY_SOURCE
+    1    1  python3 -c [SCRIPT: configure django] -> EMPTY_NONE
+    1    1  python3 -c [SCRIPT: reproduce optimizer issue] -> ERROR_NONE
+    1    1  python3 -c [SCRIPT: reproduce optimizer issue] -> PROGRESS_PATCH
+    1    1  python3 -m django test [MODULE: test module] --settings=[SETTINGS: settings module] -v [COUNT: verbosity] 2>&1 | head -[COUNT: display limit] -> ERROR_TEST
+    1    1  find [PATH: tests directory] -name [PATTERN: settings files] -o -name [PATTERN: settings files] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    1    1  python3 -m django test [MODULE: test module] --settings=[SETTINGS: settings module] -v [COUNT: verbosity] 2>&1 | head -[COUNT: display limit] -> REPEATED_TEST
+    1    1  python3 -m django test [MODULE: test module] -v [COUNT: verbosity] 2>&1 | head -[COUNT: display limit] -> REPEATED_TEST
+    1    1  python3 -c [SCRIPT: run optimizer tests] 2>&1 | tail -[COUNT: display limit] -> REPEATED_TEST
+    1    1  python3 -c [SCRIPT: reproduce optimizer issue] -> REPEATED_PATCH
+    1    1  grep -n [PATTERN: method definition] [PATH: source files] -> DISCOVERY_SOURCE
+    1    1  cat [PATH: source file] -> REPEATED_SOURCE
+    1    1  cat [PATH: source file] | grep -B [COUNT: context lines] -A [COUNT: context lines] [PATTERN: class definition] -> DISCOVERY_SOURCE
+    1    1  cat -n [PATH: source file] | grep -A [COUNT: context lines] [PATTERN: class definition] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    1    1  grep -n -A [COUNT: context lines] [PATTERN: optimization keywords] [PATH: test file] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    1    1  cat [PATH: test file] | head -[COUNT: display limit] -> REPEATED_TEST
+    1    1  find [PATH: repository root] -type f -name [FILE: target source file] | grep -i [PATTERN: target path] -> ERROR_NONE
+    1    1  cat > [PATH: temporary script] << [MARKER: script end] [SCRIPT: apply fix] python3 [PATH: temporary script] -> ERROR_PATCH
+    1    1  cat [PATH: source file] | grep -B [COUNT: context lines] -A [COUNT: context lines] [PATTERN: optimization keywords] -> PROGRESS_PATCH
+    1    1  find [PATH: repository root] -name [FILE: target source file] -path [PATTERN: nested path pattern] -> DISCOVERY_REPO
+    1    1  cat [PATH: source file] | grep -A [COUNT: context lines] [PATTERN: class definition] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    1    1  cat [PATH: source file] | grep -A [COUNT: context lines] [PATTERN: class definition] | tail -[COUNT: display limit] -> REPEATED_SOURCE
+    1    1  cat [PATH: source file] | grep -B [COUNT: context lines] -A [COUNT: context lines] [PATTERN: method definition] -> ERROR_NONE
+    1    1  grep -n [PATTERN: method name] [PATH: test file] | head -[COUNT: display limit] -> EMPTY_TEST
+    1    1  find [PATH: repository root] -type f -name [FILE: target source file] | grep -i [PATTERN: target path] -> DISCOVERY_SOURCE
+    1    1  cat [PATH: source file] | grep -n -A [COUNT: context lines] [PATTERN: class definition] -> DISCOVERY_SOURCE
+    1    1  grep -n -A [COUNT: context lines] [PATTERN: class definition] [PATH: source file] | tail -[COUNT: display limit] -> DISCOVERY_SOURCE
+    1    1  grep -n -r [PATTERN: class name] [PATH: tests directory] --include=[PATTERN: python files] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    1    1  grep -n -A [COUNT: context lines] [PATTERN: method definition] [PATH: source file] | grep -A [COUNT: context lines] [PATTERN: class definition] -A [COUNT: context lines] | head -[COUNT: display limit] -> REPEATED_SOURCE
+    1    1  find [PATH: repository root] -type f -path [PATTERN: nested path pattern] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    1    1  find [PATH: repository root] -type f -path [PATTERN: nested path pattern] | head -[COUNT: display limit] -> EMPTY_TEST
+    1    1  cat [PATH: test file] | grep -n -A [COUNT: context lines] [PATTERN: optimization keywords] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    1    1  cat [PATH: test file] | grep -n -A [COUNT: context lines] [PATTERN: optimization keywords] | head -[COUNT: display limit] -> REPEATED_TEST
+    1    1  grep -n -A [COUNT: context lines] [PATTERN: method definition] [PATH: source file] | grep -B [COUNT: context lines] -A [COUNT: context lines] [PATTERN: class name] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    1    1  grep -n [PATTERN: class name] [PATH: source file] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    1    1  grep -rn [PATTERN: method name] [PATH: source file] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    1    1  sed -n [RANGE: relevant lines] [PATH: source file] -> EMPTY_NONE
+    1    1  grep -rn [PATTERN: class name] [PATH: tests directory] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    1    1  grep -n -A [COUNT: context lines] [PATTERN: class name] [PATH: test file] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    1    1  cat [PATH: source file] | head -[COUNT: display limit] | tail -[COUNT: display limit] -> REPEATED_SOURCE
+    1    1  grep -n [PATTERN: class name] [PATH: test file] | head -[COUNT: display limit] -> EMPTY_TEST
+    1    1  grep -n [PATTERN: class definition] [PATH: source file] | head -[COUNT: display limit] -> REPEATED_SOURCE
+    1    1  cat [PATH: source file] | sed -n [RANGE: relevant lines] -> PROGRESS_PATCH
+    1    1  cat [PATH: source file] | sed -n [RANGE: relevant lines] -> REPEATED_PATCH
+    1    1  python3 -m django test [MODULE: test module] -v [COUNT: verbosity] 2>&1 | head -[COUNT: display limit] -> ERROR_TEST
+    1    1  DISCOVERY_REPO -> DISCOVERY_SOURCE
+    1    1  DISCOVERY_REPO -> EMPTY_TEST
+    1    1  PROGRESS_PATCH -> REPEATED_PATCH
+    1    1  cat [PATH: test file] | head -[COUNT: display limit] | tail -[COUNT: display limit] -> DISCOVERY_TEST
+    1    1  cat [PATH: source file] | grep -B [COUNT: context lines] -A [COUNT: context lines] [PATTERN: method definition] -> DISCOVERY_SOURCE
+    1    1  grep -n -A [COUNT: context lines] [PATTERN: method definition] [PATH: source file] | grep -A [COUNT: context lines] [PATTERN: class definition] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    1    1  cat [PATH: source file] | grep -A [COUNT: context lines] [PATTERN: method definition] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    1    1  cat [PATH: source file] | grep -B [COUNT: context lines] -A [COUNT: context lines] [PATTERN: class definition] | head -[COUNT: display limit] -> REPEATED_SOURCE
+    1    1  cat -n [PATH: source file] | grep -n -A [COUNT: context lines] [PATTERN: class definition] | head -[COUNT: display limit] -> REPEATED_SOURCE
+    1    1  cat -n [PATH: test file] | grep -n -A [COUNT: context lines] [PATTERN: class name] -> DISCOVERY_TEST
+    1    1  cat [PATH: test file] | grep -n -A [COUNT: context lines] [PATTERN: optimization keywords] | head -[COUNT: display limit] -> EMPTY_TEST
+    1    1  head -[COUNT: display limit] [PATH: source file] -> DISCOVERY_TEST
+    1    1  submit_patch [PATCH_SUMMARY: reduce repeated field migrations] -> ERROR_PATCH
+    1    1  cd [PATH: repository root] && python -c [SCRIPT: reproduce optimizer issue] -> PROGRESS_ISSUE
+    1    1  DISCOVERY_TEST -> EMPTY_TEST
+    1    1  sed -i [SCRIPT: apply fix] [PATH: source file] -> EMPTY_NONE
+    1    1  grep -rn [PATTERN: class name] [PATH: tests directory] | grep -i [PATTERN: optimization keywords] | head -[COUNT: display limit] -> EMPTY_TEST
+    1    1  grep -rn [PATTERN: class and method] [PATH: source directory] | head -[COUNT: display limit] -> EMPTY_NONE
+    1    1  sed -n [RANGE: relevant lines] [PATH: source file] -> INFO_NONE
+    1    1  cat [PATH: source file] -> ERROR_NONE
+    1    1  find [PATH: repository root] -type f -name [FILE: target source file] -> DISCOVERY_SOURCE
+    1    1  python3 -c [SCRIPT: inspect source] -> DISCOVERY_SOURCE
+    1    1  grep -r [PATTERN: class name] [PATH: test file] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    1    1  cat [PATH: source file] | grep -B [COUNT: context lines] -A [COUNT: context lines] [PATTERN: method definition] | tail -[COUNT: display limit] -> DISCOVERY_SOURCE
+    1    1  python3 -m [MODULE: test module] 2>&1 | head -[COUNT: display limit] -> ERROR_TEST
+    1    1  cat [PATH: source file] | grep -B [COUNT: context lines] -A [COUNT: context lines] [PATTERN: optimization keywords] -> DISCOVERY_SOURCE
+    1    1  python3 -c [SCRIPT: inspect environment] -> INFO_NONE
+    1    1  python3 [PATH: test file] 2>&1 | tail -[COUNT: display limit] -> ERROR_TEST
+    1    1  python3 [PATH: test runner] [MODULE: test module] --verbosity=[COUNT: verbosity] 2>&1 | head -[COUNT: display limit] -> PROGRESS_TEST
+    1    1  cat [PATH: source file] | grep -n -A [COUNT: context lines] [PATTERN: method definition] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    1    1  cat [PATH: source file] | grep -n -A [COUNT: context lines] [PATTERN: method definition] | head -[COUNT: display limit] -> REPEATED_SOURCE
+    1    1  find [PATH: tests directory] -name [PATTERN: settings files] -o -name [PATTERN: settings files] | head -[COUNT: display limit] -> DISCOVERY_REPO
+    1    1  grep -n -A [COUNT: context lines] [PATTERN: method definition] [PATH: source file] | head -[COUNT: display limit] -> EMPTY_NONE
+    1    1  grep -rn [PATTERN: class and method] [PATH: source directory] | head -[COUNT: display limit] -> DISCOVERY_SOURCE
+    1    1  sed -n [RANGE: relevant lines] [PATH: source file] -> ERROR_NONE
+    1    1  grep -r -n -A [COUNT: context lines] [PATTERN: class definition] [PATH: source file] -> DISCOVERY_SOURCE
+    1    1  grep -r -n -A [COUNT: context lines] [PATTERN: method definition] [PATH: source file] -> DISCOVERY_SOURCE
+    1    1  cd [PATH: repository root] && python [PATH: test runner] [MODULE: test module] -v [COUNT: verbosity] -> ERROR_NONE
+    1    1  find [PATH: repository root] -name [FILE: test runner] -o -name [FILE: setup file] | head -[COUNT: display limit] -> DISCOVERY_REPO
+    1    1  python3 << [MARKER: script end] [SCRIPT: inspect source] -> PROGRESS_PATCH
+    1    1  python3 << [MARKER: script end] [SCRIPT: inspect source] -> REPEATED_SOURCE
+    1    1  cd [PATH: repository root] && python [PATH: test runner] [MODULE: test module] -v [COUNT: verbosity] 2>&1 | head -[COUNT: display limit] -> ERROR_TEST
+    1    1  cd [PATH: repository root] && python [PATH: test runner] [MODULE: test module] -v [COUNT: verbosity] 2>&1 | head -[COUNT: display limit] -> REPEATED_TEST
+    1    1  find [PATH: tests directory] -name [PATTERN: optimizer or migration] -o -name [PATTERN: optimizer or migration] | grep -i [PATTERN: test] | head -[COUNT: display limit] -> DISCOVERY_TEST
+    1    1  head -[COUNT: display limit] [PATH: source file] | tail -[COUNT: display limit] -> DISCOVERY_SOURCE
+    1    1  grep -n -A [COUNT: context lines] [PATTERN: method definition] [PATH: source file] | grep -A [COUNT: context lines] [PATTERN: class name] | head -[COUNT: display limit] -> REPEATED_SOURCE
+    1    1  grep -n -A [COUNT: context lines] [PATTERN: method definition] [PATH: source file] | tail -[COUNT: display limit] -> REPEATED_SOURCE
+    1    1  grep -n -A [COUNT: context lines] [PATTERN: method definition] [PATH: source file] | grep -A [COUNT: context lines] [PATTERN: class definition] | head -[COUNT: display limit] -> REPEATED_SOURCE
+    1    1  grep -n -A [COUNT: context lines] [PATTERN: method definition] [PATH: source file] | sed -n [RANGE: class to next class] | head -[COUNT: display limit] -> REPEATED_SOURCE
+    1    1  cat [PATH: source file] | head -[COUNT: display limit] | tail -[COUNT: display limit] -> REPEATED_PATCH
