@@ -1,0 +1,87 @@
+791 interactions in 40 runs, 17 distinct actions, 81 distinct (action, output) pairs
+pairs seen at most 1 time(s): 21 (26%)
+pairs seen at most 2 time(s): 34 (42%)
+pairs seen at most 5 time(s): 53 (65%)
+
+count runs  action -> output
+  169   36  Modify (apply patch to source code) -> PROGRESS_SOURCE
+  127   25  Read (view line range in file) -> INFO_SOURCE
+   36   11  Test (run test suite with command) -> ERROR_TEST
+   32   17  Read (view line range in file) -> DISCOVERY_SOURCE
+   24   24  Submit (submit patch for verification) -> PROGRESS_TEST
+   22   17  Search (locate class definitions in source file) -> DISCOVERY_SOURCE
+   21    6  Test (run test suite with command) -> PROGRESS_TEST
+   20   17  Submit (submit patch for verification) -> ERROR_TEST
+   20   20  Search (locate class definitions across repository) -> DISCOVERY_SOURCE
+   19   15  Search (locate string pattern in source file) -> EMPTY_SOURCE
+   17    3  Modify -> PROGRESS_SOURCE
+   14    2  Read -> INFO_SOURCE
+   13    6  Read (view line range in file) -> REPEATED_SOURCE
+   12    7  Search (locate string pattern in source file) -> INFO_SOURCE
+   12    9  Search (locate string pattern in source file) -> DISCOVERY_SOURCE
+   12    9  Search (locate file by pattern in repository) -> DISCOVERY_TEST
+   11    7  Search (locate file by pattern in repository) -> INFO_REPO
+   10    2  Execute -> INFO_SOURCE
+    9    7  Read (view single file in directory) -> ERROR_SOURCE
+    9    8  Search (locate file by pattern in repository) -> DISCOVERY_REPO
+    9    7  Execute (run shell command in repository) -> INFO_SOURCE
+    8    5  Read (view single file in directory) -> INFO_SOURCE
+    8    6  Read (view single file in directory) -> INFO_TEST
+    8    2  Read (view line range in file) -> PROGRESS_SOURCE
+    7    3  Search (locate string pattern in source file) -> DISCOVERY_TEST
+    6    6  Read (view directory contents in directory) -> INFO_REPO
+    6    3  Execute (run shell command in repository) -> ERROR_NONE
+    6    2  Read (view single file in directory) -> EMPTY_SOURCE
+    5    5  Search (locate class definitions across repository) -> DISCOVERY_REPO
+    5    5  Search (locate class definitions in source file) -> EMPTY_SOURCE
+    5    4  Search (locate class definitions in source file) -> INFO_SOURCE
+    5    3  Read (view single file in directory) -> EMPTY_TEST
+    5    2  Submit -> ERROR_TEST
+    5    2  Execute -> ERROR_NONE
+    4    4  Search (locate string pattern in source file) -> EMPTY_TEST
+    4    1  Execute (run shell command in repository) -> REPEATED_SOURCE
+    4    4  Read (view single file in directory) -> DISCOVERY_TEST
+    4    2  Execute (run shell command in repository) -> INFO_NONE
+    4    4  Submit (submit patch for verification) -> PROGRESS_PATCH
+    4    1  Modify (apply patch to source code) -> PROGRESS_PATCH
+    4    2  Search -> DISCOVERY_SOURCE
+    4    3  Read (view single file in directory) -> ERROR_TEST
+    3    3  Search (locate string pattern in source file) -> ERROR_SOURCE
+    3    1  Read (view line range in file) -> INFO_TEST
+    3    2  Test -> ERROR_TEST
+    3    3  Search (locate file by pattern in repository) -> DISCOVERY_SOURCE
+    3    1  Execute -> EMPTY_SOURCE
+    2    2  Search (locate class definitions in source file) -> REPEATED_SOURCE
+    2    2  Read (view directory contents in directory) -> DISCOVERY_REPO
+    2    2  Execute (run shell command in repository) -> ERROR_SOURCE
+    2    1  Execute (run shell command in repository) -> PROGRESS_SOURCE
+    2    1  Search -> EMPTY_SOURCE
+    2    1  Modify -> INFO_SOURCE
+    2    1  Read -> INFO_TEST
+    2    2  Execute -> ERROR_TEST
+    2    2  Read (view line range in file) -> ERROR_SOURCE
+    2    2  Submit -> PROGRESS_TEST
+    2    1  Execute -> INFO_REPO
+    2    1  Execute -> DISCOVERY_SOURCE
+    2    1  Execute -> DISCOVERY_TEST
+    1    1  Search (locate class definitions across repository) -> INFO_SOURCE
+    1    1  Read (view single file in directory) -> ERROR_NONE
+    1    1  Execute (run shell command in repository) -> DISCOVERY_REPO
+    1    1  Modify (apply patch to source code) -> ERROR_SOURCE
+    1    1  Read (view directory contents in directory) -> EMPTY_SOURCE
+    1    1  Execute (run shell command in repository) -> INFO_REPO
+    1    1  Search (locate class definitions in source file) -> ERROR_SOURCE
+    1    1  Search (locate string pattern in source file) -> PROGRESS_SOURCE
+    1    1  Search (locate string pattern in source file) -> ERROR_TEST
+    1    1  Execute (run shell command in repository) -> INFO_TEST
+    1    1  Search (locate file by pattern in repository) -> EMPTY_SOURCE
+    1    1  Test (run test suite with command) -> INFO_TEST
+    1    1  Test (run test suite with command) -> REPEATED_TEST
+    1    1  Execute (run shell command in repository) -> PROGRESS_TEST
+    1    1  Read -> ERROR_TEST
+    1    1  Read -> INFO_REPO
+    1    1  Read -> DISCOVERY_REPO
+    1    1  Submit -> INFO_TEST
+    1    1  Read (view line range in file) -> EMPTY_TEST
+    1    1  Search (locate class definitions across repository) -> DISCOVERY_TEST
+    1    1  Read (view single file in directory) -> DISCOVERY_SOURCE
