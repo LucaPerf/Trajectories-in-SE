@@ -1,0 +1,33 @@
+310 interactions in 40 runs, 11 distinct actions, 27 distinct (action, output) pairs
+pairs seen at most 1 time(s): 10 (37%)
+pairs seen at most 2 time(s): 13 (48%)
+pairs seen at most 5 time(s): 20 (74%)
+
+count runs  action -> output
+   67   36  Search (file pattern search in repository) -> DISCOVERY_SOURCE
+   60   37  Edit (text replacement in source file) -> PROGRESS_PATCH
+   55   29  Read (line range in source file) -> INFO_SOURCE
+   39   39  Submit (submit patch to repository) -> PROGRESS_TEST
+   19   13  Read (line range in source file) -> DISCOVERY_SOURCE
+   17    9  Search (file pattern search in repository) -> INFO_SOURCE
+    8    5  Execute (shell command execution) -> INFO_SOURCE
+    5    3  Search (file pattern search in repository) -> EMPTY_SOURCE
+    5    5  Read (line range in source file) -> REPEATED_SOURCE
+    4    4  Search (file pattern search in repository) -> INFO_REPO
+    4    2  Search (file pattern search in repository) -> REPEATED_SOURCE
+    4    3  Execute (shell command execution) -> DISCOVERY_SOURCE
+    4    2  Edit (text replacement in source file) -> PROGRESS_SOURCE
+    3    2  Run (test suite execution) -> ERROR_TEST
+    2    1  Search -> INFO_SOURCE
+    2    2  Read (line range in source file) -> ERROR_SOURCE
+    2    2  Execute (shell command execution) -> ERROR_NONE
+    1    1  Read (line range in source file) -> EMPTY_SOURCE
+    1    1  Search -> INFO_REPO
+    1    1  Read -> INFO_SOURCE
+    1    1  Edit -> EMPTY_SOURCE
+    1    1  Submit -> PROGRESS_PATCH
+    1    1  Execute (shell command execution) -> EMPTY_SOURCE
+    1    1  Execute (empty command) -> EMPTY_NONE
+    1    1  Search (file pattern search in repository) -> ERROR_SOURCE
+    1    1  Read (line range in source file) -> PROGRESS_PATCH
+    1    1  Search (file pattern search in repository) -> EMPTY_NONE

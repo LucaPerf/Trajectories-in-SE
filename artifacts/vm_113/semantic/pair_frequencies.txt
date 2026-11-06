@@ -1,0 +1,93 @@
+1301 interactions in 40 runs, 23 distinct actions, 87 distinct (action, output) pairs
+pairs seen at most 1 time(s): 27 (31%)
+pairs seen at most 2 time(s): 35 (40%)
+pairs seen at most 5 time(s): 54 (62%)
+
+count runs  action -> output
+  454   33  Read (inspect specified line range in source file) -> REPEATED_SOURCE
+  176   27  Read (inspect specified line range in source file) -> INFO_SOURCE
+   59   16  Read (inspect specified line range in source file) -> DISCOVERY_SOURCE
+   55   27  Read (inspect initial portion of source file) -> INFO_SOURCE
+   42   11  Read (inspect method implementation in source file) -> REPEATED_SOURCE
+   32   13  Run (execute test suite in repository) -> ERROR_TEST
+   29   19  Search (locate class definition in source file) -> DISCOVERY_SOURCE
+   27   15  Read (inspect method implementation in source file) -> DISCOVERY_SOURCE
+   27   12  Read (inspect filtered portion of test file) -> INFO_TEST
+   24   12  Read (inspect initial portion of source file) -> DISCOVERY_SOURCE
+   24   21  Search (locate usage references in source file) -> DISCOVERY_SOURCE
+   16   12  Read (inspect method implementation in source file) -> INFO_SOURCE
+   15   13  Search (locate source file in repository) -> DISCOVERY_SOURCE
+   15   12  Search (locate usage references in source file) -> INFO_SOURCE
+   15    5  Search (locate class definition in source file) -> REPEATED_SOURCE
+   15    3  Read (inspect specified line range in source file) -> ERROR_SOURCE
+   14    8  Search (locate class definition in source file) -> INFO_SOURCE
+   11    9  Read (inspect filtered portion of test file) -> DISCOVERY_TEST
+   11   11  Submit (apply patch to repository) -> PROGRESS_TEST
+   11    6  Run (execute isolated test script) -> ERROR_TEST
+   11    8  Search (locate usage references in source file) -> EMPTY_SOURCE
+   10   10  Modify (replace line range in source file) -> PROGRESS_PATCH
+   10    7  Read (inspect specified line range in test file) -> INFO_TEST
+    9    3  Read (inspect specified line range in source file) -> EMPTY_SOURCE
+    9    7  Search (locate usage references in source file) -> DISCOVERY_TEST
+    8    7  Search (locate usage references in source file) -> EMPTY_TEST
+    8    8  Read (inspect directory contents in repository) -> INFO_REPO
+    7    7  Edit (insert conditional check in source file) -> PROGRESS_PATCH
+    7    7  Read (inspect initial portion of source file) -> REPEATED_SOURCE
+    7    4  Read (inspect specified line range in source file) -> PROGRESS_PATCH
+    7    6  Search (locate usage references in source file) -> INFO_TEST
+    6    6  Read (inspect initial portion of test file) -> INFO_TEST
+    6    4  Read (inspect specified line range in test file) -> DISCOVERY_TEST
+    5    4  Search (locate test file in repository) -> DISCOVERY_TEST
+    5    5  Run (execute test suite in repository) -> PROGRESS_TEST
+    5    5  Submit (apply patch to repository) -> PROGRESS_PATCH
+    5    5  Run (execute isolated test script) -> PROGRESS_TEST
+    5    4  Modify (run script in repository) -> PROGRESS_PATCH
+    5    4  Search (locate source file in repository) -> INFO_REPO
+    5    3  Search (locate method implementation in source file) -> INFO_SOURCE
+    5    3  Modify (run script in repository) -> ERROR_SOURCE
+    5    2  Read (inspect method implementation in source file) -> EMPTY_SOURCE
+    4    4  Read (inspect initial portion of test file) -> DISCOVERY_TEST
+    4    4  Read (inspect filtered portion of test file) -> EMPTY_TEST
+    4    3  Read (inspect directory contents in repository) -> DISCOVERY_REPO
+    4    3  Modify (insert lines into source file) -> PROGRESS_PATCH
+    4    1  Read (inspect specified line range in source file) -> ERROR_NONE
+    4    1  Search (locate method implementation in source file) -> DISCOVERY_SOURCE
+    3    2  Run (execute test suite in repository) -> ERROR_NONE
+    3    3  Read (inspect specified line range in test file) -> REPEATED_TEST
+    3    2  Modify (replace line range in source file) -> PROGRESS_SOURCE
+    3    1  Read (inspect specified line range in test file) -> EMPTY_TEST
+    2    2  Run (execute isolated test script) -> DISCOVERY_SOURCE
+    2    2  Search (locate source file in repository) -> DISCOVERY_REPO
+    2    1  Run (execute isolated test script) -> ERROR_NONE
+    2    2  Search (locate usage references in source file) -> EMPTY_NONE
+    2    1  Search (locate usage references in source file) -> REPEATED_TEST
+    2    2  Search (locate class definition in source file) -> ERROR_SOURCE
+    2    2  Search (locate method implementation in source file) -> EMPTY_SOURCE
+    2    1  Modify (restore source file in repository) -> PROGRESS_SOURCE
+    1    1  Search (locate executable script in repository) -> DISCOVERY_REPO
+    1    1  Run (execute isolated test script) -> EMPTY_NONE
+    1    1  Search (locate configuration files in repository) -> DISCOVERY_REPO
+    1    1  Read (read entire test file in repository) -> INFO_TEST
+    1    1  Search (locate source file in repository) -> EMPTY_NONE
+    1    1  Search (locate source file in repository) -> INFO_SOURCE
+    1    1  Search (locate test file in repository) -> EMPTY_TEST
+    1    1  Read (inspect filtered portion of test file) -> REPEATED_TEST
+    1    1  Run (execute test suite in repository) -> REPEATED_TEST
+    1    1  Read (inspect method implementation in source file) -> ERROR_SOURCE
+    1    1  Run (execute isolated test script) -> PROGRESS_PATCH
+    1    1  Search (locate method implementation in source file) -> REPEATED_SOURCE
+    1    1  Read (inspect filtered portion of test file) -> ERROR_TEST
+    1    1  Submit (apply patch to repository) -> ERROR_TEST
+    1    1  Modify (run script in repository) -> PROGRESS_SOURCE
+    1    1  Edit (insert conditional check in source file) -> PROGRESS_SOURCE
+    1    1  Modify (insert lines into source file) -> PROGRESS_SOURCE
+    1    1  Read (inspect specified line range in source file) -> PROGRESS_SOURCE
+    1    1  Modify (restore source file in repository) -> PROGRESS_PATCH
+    1    1  Run (execute isolated test script) -> INFO_NONE
+    1    1  Run (execute test suite in repository) -> ERROR_SOURCE
+    1    1  Search (locate test file in repository) -> INFO_REPO
+    1    1  Read (inspect directory contents in repository) -> INFO_SOURCE
+    1    1  Search (locate test file in repository) -> INFO_TEST
+    1    1  Search (locate configuration files in repository) -> INFO_REPO
+    1    1  Search (locate executable script in repository) -> DISCOVERY_TEST
+    1    1  Search (locate usage references in source file) -> REPEATED_SOURCE

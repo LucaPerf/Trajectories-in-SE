@@ -1,0 +1,65 @@
+614 interactions in 40 runs, 16 distinct actions, 59 distinct (action, output) pairs
+pairs seen at most 1 time(s): 17 (29%)
+pairs seen at most 2 time(s): 28 (47%)
+pairs seen at most 5 time(s): 37 (63%)
+
+count runs  action -> output
+   85   30  Read (whole file) -> INFO_SOURCE
+   71   12  Read (whole file) -> REPEATED_SOURCE
+   45   21  Modify (rewrite entire file) -> PROGRESS_PATCH
+   40    8  Read (line range) -> INFO_SOURCE
+   36   19  Modify (replace text in file) -> PROGRESS_PATCH
+   31   31  Submit (submit patch for verification) -> PROGRESS_TEST
+   26   26  Inspect (list directory contents) -> INFO_REPO
+   24    9  Search (class definition) -> INFO_SOURCE
+   22   14  Search (class definition) -> DISCOVERY_SOURCE
+   21    7  Search (method definition in source) -> INFO_SOURCE
+   16   13  Search (keyword in source) -> DISCOVERY_SOURCE
+   16    6  Search (keyword in source) -> INFO_SOURCE
+   15    8  Read (partial file content) -> INFO_SOURCE
+   14    7  Search (method definition in source) -> EMPTY_SOURCE
+   13    7  Search (keyword in source) -> EMPTY_SOURCE
+   11   10  Read (whole file) -> DISCOVERY_SOURCE
+   10    9  Read (whole file) -> ERROR_SOURCE
+   10    2  Read (line range) -> REPEATED_SOURCE
+    9    8  Search (find source file) -> DISCOVERY_SOURCE
+    9    1  Modify (rewrite entire file) -> EMPTY_NONE
+    8    8  Submit (submit patch for verification) -> ERROR_TEST
+    8    2  Search (method definition in source) -> DISCOVERY_SOURCE
+    5    5  Edit (insert lines in source file) -> PROGRESS_PATCH
+    5    3  Search (class definition) -> REPEATED_SOURCE
+    5    1  Execute -> INFO_SOURCE
+    4    3  Read (partial file content) -> REPEATED_SOURCE
+    4    2  Search (find source file) -> EMPTY_NONE
+    3    3  Search (test file references) -> INFO_SOURCE
+    3    2  Execute (run verification script) -> ERROR_SOURCE
+    3    1  Execute -> ERROR_NONE
+    3    1  Execute -> DISCOVERY_SOURCE
+    2    2  Search (test file references) -> DISCOVERY_SOURCE
+    2    2  Execute (run verification script) -> ERROR_NONE
+    2    2  Execute (run verification script) -> DISCOVERY_SOURCE
+    2    2  Execute (run verification script) -> PROGRESS_TEST
+    2    2  Modify (replace text in file) -> ERROR_SOURCE
+    2    2  Search (class definition) -> EMPTY_SOURCE
+    2    2  Modify (rewrite entire file) -> PROGRESS_SOURCE
+    2    2  Search (find source file) -> EMPTY_SOURCE
+    2    1  Read (line range) -> DISCOVERY_SOURCE
+    2    2  Execute (run verification script) -> INFO_SOURCE
+    2    1  Read (partial file content) -> DISCOVERY_SOURCE
+    1    1  Search (method definition in source) -> REPEATED_SOURCE
+    1    1  Search (test file references) -> EMPTY_SOURCE
+    1    1  Search (find source file) -> INFO_SOURCE
+    1    1  Execute (run verification script) -> PROGRESS_PATCH
+    1    1  Search (method definition in source) -> EMPTY_NONE
+    1    1  Inspect (list directory contents) -> ERROR_NONE
+    1    1  Search (test file references) -> INFO_REPO
+    1    1  Search (class definition) -> ERROR_SOURCE
+    1    1  Read (line range) -> PROGRESS_PATCH
+    1    1  Search (keyword in source) -> ERROR_SOURCE
+    1    1  Modify (replace text in file) -> INFO_SOURCE
+    1    1  Search (find source file) -> INFO_REPO
+    1    1  Modify (replace text in file) -> PROGRESS_SOURCE
+    1    1  Read (whole file) -> PROGRESS_SOURCE
+    1    1  Submit (submit patch for verification) -> PROGRESS_PATCH
+    1    1  Inspect -> INFO_REPO
+    1    1  Execute -> ERROR_SOURCE

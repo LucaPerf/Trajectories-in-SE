@@ -1,0 +1,29 @@
+213 interactions in 40 runs, 7 distinct actions, 23 distinct (action, output) pairs
+pairs seen at most 1 time(s): 7 (30%)
+pairs seen at most 2 time(s): 7 (30%)
+pairs seen at most 5 time(s): 16 (70%)
+
+count runs  action -> output
+   46   39  Apply (replace string in file) -> PROGRESS_SOURCE
+   39   39  Submit (apply patch to repository) -> PROGRESS_TEST
+   37   35  Search (find format literal in whole repository) -> DISCOVERY_SOURCE
+   26   20  Read (extract line range from single file) -> INFO_SOURCE
+    9    7  Read (extract line range from single file) -> PROGRESS_SOURCE
+    7    7  Search (find code symbol in whole repository) -> DISCOVERY_SOURCE
+    6    4  Search (find format literal in whole repository) -> EMPTY_SOURCE
+    5    5  Search (find format literal in single file) -> EMPTY_SOURCE
+    5    3  Search (find format literal in single file) -> PROGRESS_SOURCE
+    5    2  Search (find format literal in single file) -> REPEATED_SOURCE
+    4    4  Search (find format literal in single file) -> DISCOVERY_SOURCE
+    4    4  Read (extract line range from single file) -> DISCOVERY_SOURCE
+    4    3  Search (find format literal in single file) -> INFO_SOURCE
+    3    2  Submit (apply patch to repository) -> ERROR_TEST
+    3    2  Read (extract line range from single file) -> REPEATED_SOURCE
+    3    3  Search (find format literal in whole repository) -> INFO_SOURCE
+    1    1  Read (list directory contents in repository) -> INFO_REPO
+    1    1  Read (extract line range from single file) -> EMPTY_SOURCE
+    1    1  Search (find format literal in whole repository) -> PROGRESS_SOURCE
+    1    1  Submit (apply patch to repository) -> PROGRESS_PATCH
+    1    1  Apply (replace string in file) -> EMPTY_SOURCE
+    1    1  Search (find code symbol in whole repository) -> INFO_SOURCE
+    1    1  Search (find format literal in whole repository) -> ERROR_TEST
