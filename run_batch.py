@@ -6,10 +6,10 @@ import sys
 import requests
 
 # Dataset indices (SWE-bench Lite) to run, in order, one after another.
-INSTANCES = [35]
+INSTANCES = [6, 8, 9, 10, 14, 15, 16, 17, 18, 110, 111, 112, 114, 115, 116, 117, 118, 119]
 #INSTANCES = [113]
 
-RUNS_PER_INSTANCE = 40
+RUNS_PER_INSTANCE = 5
 MAX_TURNS = 40
 
 HERE = os.path.dirname(os.path.abspath(__file__))
