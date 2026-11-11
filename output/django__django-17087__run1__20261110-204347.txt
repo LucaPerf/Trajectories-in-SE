@@ -1,0 +1,4863 @@
+==============================================================================
+Run transcript: django__django-17087
+run id: 1    tag: 'vm_119_iter_0'    turns: 17
+model: SWE-bench Pilot Task
+final state: got root
+started: 2026-11-10 20:36:43.146460    stopped: 2026-11-10 19:43:47  (start is local time, stop is UTC)
+==============================================================================
+
+HOW TO READ THIS FILE
+Each TURN is one round trip with the model:
+  1. prompt   what we send: the task, the available commands and the history of the earlier commands
+  2. reply    what the model answered, complete and unedited
+  3. command  the single line we extracted from the reply and actually executed in the container
+  4. result   what the container printed (this becomes part of the history in the next prompt)
+The run ends with a status line: "got root" means the tests passed (that is the framework's name for
+any success), anything else is the reason the run stopped.
+
+------------------------------------------------------------------------------
+TURN 1
+------------------------------------------------------------------------------
+
+[prompt sent to the model, 2559 characters]
+You are a software engineer working inside a checked-out git repository
+at /testbed. Your goal is to resolve the following issue by editing the code so that the
+project's test suite passes.
+
+ISSUE:
+Class methods from nested classes cannot be used as Field.default.
+Description
+	 
+		(last modified by Mariusz Felisiak)
+	 
+Given the following model:
+ 
+class Profile(models.Model):
+	class Capability(models.TextChoices):
+		BASIC = ("BASIC", "Basic")
+		PROFESSIONAL = ("PROFESSIONAL", "Professional")
+		
+		@classmethod
+		def default(cls) -> list[str]:
+			return [cls.BASIC]
+	capabilities = ArrayField(
+		models.CharField(choices=Capability.choices, max_length=30, blank=True),
+		null=True,
+		default=Capability.default
+	)
+The resulting migration contained the following:
+ # ...
+	 migrations.AddField(
+		 model_name='profile',
+		 name='capabilities',
+		 field=django.contrib.postgres.fields.ArrayField(base_field=models.CharField(blank=True, choices=[('BASIC', 'Basic'), ('PROFESSIONAL', 'Professional')], max_length=30), default=appname.models.Capability.default, null=True, size=None),
+	 ),
+ # ...
+As you can see, migrations.AddField is passed as argument "default" a wrong value "appname.models.Capability.default", which leads to an error when trying to migrate. The right value should be "appname.models.Profile.Capability.default".
+
+
+You can either
+
+- `exec_command command`: give a command to be executed and I will respond with the terminal output when running this command inside the task's container. The given command must not require user interaction. Do not use quotation marks in front and after your command.
+- `submit_patch note`: Call this when you believe the issue is fixed. I will run the project's test suite inside the container and tell you whether it passes. Usage: submit_patch <short note about what you changed>
+
+                        
+Do not modify the files in the `tests/` directory: they will be replaced by the official tests.
+ 
+The official tests are not in the repository: do not search for them.
+
+Decide your next single action. Use exec_command to read/search/edit files or run commands, and
+submit_patch only once you believe the fix is complete and want it verified against the test
+suite.
+
+Your entire reply must be a single action, in one of these two forms, and nothing else:
+exec_command <shell command>
+submit_patch <short note>
+The command may span several lines (for example a heredoc to write a script). 
+Do not explain your reasoning, do not add markup, and do not continue the conversation after that line.       
+
+
+[model reply, complete and unedited] (643 tokens in, 47 tokens out)
+
+
+exec_command <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>
+
+[command executed: exec_command]
+<shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>
+
+[result]
+
+[stderr]
+bash: -c: line 1: syntax error near unexpected token `newline'
+bash: -c: line 1: `source /opt/miniconda3/bin/activate && conda activate testbed && cd /testbed && <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>'
+
+[exit code: 2]
+
+------------------------------------------------------------------------------
+TURN 2
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 3041 characters, the same as turn 1 plus the history below]
+$exec_command <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>
+ 
+[stderr]
+bash: -c: line 1: syntax error near unexpected token `newline'
+bash: -c: line 1: `source /opt/miniconda3/bin/activate && conda activate testbed && cd /testbed && <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>'
+
+[exit code: 2]
+
+
+[model reply, complete and unedited] (791 tokens in, 40 tokens out)
+
+
+exec_command find /testbed -maxdepth 1 -type d | head -30
+
+[command executed: exec_command]
+find /testbed -maxdepth 1 -type d | head -30
+
+[result]
+/testbed
+/testbed/.git
+/testbed/tests
+/testbed/django
+/testbed/scripts
+/testbed/docs
+/testbed/extras
+/testbed/Django.egg-info
+/testbed/.github
+/testbed/js_tests
+/testbed/.tx
+
+
+------------------------------------------------------------------------------
+TURN 3
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 3277 characters, the same as turn 1 plus the history below]
+$exec_command <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>
+ 
+[stderr]
+bash: -c: line 1: syntax error near unexpected token `newline'
+bash: -c: line 1: `source /opt/miniconda3/bin/activate && conda activate testbed && cd /testbed && <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>'
+
+[exit code: 2]
+
+$exec_command find /testbed -maxdepth 1 -type d | head -30
+ /testbed
+/testbed/.git
+/testbed/tests
+/testbed/django
+/testbed/scripts
+/testbed/docs
+/testbed/extras
+/testbed/Django.egg-info
+/testbed/.github
+/testbed/js_tests
+/testbed/.tx
+
+
+
+[model reply, complete and unedited] (866 tokens in, 2188 tokens out)
+
+
+exec_command cd /testbed && git log --oneline -3 && grep -n "def get_class_description" django/db/migrations/utils.py && grep -n "Callable\|get_class_description\|bound\|__self__" django/db/migrations/serializer.py | head -40
+
+[command executed: exec_command]
+cd /testbed && git log --oneline -3 && grep -n "def get_class_description" django/db/migrations/utils.py && grep -n "Callable\|get_class_description\|bound\|__self__" django/db/migrations/serializer.py | head -40
+
+[result]
+c6b2b2206f SWE-bench
+4a72da7100 Refs #27471 -- Made admin's filter choice arrows use cursor pointers.
+da2f8e8257 Refs #34118 -- Improved sanitize_address() error message for tuple with empty strings.
+
+[exit code: 1]
+
+------------------------------------------------------------------------------
+TURN 4
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 3722 characters, the same as turn 1 plus the history below]
+$exec_command <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>
+ 
+[stderr]
+bash: -c: line 1: syntax error near unexpected token `newline'
+bash: -c: line 1: `source /opt/miniconda3/bin/activate && conda activate testbed && cd /testbed && <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>'
+
+[exit code: 2]
+
+$exec_command find /testbed -maxdepth 1 -type d | head -30
+ /testbed
+/testbed/.git
+/testbed/tests
+/testbed/django
+/testbed/scripts
+/testbed/docs
+/testbed/extras
+/testbed/Django.egg-info
+/testbed/.github
+/testbed/js_tests
+/testbed/.tx
+
+
+$exec_command cd /testbed && git log --oneline -3 && grep -n "def get_class_description" django/db/migrations/utils.py && grep -n "Callable\|get_class_description\|bound\|__self__" django/db/migrations/serializer.py | head -40
+ c6b2b2206f SWE-bench
+4a72da7100 Refs #27471 -- Made admin's filter choice arrows use cursor pointers.
+da2f8e8257 Refs #34118 -- Improved sanitize_address() error message for tuple with empty strings.
+
+[exit code: 1]
+
+
+[model reply, complete and unedited] (1013 tokens in, 80 tokens out)
+
+
+exec_command cd /testbed && grep -n "get_class_description\|Callable\|__self__\|bound" django/db/migrations/serializer.py | head -50
+
+[command executed: exec_command]
+cd /testbed && grep -n "get_class_description\|Callable\|__self__\|bound" django/db/migrations/serializer.py | head -50
+
+[result]
+166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+
+
+------------------------------------------------------------------------------
+TURN 5
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 4014 characters, the same as turn 1 plus the history below]
+$exec_command <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>
+ 
+[stderr]
+bash: -c: line 1: syntax error near unexpected token `newline'
+bash: -c: line 1: `source /opt/miniconda3/bin/activate && conda activate testbed && cd /testbed && <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>'
+
+[exit code: 2]
+
+$exec_command find /testbed -maxdepth 1 -type d | head -30
+ /testbed
+/testbed/.git
+/testbed/tests
+/testbed/django
+/testbed/scripts
+/testbed/docs
+/testbed/extras
+/testbed/Django.egg-info
+/testbed/.github
+/testbed/js_tests
+/testbed/.tx
+
+
+$exec_command cd /testbed && git log --oneline -3 && grep -n "def get_class_description" django/db/migrations/utils.py && grep -n "Callable\|get_class_description\|bound\|__self__" django/db/migrations/serializer.py | head -40
+ c6b2b2206f SWE-bench
+4a72da7100 Refs #27471 -- Made admin's filter choice arrows use cursor pointers.
+da2f8e8257 Refs #34118 -- Improved sanitize_address() error message for tuple with empty strings.
+
+[exit code: 1]
+
+$exec_command cd /testbed && grep -n "get_class_description\|Callable\|__self__\|bound" django/db/migrations/serializer.py | head -50
+ 166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+
+
+
+[model reply, complete and unedited] (1099 tokens in, 4520 tokens out)
+
+
+exec_command cd /testbed && grep -rn "def get_class_description" django/ && grep -n "__self__\|__qualname__\|__name__" django/db/migrations/serializer.py | head -30 && sed -n '150,210p' django/db/migrations/serializer.py
+</shell command>
+
+[command executed: exec_command]
+cd /testbed && grep -rn "def get_class_description" django/ && grep -n "__self__\|__qualname__\|__name__" django/db/migrations/serializer.py | head -30 && sed -n '150,210p' django/db/migrations/serializer.py
+</shell command>
+
+[result]
+
+[stderr]
+bash: -c: line 2: syntax error near unexpected token `newline'
+bash: -c: line 2: `</shell command>'
+
+[exit code: 2]
+
+------------------------------------------------------------------------------
+TURN 6
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 4381 characters, the same as turn 1 plus the history below]
+$exec_command <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>
+ 
+[stderr]
+bash: -c: line 1: syntax error near unexpected token `newline'
+bash: -c: line 1: `source /opt/miniconda3/bin/activate && conda activate testbed && cd /testbed && <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>'
+
+[exit code: 2]
+
+$exec_command find /testbed -maxdepth 1 -type d | head -30
+ /testbed
+/testbed/.git
+/testbed/tests
+/testbed/django
+/testbed/scripts
+/testbed/docs
+/testbed/extras
+/testbed/Django.egg-info
+/testbed/.github
+/testbed/js_tests
+/testbed/.tx
+
+
+$exec_command cd /testbed && git log --oneline -3 && grep -n "def get_class_description" django/db/migrations/utils.py && grep -n "Callable\|get_class_description\|bound\|__self__" django/db/migrations/serializer.py | head -40
+ c6b2b2206f SWE-bench
+4a72da7100 Refs #27471 -- Made admin's filter choice arrows use cursor pointers.
+da2f8e8257 Refs #34118 -- Improved sanitize_address() error message for tuple with empty strings.
+
+[exit code: 1]
+
+$exec_command cd /testbed && grep -n "get_class_description\|Callable\|__self__\|bound" django/db/migrations/serializer.py | head -50
+ 166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+
+
+$exec_command cd /testbed && grep -rn "def get_class_description" django/ && grep -n "__self__\|__qualname__\|__name__" django/db/migrations/serializer.py | head -30 && sed -n '150,210p' django/db/migrations/serializer.py
+</shell command>
+ 
+[stderr]
+bash: -c: line 2: syntax error near unexpected token `newline'
+bash: -c: line 2: `</shell command>'
+
+[exit code: 2]
+
+
+[model reply, complete and unedited] (1222 tokens in, 273 tokens out)
+
+
+exec_command cd /testbed && sed -n '1,80p' django/db/migrations/utils.py && grep -n "get_class_description\|ClassDescription\|qualname\|__self__" django/db/migrations/serializer.py | head -40
+
+[command executed: exec_command]
+cd /testbed && sed -n '1,80p' django/db/migrations/utils.py && grep -n "get_class_description\|ClassDescription\|qualname\|__self__" django/db/migrations/serializer.py | head -40
+
+[result]
+import datetime
+import re
+from collections import namedtuple
+
+from django.db.models.fields.related import RECURSIVE_RELATIONSHIP_CONSTANT
+
+FieldReference = namedtuple("FieldReference", "to through")
+
+COMPILED_REGEX_TYPE = type(re.compile(""))
+
+
+class RegexObject:
+    def __init__(self, obj):
+        self.pattern = obj.pattern
+        self.flags = obj.flags
+
+    def __eq__(self, other):
+        if not isinstance(other, RegexObject):
+            return NotImplemented
+        return self.pattern == other.pattern and self.flags == other.flags
+
+
+def get_migration_name_timestamp():
+    return datetime.datetime.now().strftime("%Y%m%d_%H%M")
+
+
+def resolve_relation(model, app_label=None, model_name=None):
+    """
+    Turn a model class or model reference string and return a model tuple.
+
+    app_label and model_name are used to resolve the scope of recursive and
+    unscoped model relationship.
+    """
+    if isinstance(model, str):
+        if model == RECURSIVE_RELATIONSHIP_CONSTANT:
+            if app_label is None or model_name is None:
+                raise TypeError(
+                    "app_label and model_name must be provided to resolve "
+                    "recursive relationships."
+                )
+            return app_label, model_name
+        if "." in model:
+            app_label, model_name = model.split(".", 1)
+            return app_label, model_name.lower()
+        if app_label is None:
+            raise TypeError(
+                "app_label must be provided to resolve unscoped model relationships."
+            )
+        return app_label, model.lower()
+    return model._meta.app_label, model._meta.model_name
+
+
+def field_references(
+    model_tuple,
+    field,
+    reference_model_tuple,
+    reference_field_name=None,
+    reference_field=None,
+):
+    """
+    Return either False or a FieldReference if `field` references provided
+    context.
+
+    False positives can be returned if `reference_field_name` is provided
+    without `reference_field` because of the introspection limitation it
+    incurs. This should not be an issue when this function is used to determine
+    whether or not an optimization can take place.
+    """
+    remote_field = field.remote_field
+    if not remote_field:
+        return False
+    references_to = None
+    references_through = None
+    if resolve_relation(remote_field.model, *model_tuple) == reference_model_tuple:
+        to_fields = getattr(field, "to_fields", None)
+        if (
+            reference_field_name is None
+            or
+            # Unspecified to_field(s).
+            to_fields is None
+144:                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+182:        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+183:            return "%s.%s" % (module_name, self.value.__qualname__), {
+322:                return "%s.%s" % (module, self.value.__qualname__), {
+
+
+------------------------------------------------------------------------------
+TURN 7
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 7627 characters, the same as turn 1 plus the history below]
+$exec_command <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>
+ 
+[stderr]
+bash: -c: line 1: syntax error near unexpected token `newline'
+bash: -c: line 1: `source /opt/miniconda3/bin/activate && conda activate testbed && cd /testbed && <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>'
+
+[exit code: 2]
+
+$exec_command find /testbed -maxdepth 1 -type d | head -30
+ /testbed
+/testbed/.git
+/testbed/tests
+/testbed/django
+/testbed/scripts
+/testbed/docs
+/testbed/extras
+/testbed/Django.egg-info
+/testbed/.github
+/testbed/js_tests
+/testbed/.tx
+
+
+$exec_command cd /testbed && git log --oneline -3 && grep -n "def get_class_description" django/db/migrations/utils.py && grep -n "Callable\|get_class_description\|bound\|__self__" django/db/migrations/serializer.py | head -40
+ c6b2b2206f SWE-bench
+4a72da7100 Refs #27471 -- Made admin's filter choice arrows use cursor pointers.
+da2f8e8257 Refs #34118 -- Improved sanitize_address() error message for tuple with empty strings.
+
+[exit code: 1]
+
+$exec_command cd /testbed && grep -n "get_class_description\|Callable\|__self__\|bound" django/db/migrations/serializer.py | head -50
+ 166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+
+
+$exec_command cd /testbed && grep -rn "def get_class_description" django/ && grep -n "__self__\|__qualname__\|__name__" django/db/migrations/serializer.py | head -30 && sed -n '150,210p' django/db/migrations/serializer.py
+</shell command>
+ 
+[stderr]
+bash: -c: line 2: syntax error near unexpected token `newline'
+bash: -c: line 2: `</shell command>'
+
+[exit code: 2]
+
+$exec_command cd /testbed && sed -n '1,80p' django/db/migrations/utils.py && grep -n "get_class_description\|ClassDescription\|qualname\|__self__" django/db/migrations/serializer.py | head -40
+ import datetime
+import re
+from collections import namedtuple
+
+from django.db.models.fields.related import RECURSIVE_RELATIONSHIP_CONSTANT
+
+FieldReference = namedtuple("FieldReference", "to through")
+
+COMPILED_REGEX_TYPE = type(re.compile(""))
+
+
+class RegexObject:
+    def __init__(self, obj):
+        self.pattern = obj.pattern
+        self.flags = obj.flags
+
+    def __eq__(self, other):
+        if not isinstance(other, RegexObject):
+            return NotImplemented
+        return self.pattern == other.pattern and self.flags == other.flags
+
+
+def get_migration_name_timestamp():
+    return datetime.datetime.now().strftime("%Y%m%d_%H%M")
+
+
+def resolve_relation(model, app_label=None, model_name=None):
+    """
+    Turn a model class or model reference string and return a model tuple.
+
+    app_label and model_name are used to resolve the scope of recursive and
+    unscoped model relationship.
+    """
+    if isinstance(model, str):
+        if model == RECURSIVE_RELATIONSHIP_CONSTANT:
+            if app_label is None or model_name is None:
+                raise TypeError(
+                    "app_label and model_name must be provided to resolve "
+                    "recursive relationships."
+                )
+            return app_label, model_name
+        if "." in model:
+            app_label, model_name = model.split(".", 1)
+            return app_label, model_name.lower()
+        if app_label is None:
+            raise TypeError(
+                "app_label must be provided to resolve unscoped model relationships."
+            )
+        return app_label, model.lower()
+    return model._meta.app_label, model._meta.model_name
+
+
+def field_references(
+    model_tuple,
+    field,
+    reference_model_tuple,
+    reference_field_name=None,
+    reference_field=None,
+):
+    """
+    Return either False or a FieldReference if `field` references provided
+    context.
+
+    False positives can be returned if `reference_field_name` is provided
+    without `reference_field` because of the introspection limitation it
+    incurs. This should not be an issue when this function is used to determine
+    whether or not an optimization can take place.
+    """
+    remote_field = field.remote_field
+    if not remote_field:
+        return False
+    references_to = None
+    references_through = None
+    if resolve_relation(remote_field.model, *model_tuple) == reference_model_tuple:
+        to_fields = getattr(field, "to_fields", None)
+        if (
+            reference_field_name is None
+            or
+            # Unspecified to_field(s).
+            to_fields is None
+144:                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+182:        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+183:            return "%s.%s" % (module_name, self.value.__qualname__), {
+322:                return "%s.%s" % (module, self.value.__qualname__), {
+
+
+
+[model reply, complete and unedited] (1989 tokens in, 56 tokens out)
+
+
+exec_command cd /testbed && sed -n '120,200p' django/db/migrations/serializer.py
+
+[command executed: exec_command]
+cd /testbed && sed -n '120,200p' django/db/migrations/serializer.py
+
+[result]
+        for k, v in sorted(self.value.items()):
+            k_string, k_imports = serializer_factory(k).serialize()
+            v_string, v_imports = serializer_factory(v).serialize()
+            imports.update(k_imports)
+            imports.update(v_imports)
+            strings.append((k_string, v_string))
+        return "{%s}" % (", ".join("%s: %s" % (k, v) for k, v in strings)), imports
+
+
+class EnumSerializer(BaseSerializer):
+    def serialize(self):
+        enum_class = self.value.__class__
+        module = enum_class.__module__
+        if issubclass(enum_class, enum.Flag):
+            if PY311:
+                members = list(self.value)
+            else:
+                members, _ = enum._decompose(enum_class, self.value)
+                members = reversed(members)
+        else:
+            members = (self.value,)
+        return (
+            " | ".join(
+                [
+                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+                    for item in members
+                ]
+            ),
+            {"import %s" % module},
+        )
+
+
+class FloatSerializer(BaseSimpleSerializer):
+    def serialize(self):
+        if math.isnan(self.value) or math.isinf(self.value):
+            return 'float("{}")'.format(self.value), set()
+        return super().serialize()
+
+
+class FrozensetSerializer(BaseUnorderedSequenceSerializer):
+    def _format(self):
+        return "frozenset([%s])"
+
+
+class FunctionTypeSerializer(BaseSerializer):
+    def serialize(self):
+        if getattr(self.value, "__self__", None) and isinstance(
+            self.value.__self__, type
+        ):
+            klass = self.value.__self__
+            module = klass.__module__
+            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
+                "import %s" % module
+            }
+        # Further error checking
+        if self.value.__name__ == "<lambda>":
+            raise ValueError("Cannot serialize function: lambda")
+        if self.value.__module__ is None:
+            raise ValueError("Cannot serialize function %r: No module" % self.value)
+
+        module_name = self.value.__module__
+
+        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+            return "%s.%s" % (module_name, self.value.__qualname__), {
+                "import %s" % self.value.__module__
+            }
+
+        raise ValueError(
+            "Could not find function %s in %s.\n" % (self.value.__name__, module_name)
+        )
+
+
+class FunctoolsPartialSerializer(BaseSerializer):
+    def serialize(self):
+        # Serialize functools.partial() arguments
+        func_string, func_imports = serializer_factory(self.value.func).serialize()
+        args_string, args_imports = serializer_factory(self.value.args).serialize()
+        keywords_string, keywords_imports = serializer_factory(
+            self.value.keywords
+        ).serialize()
+        # Add any imports needed by arguments
+
+
+------------------------------------------------------------------------------
+TURN 8
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 10654 characters, the same as turn 1 plus the history below]
+$exec_command <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>
+ 
+[stderr]
+bash: -c: line 1: syntax error near unexpected token `newline'
+bash: -c: line 1: `source /opt/miniconda3/bin/activate && conda activate testbed && cd /testbed && <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>'
+
+[exit code: 2]
+
+$exec_command find /testbed -maxdepth 1 -type d | head -30
+ /testbed
+/testbed/.git
+/testbed/tests
+/testbed/django
+/testbed/scripts
+/testbed/docs
+/testbed/extras
+/testbed/Django.egg-info
+/testbed/.github
+/testbed/js_tests
+/testbed/.tx
+
+
+$exec_command cd /testbed && git log --oneline -3 && grep -n "def get_class_description" django/db/migrations/utils.py && grep -n "Callable\|get_class_description\|bound\|__self__" django/db/migrations/serializer.py | head -40
+ c6b2b2206f SWE-bench
+4a72da7100 Refs #27471 -- Made admin's filter choice arrows use cursor pointers.
+da2f8e8257 Refs #34118 -- Improved sanitize_address() error message for tuple with empty strings.
+
+[exit code: 1]
+
+$exec_command cd /testbed && grep -n "get_class_description\|Callable\|__self__\|bound" django/db/migrations/serializer.py | head -50
+ 166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+
+
+$exec_command cd /testbed && grep -rn "def get_class_description" django/ && grep -n "__self__\|__qualname__\|__name__" django/db/migrations/serializer.py | head -30 && sed -n '150,210p' django/db/migrations/serializer.py
+</shell command>
+ 
+[stderr]
+bash: -c: line 2: syntax error near unexpected token `newline'
+bash: -c: line 2: `</shell command>'
+
+[exit code: 2]
+
+$exec_command cd /testbed && sed -n '1,80p' django/db/migrations/utils.py && grep -n "get_class_description\|ClassDescription\|qualname\|__self__" django/db/migrations/serializer.py | head -40
+ import datetime
+import re
+from collections import namedtuple
+
+from django.db.models.fields.related import RECURSIVE_RELATIONSHIP_CONSTANT
+
+FieldReference = namedtuple("FieldReference", "to through")
+
+COMPILED_REGEX_TYPE = type(re.compile(""))
+
+
+class RegexObject:
+    def __init__(self, obj):
+        self.pattern = obj.pattern
+        self.flags = obj.flags
+
+    def __eq__(self, other):
+        if not isinstance(other, RegexObject):
+            return NotImplemented
+        return self.pattern == other.pattern and self.flags == other.flags
+
+
+def get_migration_name_timestamp():
+    return datetime.datetime.now().strftime("%Y%m%d_%H%M")
+
+
+def resolve_relation(model, app_label=None, model_name=None):
+    """
+    Turn a model class or model reference string and return a model tuple.
+
+    app_label and model_name are used to resolve the scope of recursive and
+    unscoped model relationship.
+    """
+    if isinstance(model, str):
+        if model == RECURSIVE_RELATIONSHIP_CONSTANT:
+            if app_label is None or model_name is None:
+                raise TypeError(
+                    "app_label and model_name must be provided to resolve "
+                    "recursive relationships."
+                )
+            return app_label, model_name
+        if "." in model:
+            app_label, model_name = model.split(".", 1)
+            return app_label, model_name.lower()
+        if app_label is None:
+            raise TypeError(
+                "app_label must be provided to resolve unscoped model relationships."
+            )
+        return app_label, model.lower()
+    return model._meta.app_label, model._meta.model_name
+
+
+def field_references(
+    model_tuple,
+    field,
+    reference_model_tuple,
+    reference_field_name=None,
+    reference_field=None,
+):
+    """
+    Return either False or a FieldReference if `field` references provided
+    context.
+
+    False positives can be returned if `reference_field_name` is provided
+    without `reference_field` because of the introspection limitation it
+    incurs. This should not be an issue when this function is used to determine
+    whether or not an optimization can take place.
+    """
+    remote_field = field.remote_field
+    if not remote_field:
+        return False
+    references_to = None
+    references_through = None
+    if resolve_relation(remote_field.model, *model_tuple) == reference_model_tuple:
+        to_fields = getattr(field, "to_fields", None)
+        if (
+            reference_field_name is None
+            or
+            # Unspecified to_field(s).
+            to_fields is None
+144:                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+182:        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+183:            return "%s.%s" % (module_name, self.value.__qualname__), {
+322:                return "%s.%s" % (module, self.value.__qualname__), {
+
+
+$exec_command cd /testbed && sed -n '120,200p' django/db/migrations/serializer.py
+         for k, v in sorted(self.value.items()):
+            k_string, k_imports = serializer_factory(k).serialize()
+            v_string, v_imports = serializer_factory(v).serialize()
+            imports.update(k_imports)
+            imports.update(v_imports)
+            strings.append((k_string, v_string))
+        return "{%s}" % (", ".join("%s: %s" % (k, v) for k, v in strings)), imports
+
+
+class EnumSerializer(BaseSerializer):
+    def serialize(self):
+        enum_class = self.value.__class__
+        module = enum_class.__module__
+        if issubclass(enum_class, enum.Flag):
+            if PY311:
+                members = list(self.value)
+            else:
+                members, _ = enum._decompose(enum_class, self.value)
+                members = reversed(members)
+        else:
+            members = (self.value,)
+        return (
+            " | ".join(
+                [
+                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+                    for item in members
+                ]
+            ),
+            {"import %s" % module},
+        )
+
+
+class FloatSerializer(BaseSimpleSerializer):
+    def serialize(self):
+        if math.isnan(self.value) or math.isinf(self.value):
+            return 'float("{}")'.format(self.value), set()
+        return super().serialize()
+
+
+class FrozensetSerializer(BaseUnorderedSequenceSerializer):
+    def _format(self):
+        return "frozenset([%s])"
+
+
+class FunctionTypeSerializer(BaseSerializer):
+    def serialize(self):
+        if getattr(self.value, "__self__", None) and isinstance(
+            self.value.__self__, type
+        ):
+            klass = self.value.__self__
+            module = klass.__module__
+            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
+                "import %s" % module
+            }
+        # Further error checking
+        if self.value.__name__ == "<lambda>":
+            raise ValueError("Cannot serialize function: lambda")
+        if self.value.__module__ is None:
+            raise ValueError("Cannot serialize function %r: No module" % self.value)
+
+        module_name = self.value.__module__
+
+        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+            return "%s.%s" % (module_name, self.value.__qualname__), {
+                "import %s" % self.value.__module__
+            }
+
+        raise ValueError(
+            "Could not find function %s in %s.\n" % (self.value.__name__, module_name)
+        )
+
+
+class FunctoolsPartialSerializer(BaseSerializer):
+    def serialize(self):
+        # Serialize functools.partial() arguments
+        func_string, func_imports = serializer_factory(self.value.func).serialize()
+        args_string, args_imports = serializer_factory(self.value.args).serialize()
+        keywords_string, keywords_imports = serializer_factory(
+            self.value.keywords
+        ).serialize()
+        # Add any imports needed by arguments
+
+
+
+[model reply, complete and unedited] (2701 tokens in, 2549 tokens out)
+
+
+exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = 'return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {'
+new = 'return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+print("serialized:", s, i)
+assert s.endswith(".Outer.Inner.default"), s
+print("OK")
+EOF
+
+[command executed: exec_command]
+cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = 'return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {'
+new = 'return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+print("serialized:", s, i)
+assert s.endswith(".Outer.Inner.default"), s
+print("OK")
+EOF
+
+[result]
+patched
+serialized: __main__.Outer.Inner.default {'import __main__'}
+OK
+
+
+------------------------------------------------------------------------------
+TURN 9
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 11418 characters, the same as turn 1 plus the history below]
+$exec_command <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>
+ 
+[stderr]
+bash: -c: line 1: syntax error near unexpected token `newline'
+bash: -c: line 1: `source /opt/miniconda3/bin/activate && conda activate testbed && cd /testbed && <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>'
+
+[exit code: 2]
+
+$exec_command find /testbed -maxdepth 1 -type d | head -30
+ /testbed
+/testbed/.git
+/testbed/tests
+/testbed/django
+/testbed/scripts
+/testbed/docs
+/testbed/extras
+/testbed/Django.egg-info
+/testbed/.github
+/testbed/js_tests
+/testbed/.tx
+
+
+$exec_command cd /testbed && git log --oneline -3 && grep -n "def get_class_description" django/db/migrations/utils.py && grep -n "Callable\|get_class_description\|bound\|__self__" django/db/migrations/serializer.py | head -40
+ c6b2b2206f SWE-bench
+4a72da7100 Refs #27471 -- Made admin's filter choice arrows use cursor pointers.
+da2f8e8257 Refs #34118 -- Improved sanitize_address() error message for tuple with empty strings.
+
+[exit code: 1]
+
+$exec_command cd /testbed && grep -n "get_class_description\|Callable\|__self__\|bound" django/db/migrations/serializer.py | head -50
+ 166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+
+
+$exec_command cd /testbed && grep -rn "def get_class_description" django/ && grep -n "__self__\|__qualname__\|__name__" django/db/migrations/serializer.py | head -30 && sed -n '150,210p' django/db/migrations/serializer.py
+</shell command>
+ 
+[stderr]
+bash: -c: line 2: syntax error near unexpected token `newline'
+bash: -c: line 2: `</shell command>'
+
+[exit code: 2]
+
+$exec_command cd /testbed && sed -n '1,80p' django/db/migrations/utils.py && grep -n "get_class_description\|ClassDescription\|qualname\|__self__" django/db/migrations/serializer.py | head -40
+ import datetime
+import re
+from collections import namedtuple
+
+from django.db.models.fields.related import RECURSIVE_RELATIONSHIP_CONSTANT
+
+FieldReference = namedtuple("FieldReference", "to through")
+
+COMPILED_REGEX_TYPE = type(re.compile(""))
+
+
+class RegexObject:
+    def __init__(self, obj):
+        self.pattern = obj.pattern
+        self.flags = obj.flags
+
+    def __eq__(self, other):
+        if not isinstance(other, RegexObject):
+            return NotImplemented
+        return self.pattern == other.pattern and self.flags == other.flags
+
+
+def get_migration_name_timestamp():
+    return datetime.datetime.now().strftime("%Y%m%d_%H%M")
+
+
+def resolve_relation(model, app_label=None, model_name=None):
+    """
+    Turn a model class or model reference string and return a model tuple.
+
+    app_label and model_name are used to resolve the scope of recursive and
+    unscoped model relationship.
+    """
+    if isinstance(model, str):
+        if model == RECURSIVE_RELATIONSHIP_CONSTANT:
+            if app_label is None or model_name is None:
+                raise TypeError(
+                    "app_label and model_name must be provided to resolve "
+                    "recursive relationships."
+                )
+            return app_label, model_name
+        if "." in model:
+            app_label, model_name = model.split(".", 1)
+            return app_label, model_name.lower()
+        if app_label is None:
+            raise TypeError(
+                "app_label must be provided to resolve unscoped model relationships."
+            )
+        return app_label, model.lower()
+    return model._meta.app_label, model._meta.model_name
+
+
+def field_references(
+    model_tuple,
+    field,
+    reference_model_tuple,
+    reference_field_name=None,
+    reference_field=None,
+):
+    """
+    Return either False or a FieldReference if `field` references provided
+    context.
+
+    False positives can be returned if `reference_field_name` is provided
+    without `reference_field` because of the introspection limitation it
+    incurs. This should not be an issue when this function is used to determine
+    whether or not an optimization can take place.
+    """
+    remote_field = field.remote_field
+    if not remote_field:
+        return False
+    references_to = None
+    references_through = None
+    if resolve_relation(remote_field.model, *model_tuple) == reference_model_tuple:
+        to_fields = getattr(field, "to_fields", None)
+        if (
+            reference_field_name is None
+            or
+            # Unspecified to_field(s).
+            to_fields is None
+144:                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+182:        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+183:            return "%s.%s" % (module_name, self.value.__qualname__), {
+322:                return "%s.%s" % (module, self.value.__qualname__), {
+
+
+$exec_command cd /testbed && sed -n '120,200p' django/db/migrations/serializer.py
+         for k, v in sorted(self.value.items()):
+            k_string, k_imports = serializer_factory(k).serialize()
+            v_string, v_imports = serializer_factory(v).serialize()
+            imports.update(k_imports)
+            imports.update(v_imports)
+            strings.append((k_string, v_string))
+        return "{%s}" % (", ".join("%s: %s" % (k, v) for k, v in strings)), imports
+
+
+class EnumSerializer(BaseSerializer):
+    def serialize(self):
+        enum_class = self.value.__class__
+        module = enum_class.__module__
+        if issubclass(enum_class, enum.Flag):
+            if PY311:
+                members = list(self.value)
+            else:
+                members, _ = enum._decompose(enum_class, self.value)
+                members = reversed(members)
+        else:
+            members = (self.value,)
+        return (
+            " | ".join(
+                [
+                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+                    for item in members
+                ]
+            ),
+            {"import %s" % module},
+        )
+
+
+class FloatSerializer(BaseSimpleSerializer):
+    def serialize(self):
+        if math.isnan(self.value) or math.isinf(self.value):
+            return 'float("{}")'.format(self.value), set()
+        return super().serialize()
+
+
+class FrozensetSerializer(BaseUnorderedSequenceSerializer):
+    def _format(self):
+        return "frozenset([%s])"
+
+
+class FunctionTypeSerializer(BaseSerializer):
+    def serialize(self):
+        if getattr(self.value, "__self__", None) and isinstance(
+            self.value.__self__, type
+        ):
+            klass = self.value.__self__
+            module = klass.__module__
+            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
+                "import %s" % module
+            }
+        # Further error checking
+        if self.value.__name__ == "<lambda>":
+            raise ValueError("Cannot serialize function: lambda")
+        if self.value.__module__ is None:
+            raise ValueError("Cannot serialize function %r: No module" % self.value)
+
+        module_name = self.value.__module__
+
+        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+            return "%s.%s" % (module_name, self.value.__qualname__), {
+                "import %s" % self.value.__module__
+            }
+
+        raise ValueError(
+            "Could not find function %s in %s.\n" % (self.value.__name__, module_name)
+        )
+
+
+class FunctoolsPartialSerializer(BaseSerializer):
+    def serialize(self):
+        # Serialize functools.partial() arguments
+        func_string, func_imports = serializer_factory(self.value.func).serialize()
+        args_string, args_imports = serializer_factory(self.value.args).serialize()
+        keywords_string, keywords_imports = serializer_factory(
+            self.value.keywords
+        ).serialize()
+        # Add any imports needed by arguments
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = 'return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {'
+new = 'return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+print("serialized:", s, i)
+assert s.endswith(".Outer.Inner.default"), s
+print("OK")
+EOF
+ patched
+serialized: __main__.Outer.Inner.default {'import __main__'}
+OK
+
+
+
+[model reply, complete and unedited] (2915 tokens in, 3405 tokens out)
+
+
+exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = '            klass = self.value.__self__\n            module = klass.__module__\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+new = '            klass = self.value.__self__\n            module = klass.__module__\n            if "<" in klass.__qualname__:\n                raise ValueError(\n                    "Could not find klass %s in %s.\\n"\n                    % (klass.__qualname__, module)\n                )\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+EOF
+git diff && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func().cm).serialize()
+    raise AssertionError("expected ValueError")
+except ValueError as e:
+    print("local class raises:", e)
+print("OK")
+EOF
+python tests/runtests.py migrations.test_writer 2>&1 | tail -3
+
+[command executed: exec_command]
+cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = '            klass = self.value.__self__\n            module = klass.__module__\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+new = '            klass = self.value.__self__\n            module = klass.__module__\n            if "<" in klass.__qualname__:\n                raise ValueError(\n                    "Could not find klass %s in %s.\\n"\n                    % (klass.__qualname__, module)\n                )\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+EOF
+git diff && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func().cm).serialize()
+    raise AssertionError("expected ValueError")
+except ValueError as e:
+    print("local class raises:", e)
+print("OK")
+EOF
+python tests/runtests.py migrations.test_writer 2>&1 | tail -3
+
+[result]
+patched
+diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..efacd60686 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,12 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            if "<" in klass.__qualname__:
++                raise ValueError(
++                    "Could not find klass %s in %s.\n"
++                    % (klass.__qualname__, module)
++                )
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+Ran 53 tests in 0.050s
+
+OK
+
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 20, in <module>
+AttributeError: 'function' object has no attribute 'cm'
+
+
+------------------------------------------------------------------------------
+TURN 10
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 13957 characters, the same as turn 1 plus the history below]
+$exec_command <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>
+ 
+[stderr]
+bash: -c: line 1: syntax error near unexpected token `newline'
+bash: -c: line 1: `source /opt/miniconda3/bin/activate && conda activate testbed && cd /testbed && <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>'
+
+[exit code: 2]
+
+$exec_command find /testbed -maxdepth 1 -type d | head -30
+ /testbed
+/testbed/.git
+/testbed/tests
+/testbed/django
+/testbed/scripts
+/testbed/docs
+/testbed/extras
+/testbed/Django.egg-info
+/testbed/.github
+/testbed/js_tests
+/testbed/.tx
+
+
+$exec_command cd /testbed && git log --oneline -3 && grep -n "def get_class_description" django/db/migrations/utils.py && grep -n "Callable\|get_class_description\|bound\|__self__" django/db/migrations/serializer.py | head -40
+ c6b2b2206f SWE-bench
+4a72da7100 Refs #27471 -- Made admin's filter choice arrows use cursor pointers.
+da2f8e8257 Refs #34118 -- Improved sanitize_address() error message for tuple with empty strings.
+
+[exit code: 1]
+
+$exec_command cd /testbed && grep -n "get_class_description\|Callable\|__self__\|bound" django/db/migrations/serializer.py | head -50
+ 166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+
+
+$exec_command cd /testbed && grep -rn "def get_class_description" django/ && grep -n "__self__\|__qualname__\|__name__" django/db/migrations/serializer.py | head -30 && sed -n '150,210p' django/db/migrations/serializer.py
+</shell command>
+ 
+[stderr]
+bash: -c: line 2: syntax error near unexpected token `newline'
+bash: -c: line 2: `</shell command>'
+
+[exit code: 2]
+
+$exec_command cd /testbed && sed -n '1,80p' django/db/migrations/utils.py && grep -n "get_class_description\|ClassDescription\|qualname\|__self__" django/db/migrations/serializer.py | head -40
+ import datetime
+import re
+from collections import namedtuple
+
+from django.db.models.fields.related import RECURSIVE_RELATIONSHIP_CONSTANT
+
+FieldReference = namedtuple("FieldReference", "to through")
+
+COMPILED_REGEX_TYPE = type(re.compile(""))
+
+
+class RegexObject:
+    def __init__(self, obj):
+        self.pattern = obj.pattern
+        self.flags = obj.flags
+
+    def __eq__(self, other):
+        if not isinstance(other, RegexObject):
+            return NotImplemented
+        return self.pattern == other.pattern and self.flags == other.flags
+
+
+def get_migration_name_timestamp():
+    return datetime.datetime.now().strftime("%Y%m%d_%H%M")
+
+
+def resolve_relation(model, app_label=None, model_name=None):
+    """
+    Turn a model class or model reference string and return a model tuple.
+
+    app_label and model_name are used to resolve the scope of recursive and
+    unscoped model relationship.
+    """
+    if isinstance(model, str):
+        if model == RECURSIVE_RELATIONSHIP_CONSTANT:
+            if app_label is None or model_name is None:
+                raise TypeError(
+                    "app_label and model_name must be provided to resolve "
+                    "recursive relationships."
+                )
+            return app_label, model_name
+        if "." in model:
+            app_label, model_name = model.split(".", 1)
+            return app_label, model_name.lower()
+        if app_label is None:
+            raise TypeError(
+                "app_label must be provided to resolve unscoped model relationships."
+            )
+        return app_label, model.lower()
+    return model._meta.app_label, model._meta.model_name
+
+
+def field_references(
+    model_tuple,
+    field,
+    reference_model_tuple,
+    reference_field_name=None,
+    reference_field=None,
+):
+    """
+    Return either False or a FieldReference if `field` references provided
+    context.
+
+    False positives can be returned if `reference_field_name` is provided
+    without `reference_field` because of the introspection limitation it
+    incurs. This should not be an issue when this function is used to determine
+    whether or not an optimization can take place.
+    """
+    remote_field = field.remote_field
+    if not remote_field:
+        return False
+    references_to = None
+    references_through = None
+    if resolve_relation(remote_field.model, *model_tuple) == reference_model_tuple:
+        to_fields = getattr(field, "to_fields", None)
+        if (
+            reference_field_name is None
+            or
+            # Unspecified to_field(s).
+            to_fields is None
+144:                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+182:        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+183:            return "%s.%s" % (module_name, self.value.__qualname__), {
+322:                return "%s.%s" % (module, self.value.__qualname__), {
+
+
+$exec_command cd /testbed && sed -n '120,200p' django/db/migrations/serializer.py
+         for k, v in sorted(self.value.items()):
+            k_string, k_imports = serializer_factory(k).serialize()
+            v_string, v_imports = serializer_factory(v).serialize()
+            imports.update(k_imports)
+            imports.update(v_imports)
+            strings.append((k_string, v_string))
+        return "{%s}" % (", ".join("%s: %s" % (k, v) for k, v in strings)), imports
+
+
+class EnumSerializer(BaseSerializer):
+    def serialize(self):
+        enum_class = self.value.__class__
+        module = enum_class.__module__
+        if issubclass(enum_class, enum.Flag):
+            if PY311:
+                members = list(self.value)
+            else:
+                members, _ = enum._decompose(enum_class, self.value)
+                members = reversed(members)
+        else:
+            members = (self.value,)
+        return (
+            " | ".join(
+                [
+                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+                    for item in members
+                ]
+            ),
+            {"import %s" % module},
+        )
+
+
+class FloatSerializer(BaseSimpleSerializer):
+    def serialize(self):
+        if math.isnan(self.value) or math.isinf(self.value):
+            return 'float("{}")'.format(self.value), set()
+        return super().serialize()
+
+
+class FrozensetSerializer(BaseUnorderedSequenceSerializer):
+    def _format(self):
+        return "frozenset([%s])"
+
+
+class FunctionTypeSerializer(BaseSerializer):
+    def serialize(self):
+        if getattr(self.value, "__self__", None) and isinstance(
+            self.value.__self__, type
+        ):
+            klass = self.value.__self__
+            module = klass.__module__
+            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
+                "import %s" % module
+            }
+        # Further error checking
+        if self.value.__name__ == "<lambda>":
+            raise ValueError("Cannot serialize function: lambda")
+        if self.value.__module__ is None:
+            raise ValueError("Cannot serialize function %r: No module" % self.value)
+
+        module_name = self.value.__module__
+
+        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+            return "%s.%s" % (module_name, self.value.__qualname__), {
+                "import %s" % self.value.__module__
+            }
+
+        raise ValueError(
+            "Could not find function %s in %s.\n" % (self.value.__name__, module_name)
+        )
+
+
+class FunctoolsPartialSerializer(BaseSerializer):
+    def serialize(self):
+        # Serialize functools.partial() arguments
+        func_string, func_imports = serializer_factory(self.value.func).serialize()
+        args_string, args_imports = serializer_factory(self.value.args).serialize()
+        keywords_string, keywords_imports = serializer_factory(
+            self.value.keywords
+        ).serialize()
+        # Add any imports needed by arguments
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = 'return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {'
+new = 'return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+print("serialized:", s, i)
+assert s.endswith(".Outer.Inner.default"), s
+print("OK")
+EOF
+ patched
+serialized: __main__.Outer.Inner.default {'import __main__'}
+OK
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = '            klass = self.value.__self__\n            module = klass.__module__\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+new = '            klass = self.value.__self__\n            module = klass.__module__\n            if "<" in klass.__qualname__:\n                raise ValueError(\n                    "Could not find klass %s in %s.\\n"\n                    % (klass.__qualname__, module)\n                )\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+EOF
+git diff && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func().cm).serialize()
+    raise AssertionError("expected ValueError")
+except ValueError as e:
+    print("local class raises:", e)
+print("OK")
+EOF
+python tests/runtests.py migrations.test_writer 2>&1 | tail -3
+ patched
+diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..efacd60686 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,12 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            if "<" in klass.__qualname__:
++                raise ValueError(
++                    "Could not find klass %s in %s.\n"
++                    % (klass.__qualname__, module)
++                )
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+Ran 53 tests in 0.050s
+
+OK
+
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 20, in <module>
+AttributeError: 'function' object has no attribute 'cm'
+
+
+
+[model reply, complete and unedited] (3607 tokens in, 4255 tokens out)
+
+
+exec_command cd /testbed && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+print("nested classmethod OK:", s)
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func()).serialize()
+    raise SystemExit("expected ValueError")
+except ValueError as e:
+    print("local class raises ValueError:", str(e).replace("\n", " | "))
+EOF
+python tests/runtests.py migrations 2>&1 | tail -4
+
+[command executed: exec_command]
+cd /testbed && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+print("nested classmethod OK:", s)
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func()).serialize()
+    raise SystemExit("expected ValueError")
+except ValueError as e:
+    print("local class raises ValueError:", str(e).replace("\n", " | "))
+EOF
+python tests/runtests.py migrations 2>&1 | tail -4
+
+[result]
+nested classmethod OK: __main__.Outer.Inner.default
+local class raises ValueError: Could not find klass outer_func.<locals>.Local in __main__. | 
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+
+
+------------------------------------------------------------------------------
+TURN 11
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 15006 characters, the same as turn 1 plus the history below]
+$exec_command <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>
+ 
+[stderr]
+bash: -c: line 1: syntax error near unexpected token `newline'
+bash: -c: line 1: `source /opt/miniconda3/bin/activate && conda activate testbed && cd /testbed && <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>'
+
+[exit code: 2]
+
+$exec_command find /testbed -maxdepth 1 -type d | head -30
+ /testbed
+/testbed/.git
+/testbed/tests
+/testbed/django
+/testbed/scripts
+/testbed/docs
+/testbed/extras
+/testbed/Django.egg-info
+/testbed/.github
+/testbed/js_tests
+/testbed/.tx
+
+
+$exec_command cd /testbed && git log --oneline -3 && grep -n "def get_class_description" django/db/migrations/utils.py && grep -n "Callable\|get_class_description\|bound\|__self__" django/db/migrations/serializer.py | head -40
+ c6b2b2206f SWE-bench
+4a72da7100 Refs #27471 -- Made admin's filter choice arrows use cursor pointers.
+da2f8e8257 Refs #34118 -- Improved sanitize_address() error message for tuple with empty strings.
+
+[exit code: 1]
+
+$exec_command cd /testbed && grep -n "get_class_description\|Callable\|__self__\|bound" django/db/migrations/serializer.py | head -50
+ 166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+
+
+$exec_command cd /testbed && grep -rn "def get_class_description" django/ && grep -n "__self__\|__qualname__\|__name__" django/db/migrations/serializer.py | head -30 && sed -n '150,210p' django/db/migrations/serializer.py
+</shell command>
+ 
+[stderr]
+bash: -c: line 2: syntax error near unexpected token `newline'
+bash: -c: line 2: `</shell command>'
+
+[exit code: 2]
+
+$exec_command cd /testbed && sed -n '1,80p' django/db/migrations/utils.py && grep -n "get_class_description\|ClassDescription\|qualname\|__self__" django/db/migrations/serializer.py | head -40
+ import datetime
+import re
+from collections import namedtuple
+
+from django.db.models.fields.related import RECURSIVE_RELATIONSHIP_CONSTANT
+
+FieldReference = namedtuple("FieldReference", "to through")
+
+COMPILED_REGEX_TYPE = type(re.compile(""))
+
+
+class RegexObject:
+    def __init__(self, obj):
+        self.pattern = obj.pattern
+        self.flags = obj.flags
+
+    def __eq__(self, other):
+        if not isinstance(other, RegexObject):
+            return NotImplemented
+        return self.pattern == other.pattern and self.flags == other.flags
+
+
+def get_migration_name_timestamp():
+    return datetime.datetime.now().strftime("%Y%m%d_%H%M")
+
+
+def resolve_relation(model, app_label=None, model_name=None):
+    """
+    Turn a model class or model reference string and return a model tuple.
+
+    app_label and model_name are used to resolve the scope of recursive and
+    unscoped model relationship.
+    """
+    if isinstance(model, str):
+        if model == RECURSIVE_RELATIONSHIP_CONSTANT:
+            if app_label is None or model_name is None:
+                raise TypeError(
+                    "app_label and model_name must be provided to resolve "
+                    "recursive relationships."
+                )
+            return app_label, model_name
+        if "." in model:
+            app_label, model_name = model.split(".", 1)
+            return app_label, model_name.lower()
+        if app_label is None:
+            raise TypeError(
+                "app_label must be provided to resolve unscoped model relationships."
+            )
+        return app_label, model.lower()
+    return model._meta.app_label, model._meta.model_name
+
+
+def field_references(
+    model_tuple,
+    field,
+    reference_model_tuple,
+    reference_field_name=None,
+    reference_field=None,
+):
+    """
+    Return either False or a FieldReference if `field` references provided
+    context.
+
+    False positives can be returned if `reference_field_name` is provided
+    without `reference_field` because of the introspection limitation it
+    incurs. This should not be an issue when this function is used to determine
+    whether or not an optimization can take place.
+    """
+    remote_field = field.remote_field
+    if not remote_field:
+        return False
+    references_to = None
+    references_through = None
+    if resolve_relation(remote_field.model, *model_tuple) == reference_model_tuple:
+        to_fields = getattr(field, "to_fields", None)
+        if (
+            reference_field_name is None
+            or
+            # Unspecified to_field(s).
+            to_fields is None
+144:                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+182:        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+183:            return "%s.%s" % (module_name, self.value.__qualname__), {
+322:                return "%s.%s" % (module, self.value.__qualname__), {
+
+
+$exec_command cd /testbed && sed -n '120,200p' django/db/migrations/serializer.py
+         for k, v in sorted(self.value.items()):
+            k_string, k_imports = serializer_factory(k).serialize()
+            v_string, v_imports = serializer_factory(v).serialize()
+            imports.update(k_imports)
+            imports.update(v_imports)
+            strings.append((k_string, v_string))
+        return "{%s}" % (", ".join("%s: %s" % (k, v) for k, v in strings)), imports
+
+
+class EnumSerializer(BaseSerializer):
+    def serialize(self):
+        enum_class = self.value.__class__
+        module = enum_class.__module__
+        if issubclass(enum_class, enum.Flag):
+            if PY311:
+                members = list(self.value)
+            else:
+                members, _ = enum._decompose(enum_class, self.value)
+                members = reversed(members)
+        else:
+            members = (self.value,)
+        return (
+            " | ".join(
+                [
+                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+                    for item in members
+                ]
+            ),
+            {"import %s" % module},
+        )
+
+
+class FloatSerializer(BaseSimpleSerializer):
+    def serialize(self):
+        if math.isnan(self.value) or math.isinf(self.value):
+            return 'float("{}")'.format(self.value), set()
+        return super().serialize()
+
+
+class FrozensetSerializer(BaseUnorderedSequenceSerializer):
+    def _format(self):
+        return "frozenset([%s])"
+
+
+class FunctionTypeSerializer(BaseSerializer):
+    def serialize(self):
+        if getattr(self.value, "__self__", None) and isinstance(
+            self.value.__self__, type
+        ):
+            klass = self.value.__self__
+            module = klass.__module__
+            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
+                "import %s" % module
+            }
+        # Further error checking
+        if self.value.__name__ == "<lambda>":
+            raise ValueError("Cannot serialize function: lambda")
+        if self.value.__module__ is None:
+            raise ValueError("Cannot serialize function %r: No module" % self.value)
+
+        module_name = self.value.__module__
+
+        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+            return "%s.%s" % (module_name, self.value.__qualname__), {
+                "import %s" % self.value.__module__
+            }
+
+        raise ValueError(
+            "Could not find function %s in %s.\n" % (self.value.__name__, module_name)
+        )
+
+
+class FunctoolsPartialSerializer(BaseSerializer):
+    def serialize(self):
+        # Serialize functools.partial() arguments
+        func_string, func_imports = serializer_factory(self.value.func).serialize()
+        args_string, args_imports = serializer_factory(self.value.args).serialize()
+        keywords_string, keywords_imports = serializer_factory(
+            self.value.keywords
+        ).serialize()
+        # Add any imports needed by arguments
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = 'return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {'
+new = 'return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+print("serialized:", s, i)
+assert s.endswith(".Outer.Inner.default"), s
+print("OK")
+EOF
+ patched
+serialized: __main__.Outer.Inner.default {'import __main__'}
+OK
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = '            klass = self.value.__self__\n            module = klass.__module__\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+new = '            klass = self.value.__self__\n            module = klass.__module__\n            if "<" in klass.__qualname__:\n                raise ValueError(\n                    "Could not find klass %s in %s.\\n"\n                    % (klass.__qualname__, module)\n                )\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+EOF
+git diff && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func().cm).serialize()
+    raise AssertionError("expected ValueError")
+except ValueError as e:
+    print("local class raises:", e)
+print("OK")
+EOF
+python tests/runtests.py migrations.test_writer 2>&1 | tail -3
+ patched
+diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..efacd60686 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,12 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            if "<" in klass.__qualname__:
++                raise ValueError(
++                    "Could not find klass %s in %s.\n"
++                    % (klass.__qualname__, module)
++                )
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+Ran 53 tests in 0.050s
+
+OK
+
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 20, in <module>
+AttributeError: 'function' object has no attribute 'cm'
+
+
+$exec_command cd /testbed && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+print("nested classmethod OK:", s)
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func()).serialize()
+    raise SystemExit("expected ValueError")
+except ValueError as e:
+    print("local class raises ValueError:", str(e).replace("\n", " | "))
+EOF
+python tests/runtests.py migrations 2>&1 | tail -4
+ nested classmethod OK: __main__.Outer.Inner.default
+local class raises ValueError: Could not find klass outer_func.<locals>.Local in __main__. | 
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+
+
+
+[model reply, complete and unedited] (3860 tokens in, 7484 tokens out)
+
+
+exec_command cd /testbed && grep -n "class_method\|ClassMethod\|classmethod\|Could not find\|local" tests/migrations/test_writer.py | head -40
+
+[command executed: exec_command]
+cd /testbed && grep -n "class_method\|ClassMethod\|classmethod\|Could not find\|local" tests/migrations/test_writer.py | head -40
+
+[result]
+685:            "Could not find object EmailValidator2 in django.core.validators.",
+742:    def test_serialize_local_function_reference(self):
+743:        """A reference in a local scope can't be serialized."""
+752:            ValueError, "Could not find function upload_to in migrations.test_writer"
+
+
+------------------------------------------------------------------------------
+TURN 12
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 15454 characters, the same as turn 1 plus the history below]
+$exec_command <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>
+ 
+[stderr]
+bash: -c: line 1: syntax error near unexpected token `newline'
+bash: -c: line 1: `source /opt/miniconda3/bin/activate && conda activate testbed && cd /testbed && <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>'
+
+[exit code: 2]
+
+$exec_command find /testbed -maxdepth 1 -type d | head -30
+ /testbed
+/testbed/.git
+/testbed/tests
+/testbed/django
+/testbed/scripts
+/testbed/docs
+/testbed/extras
+/testbed/Django.egg-info
+/testbed/.github
+/testbed/js_tests
+/testbed/.tx
+
+
+$exec_command cd /testbed && git log --oneline -3 && grep -n "def get_class_description" django/db/migrations/utils.py && grep -n "Callable\|get_class_description\|bound\|__self__" django/db/migrations/serializer.py | head -40
+ c6b2b2206f SWE-bench
+4a72da7100 Refs #27471 -- Made admin's filter choice arrows use cursor pointers.
+da2f8e8257 Refs #34118 -- Improved sanitize_address() error message for tuple with empty strings.
+
+[exit code: 1]
+
+$exec_command cd /testbed && grep -n "get_class_description\|Callable\|__self__\|bound" django/db/migrations/serializer.py | head -50
+ 166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+
+
+$exec_command cd /testbed && grep -rn "def get_class_description" django/ && grep -n "__self__\|__qualname__\|__name__" django/db/migrations/serializer.py | head -30 && sed -n '150,210p' django/db/migrations/serializer.py
+</shell command>
+ 
+[stderr]
+bash: -c: line 2: syntax error near unexpected token `newline'
+bash: -c: line 2: `</shell command>'
+
+[exit code: 2]
+
+$exec_command cd /testbed && sed -n '1,80p' django/db/migrations/utils.py && grep -n "get_class_description\|ClassDescription\|qualname\|__self__" django/db/migrations/serializer.py | head -40
+ import datetime
+import re
+from collections import namedtuple
+
+from django.db.models.fields.related import RECURSIVE_RELATIONSHIP_CONSTANT
+
+FieldReference = namedtuple("FieldReference", "to through")
+
+COMPILED_REGEX_TYPE = type(re.compile(""))
+
+
+class RegexObject:
+    def __init__(self, obj):
+        self.pattern = obj.pattern
+        self.flags = obj.flags
+
+    def __eq__(self, other):
+        if not isinstance(other, RegexObject):
+            return NotImplemented
+        return self.pattern == other.pattern and self.flags == other.flags
+
+
+def get_migration_name_timestamp():
+    return datetime.datetime.now().strftime("%Y%m%d_%H%M")
+
+
+def resolve_relation(model, app_label=None, model_name=None):
+    """
+    Turn a model class or model reference string and return a model tuple.
+
+    app_label and model_name are used to resolve the scope of recursive and
+    unscoped model relationship.
+    """
+    if isinstance(model, str):
+        if model == RECURSIVE_RELATIONSHIP_CONSTANT:
+            if app_label is None or model_name is None:
+                raise TypeError(
+                    "app_label and model_name must be provided to resolve "
+                    "recursive relationships."
+                )
+            return app_label, model_name
+        if "." in model:
+            app_label, model_name = model.split(".", 1)
+            return app_label, model_name.lower()
+        if app_label is None:
+            raise TypeError(
+                "app_label must be provided to resolve unscoped model relationships."
+            )
+        return app_label, model.lower()
+    return model._meta.app_label, model._meta.model_name
+
+
+def field_references(
+    model_tuple,
+    field,
+    reference_model_tuple,
+    reference_field_name=None,
+    reference_field=None,
+):
+    """
+    Return either False or a FieldReference if `field` references provided
+    context.
+
+    False positives can be returned if `reference_field_name` is provided
+    without `reference_field` because of the introspection limitation it
+    incurs. This should not be an issue when this function is used to determine
+    whether or not an optimization can take place.
+    """
+    remote_field = field.remote_field
+    if not remote_field:
+        return False
+    references_to = None
+    references_through = None
+    if resolve_relation(remote_field.model, *model_tuple) == reference_model_tuple:
+        to_fields = getattr(field, "to_fields", None)
+        if (
+            reference_field_name is None
+            or
+            # Unspecified to_field(s).
+            to_fields is None
+144:                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+182:        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+183:            return "%s.%s" % (module_name, self.value.__qualname__), {
+322:                return "%s.%s" % (module, self.value.__qualname__), {
+
+
+$exec_command cd /testbed && sed -n '120,200p' django/db/migrations/serializer.py
+         for k, v in sorted(self.value.items()):
+            k_string, k_imports = serializer_factory(k).serialize()
+            v_string, v_imports = serializer_factory(v).serialize()
+            imports.update(k_imports)
+            imports.update(v_imports)
+            strings.append((k_string, v_string))
+        return "{%s}" % (", ".join("%s: %s" % (k, v) for k, v in strings)), imports
+
+
+class EnumSerializer(BaseSerializer):
+    def serialize(self):
+        enum_class = self.value.__class__
+        module = enum_class.__module__
+        if issubclass(enum_class, enum.Flag):
+            if PY311:
+                members = list(self.value)
+            else:
+                members, _ = enum._decompose(enum_class, self.value)
+                members = reversed(members)
+        else:
+            members = (self.value,)
+        return (
+            " | ".join(
+                [
+                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+                    for item in members
+                ]
+            ),
+            {"import %s" % module},
+        )
+
+
+class FloatSerializer(BaseSimpleSerializer):
+    def serialize(self):
+        if math.isnan(self.value) or math.isinf(self.value):
+            return 'float("{}")'.format(self.value), set()
+        return super().serialize()
+
+
+class FrozensetSerializer(BaseUnorderedSequenceSerializer):
+    def _format(self):
+        return "frozenset([%s])"
+
+
+class FunctionTypeSerializer(BaseSerializer):
+    def serialize(self):
+        if getattr(self.value, "__self__", None) and isinstance(
+            self.value.__self__, type
+        ):
+            klass = self.value.__self__
+            module = klass.__module__
+            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
+                "import %s" % module
+            }
+        # Further error checking
+        if self.value.__name__ == "<lambda>":
+            raise ValueError("Cannot serialize function: lambda")
+        if self.value.__module__ is None:
+            raise ValueError("Cannot serialize function %r: No module" % self.value)
+
+        module_name = self.value.__module__
+
+        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+            return "%s.%s" % (module_name, self.value.__qualname__), {
+                "import %s" % self.value.__module__
+            }
+
+        raise ValueError(
+            "Could not find function %s in %s.\n" % (self.value.__name__, module_name)
+        )
+
+
+class FunctoolsPartialSerializer(BaseSerializer):
+    def serialize(self):
+        # Serialize functools.partial() arguments
+        func_string, func_imports = serializer_factory(self.value.func).serialize()
+        args_string, args_imports = serializer_factory(self.value.args).serialize()
+        keywords_string, keywords_imports = serializer_factory(
+            self.value.keywords
+        ).serialize()
+        # Add any imports needed by arguments
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = 'return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {'
+new = 'return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+print("serialized:", s, i)
+assert s.endswith(".Outer.Inner.default"), s
+print("OK")
+EOF
+ patched
+serialized: __main__.Outer.Inner.default {'import __main__'}
+OK
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = '            klass = self.value.__self__\n            module = klass.__module__\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+new = '            klass = self.value.__self__\n            module = klass.__module__\n            if "<" in klass.__qualname__:\n                raise ValueError(\n                    "Could not find klass %s in %s.\\n"\n                    % (klass.__qualname__, module)\n                )\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+EOF
+git diff && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func().cm).serialize()
+    raise AssertionError("expected ValueError")
+except ValueError as e:
+    print("local class raises:", e)
+print("OK")
+EOF
+python tests/runtests.py migrations.test_writer 2>&1 | tail -3
+ patched
+diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..efacd60686 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,12 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            if "<" in klass.__qualname__:
++                raise ValueError(
++                    "Could not find klass %s in %s.\n"
++                    % (klass.__qualname__, module)
++                )
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+Ran 53 tests in 0.050s
+
+OK
+
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 20, in <module>
+AttributeError: 'function' object has no attribute 'cm'
+
+
+$exec_command cd /testbed && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+print("nested classmethod OK:", s)
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func()).serialize()
+    raise SystemExit("expected ValueError")
+except ValueError as e:
+    print("local class raises ValueError:", str(e).replace("\n", " | "))
+EOF
+python tests/runtests.py migrations 2>&1 | tail -4
+ nested classmethod OK: __main__.Outer.Inner.default
+local class raises ValueError: Could not find klass outer_func.<locals>.Local in __main__. | 
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+
+
+$exec_command cd /testbed && grep -n "class_method\|ClassMethod\|classmethod\|Could not find\|local" tests/migrations/test_writer.py | head -40
+ 685:            "Could not find object EmailValidator2 in django.core.validators.",
+742:    def test_serialize_local_function_reference(self):
+743:        """A reference in a local scope can't be serialized."""
+752:            ValueError, "Could not find function upload_to in migrations.test_writer"
+
+
+
+[model reply, complete and unedited] (3974 tokens in, 3002 tokens out)
+
+
+exec_command cd /testbed && python - <<'PYEOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = 'Could not find klass %s in %s'
+new = 'Could not find class %s in %s'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print('patched')
+PYEOF
+sed -n '163,180p' django/db/migrations/serializer.py && python tests/runtests.py migrations 2>&1 | grep -E "^(OK|FAILED|Ran)"
+
+
+[command executed: exec_command]
+cd /testbed && python - <<'PYEOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = 'Could not find klass %s in %s'
+new = 'Could not find class %s in %s'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print('patched')
+PYEOF
+sed -n '163,180p' django/db/migrations/serializer.py && python tests/runtests.py migrations 2>&1 | grep -E "^(OK|FAILED|Ran)"
+
+[result]
+patched
+
+class FunctionTypeSerializer(BaseSerializer):
+    def serialize(self):
+        if getattr(self.value, "__self__", None) and isinstance(
+            self.value.__self__, type
+        ):
+            klass = self.value.__self__
+            module = klass.__module__
+            if "<" in klass.__qualname__:
+                raise ValueError(
+                    "Could not find class %s in %s.\n"
+                    % (klass.__qualname__, module)
+                )
+            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                "import %s" % module
+            }
+        # Further error checking
+        if self.value.__name__ == "<lambda>":
+Ran 737 tests in 9.935s
+OK (skipped=2)
+
+
+------------------------------------------------------------------------------
+TURN 13
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 16612 characters, the same as turn 1 plus the history below]
+$exec_command <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>
+ 
+[stderr]
+bash: -c: line 1: syntax error near unexpected token `newline'
+bash: -c: line 1: `source /opt/miniconda3/bin/activate && conda activate testbed && cd /testbed && <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>'
+
+[exit code: 2]
+
+$exec_command find /testbed -maxdepth 1 -type d | head -30
+ /testbed
+/testbed/.git
+/testbed/tests
+/testbed/django
+/testbed/scripts
+/testbed/docs
+/testbed/extras
+/testbed/Django.egg-info
+/testbed/.github
+/testbed/js_tests
+/testbed/.tx
+
+
+$exec_command cd /testbed && git log --oneline -3 && grep -n "def get_class_description" django/db/migrations/utils.py && grep -n "Callable\|get_class_description\|bound\|__self__" django/db/migrations/serializer.py | head -40
+ c6b2b2206f SWE-bench
+4a72da7100 Refs #27471 -- Made admin's filter choice arrows use cursor pointers.
+da2f8e8257 Refs #34118 -- Improved sanitize_address() error message for tuple with empty strings.
+
+[exit code: 1]
+
+$exec_command cd /testbed && grep -n "get_class_description\|Callable\|__self__\|bound" django/db/migrations/serializer.py | head -50
+ 166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+
+
+$exec_command cd /testbed && grep -rn "def get_class_description" django/ && grep -n "__self__\|__qualname__\|__name__" django/db/migrations/serializer.py | head -30 && sed -n '150,210p' django/db/migrations/serializer.py
+</shell command>
+ 
+[stderr]
+bash: -c: line 2: syntax error near unexpected token `newline'
+bash: -c: line 2: `</shell command>'
+
+[exit code: 2]
+
+$exec_command cd /testbed && sed -n '1,80p' django/db/migrations/utils.py && grep -n "get_class_description\|ClassDescription\|qualname\|__self__" django/db/migrations/serializer.py | head -40
+ import datetime
+import re
+from collections import namedtuple
+
+from django.db.models.fields.related import RECURSIVE_RELATIONSHIP_CONSTANT
+
+FieldReference = namedtuple("FieldReference", "to through")
+
+COMPILED_REGEX_TYPE = type(re.compile(""))
+
+
+class RegexObject:
+    def __init__(self, obj):
+        self.pattern = obj.pattern
+        self.flags = obj.flags
+
+    def __eq__(self, other):
+        if not isinstance(other, RegexObject):
+            return NotImplemented
+        return self.pattern == other.pattern and self.flags == other.flags
+
+
+def get_migration_name_timestamp():
+    return datetime.datetime.now().strftime("%Y%m%d_%H%M")
+
+
+def resolve_relation(model, app_label=None, model_name=None):
+    """
+    Turn a model class or model reference string and return a model tuple.
+
+    app_label and model_name are used to resolve the scope of recursive and
+    unscoped model relationship.
+    """
+    if isinstance(model, str):
+        if model == RECURSIVE_RELATIONSHIP_CONSTANT:
+            if app_label is None or model_name is None:
+                raise TypeError(
+                    "app_label and model_name must be provided to resolve "
+                    "recursive relationships."
+                )
+            return app_label, model_name
+        if "." in model:
+            app_label, model_name = model.split(".", 1)
+            return app_label, model_name.lower()
+        if app_label is None:
+            raise TypeError(
+                "app_label must be provided to resolve unscoped model relationships."
+            )
+        return app_label, model.lower()
+    return model._meta.app_label, model._meta.model_name
+
+
+def field_references(
+    model_tuple,
+    field,
+    reference_model_tuple,
+    reference_field_name=None,
+    reference_field=None,
+):
+    """
+    Return either False or a FieldReference if `field` references provided
+    context.
+
+    False positives can be returned if `reference_field_name` is provided
+    without `reference_field` because of the introspection limitation it
+    incurs. This should not be an issue when this function is used to determine
+    whether or not an optimization can take place.
+    """
+    remote_field = field.remote_field
+    if not remote_field:
+        return False
+    references_to = None
+    references_through = None
+    if resolve_relation(remote_field.model, *model_tuple) == reference_model_tuple:
+        to_fields = getattr(field, "to_fields", None)
+        if (
+            reference_field_name is None
+            or
+            # Unspecified to_field(s).
+            to_fields is None
+144:                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+182:        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+183:            return "%s.%s" % (module_name, self.value.__qualname__), {
+322:                return "%s.%s" % (module, self.value.__qualname__), {
+
+
+$exec_command cd /testbed && sed -n '120,200p' django/db/migrations/serializer.py
+         for k, v in sorted(self.value.items()):
+            k_string, k_imports = serializer_factory(k).serialize()
+            v_string, v_imports = serializer_factory(v).serialize()
+            imports.update(k_imports)
+            imports.update(v_imports)
+            strings.append((k_string, v_string))
+        return "{%s}" % (", ".join("%s: %s" % (k, v) for k, v in strings)), imports
+
+
+class EnumSerializer(BaseSerializer):
+    def serialize(self):
+        enum_class = self.value.__class__
+        module = enum_class.__module__
+        if issubclass(enum_class, enum.Flag):
+            if PY311:
+                members = list(self.value)
+            else:
+                members, _ = enum._decompose(enum_class, self.value)
+                members = reversed(members)
+        else:
+            members = (self.value,)
+        return (
+            " | ".join(
+                [
+                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+                    for item in members
+                ]
+            ),
+            {"import %s" % module},
+        )
+
+
+class FloatSerializer(BaseSimpleSerializer):
+    def serialize(self):
+        if math.isnan(self.value) or math.isinf(self.value):
+            return 'float("{}")'.format(self.value), set()
+        return super().serialize()
+
+
+class FrozensetSerializer(BaseUnorderedSequenceSerializer):
+    def _format(self):
+        return "frozenset([%s])"
+
+
+class FunctionTypeSerializer(BaseSerializer):
+    def serialize(self):
+        if getattr(self.value, "__self__", None) and isinstance(
+            self.value.__self__, type
+        ):
+            klass = self.value.__self__
+            module = klass.__module__
+            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
+                "import %s" % module
+            }
+        # Further error checking
+        if self.value.__name__ == "<lambda>":
+            raise ValueError("Cannot serialize function: lambda")
+        if self.value.__module__ is None:
+            raise ValueError("Cannot serialize function %r: No module" % self.value)
+
+        module_name = self.value.__module__
+
+        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+            return "%s.%s" % (module_name, self.value.__qualname__), {
+                "import %s" % self.value.__module__
+            }
+
+        raise ValueError(
+            "Could not find function %s in %s.\n" % (self.value.__name__, module_name)
+        )
+
+
+class FunctoolsPartialSerializer(BaseSerializer):
+    def serialize(self):
+        # Serialize functools.partial() arguments
+        func_string, func_imports = serializer_factory(self.value.func).serialize()
+        args_string, args_imports = serializer_factory(self.value.args).serialize()
+        keywords_string, keywords_imports = serializer_factory(
+            self.value.keywords
+        ).serialize()
+        # Add any imports needed by arguments
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = 'return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {'
+new = 'return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+print("serialized:", s, i)
+assert s.endswith(".Outer.Inner.default"), s
+print("OK")
+EOF
+ patched
+serialized: __main__.Outer.Inner.default {'import __main__'}
+OK
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = '            klass = self.value.__self__\n            module = klass.__module__\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+new = '            klass = self.value.__self__\n            module = klass.__module__\n            if "<" in klass.__qualname__:\n                raise ValueError(\n                    "Could not find klass %s in %s.\\n"\n                    % (klass.__qualname__, module)\n                )\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+EOF
+git diff && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func().cm).serialize()
+    raise AssertionError("expected ValueError")
+except ValueError as e:
+    print("local class raises:", e)
+print("OK")
+EOF
+python tests/runtests.py migrations.test_writer 2>&1 | tail -3
+ patched
+diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..efacd60686 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,12 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            if "<" in klass.__qualname__:
++                raise ValueError(
++                    "Could not find klass %s in %s.\n"
++                    % (klass.__qualname__, module)
++                )
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+Ran 53 tests in 0.050s
+
+OK
+
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 20, in <module>
+AttributeError: 'function' object has no attribute 'cm'
+
+
+$exec_command cd /testbed && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+print("nested classmethod OK:", s)
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func()).serialize()
+    raise SystemExit("expected ValueError")
+except ValueError as e:
+    print("local class raises ValueError:", str(e).replace("\n", " | "))
+EOF
+python tests/runtests.py migrations 2>&1 | tail -4
+ nested classmethod OK: __main__.Outer.Inner.default
+local class raises ValueError: Could not find klass outer_func.<locals>.Local in __main__. | 
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+
+
+$exec_command cd /testbed && grep -n "class_method\|ClassMethod\|classmethod\|Could not find\|local" tests/migrations/test_writer.py | head -40
+ 685:            "Could not find object EmailValidator2 in django.core.validators.",
+742:    def test_serialize_local_function_reference(self):
+743:        """A reference in a local scope can't be serialized."""
+752:            ValueError, "Could not find function upload_to in migrations.test_writer"
+
+
+$exec_command cd /testbed && python - <<'PYEOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = 'Could not find klass %s in %s'
+new = 'Could not find class %s in %s'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print('patched')
+PYEOF
+sed -n '163,180p' django/db/migrations/serializer.py && python tests/runtests.py migrations 2>&1 | grep -E "^(OK|FAILED|Ran)"
+ patched
+
+class FunctionTypeSerializer(BaseSerializer):
+    def serialize(self):
+        if getattr(self.value, "__self__", None) and isinstance(
+            self.value.__self__, type
+        ):
+            klass = self.value.__self__
+            module = klass.__module__
+            if "<" in klass.__qualname__:
+                raise ValueError(
+                    "Could not find class %s in %s.\n"
+                    % (klass.__qualname__, module)
+                )
+            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                "import %s" % module
+            }
+        # Further error checking
+        if self.value.__name__ == "<lambda>":
+Ran 737 tests in 9.935s
+OK (skipped=2)
+
+
+
+[model reply, complete and unedited] (4304 tokens in, 6076 tokens out)
+
+
+exec_command cd /testbed && git diff && python tests/runtests.py migrations 2>&1 | tail -2
+
+[command executed: exec_command]
+cd /testbed && git diff && python tests/runtests.py migrations 2>&1 | tail -2
+
+[result]
+diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..c0e5a0c96a 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,12 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            if "<" in klass.__qualname__:
++                raise ValueError(
++                    "Could not find class %s in %s.\n"
++                    % (klass.__qualname__, module)
++                )
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+
+
+------------------------------------------------------------------------------
+TURN 14
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 17621 characters, the same as turn 1 plus the history below]
+$exec_command <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>
+ 
+[stderr]
+bash: -c: line 1: syntax error near unexpected token `newline'
+bash: -c: line 1: `source /opt/miniconda3/bin/activate && conda activate testbed && cd /testbed && <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>'
+
+[exit code: 2]
+
+$exec_command find /testbed -maxdepth 1 -type d | head -30
+ /testbed
+/testbed/.git
+/testbed/tests
+/testbed/django
+/testbed/scripts
+/testbed/docs
+/testbed/extras
+/testbed/Django.egg-info
+/testbed/.github
+/testbed/js_tests
+/testbed/.tx
+
+
+$exec_command cd /testbed && git log --oneline -3 && grep -n "def get_class_description" django/db/migrations/utils.py && grep -n "Callable\|get_class_description\|bound\|__self__" django/db/migrations/serializer.py | head -40
+ c6b2b2206f SWE-bench
+4a72da7100 Refs #27471 -- Made admin's filter choice arrows use cursor pointers.
+da2f8e8257 Refs #34118 -- Improved sanitize_address() error message for tuple with empty strings.
+
+[exit code: 1]
+
+$exec_command cd /testbed && grep -n "get_class_description\|Callable\|__self__\|bound" django/db/migrations/serializer.py | head -50
+ 166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+
+
+$exec_command cd /testbed && grep -rn "def get_class_description" django/ && grep -n "__self__\|__qualname__\|__name__" django/db/migrations/serializer.py | head -30 && sed -n '150,210p' django/db/migrations/serializer.py
+</shell command>
+ 
+[stderr]
+bash: -c: line 2: syntax error near unexpected token `newline'
+bash: -c: line 2: `</shell command>'
+
+[exit code: 2]
+
+$exec_command cd /testbed && sed -n '1,80p' django/db/migrations/utils.py && grep -n "get_class_description\|ClassDescription\|qualname\|__self__" django/db/migrations/serializer.py | head -40
+ import datetime
+import re
+from collections import namedtuple
+
+from django.db.models.fields.related import RECURSIVE_RELATIONSHIP_CONSTANT
+
+FieldReference = namedtuple("FieldReference", "to through")
+
+COMPILED_REGEX_TYPE = type(re.compile(""))
+
+
+class RegexObject:
+    def __init__(self, obj):
+        self.pattern = obj.pattern
+        self.flags = obj.flags
+
+    def __eq__(self, other):
+        if not isinstance(other, RegexObject):
+            return NotImplemented
+        return self.pattern == other.pattern and self.flags == other.flags
+
+
+def get_migration_name_timestamp():
+    return datetime.datetime.now().strftime("%Y%m%d_%H%M")
+
+
+def resolve_relation(model, app_label=None, model_name=None):
+    """
+    Turn a model class or model reference string and return a model tuple.
+
+    app_label and model_name are used to resolve the scope of recursive and
+    unscoped model relationship.
+    """
+    if isinstance(model, str):
+        if model == RECURSIVE_RELATIONSHIP_CONSTANT:
+            if app_label is None or model_name is None:
+                raise TypeError(
+                    "app_label and model_name must be provided to resolve "
+                    "recursive relationships."
+                )
+            return app_label, model_name
+        if "." in model:
+            app_label, model_name = model.split(".", 1)
+            return app_label, model_name.lower()
+        if app_label is None:
+            raise TypeError(
+                "app_label must be provided to resolve unscoped model relationships."
+            )
+        return app_label, model.lower()
+    return model._meta.app_label, model._meta.model_name
+
+
+def field_references(
+    model_tuple,
+    field,
+    reference_model_tuple,
+    reference_field_name=None,
+    reference_field=None,
+):
+    """
+    Return either False or a FieldReference if `field` references provided
+    context.
+
+    False positives can be returned if `reference_field_name` is provided
+    without `reference_field` because of the introspection limitation it
+    incurs. This should not be an issue when this function is used to determine
+    whether or not an optimization can take place.
+    """
+    remote_field = field.remote_field
+    if not remote_field:
+        return False
+    references_to = None
+    references_through = None
+    if resolve_relation(remote_field.model, *model_tuple) == reference_model_tuple:
+        to_fields = getattr(field, "to_fields", None)
+        if (
+            reference_field_name is None
+            or
+            # Unspecified to_field(s).
+            to_fields is None
+144:                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+182:        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+183:            return "%s.%s" % (module_name, self.value.__qualname__), {
+322:                return "%s.%s" % (module, self.value.__qualname__), {
+
+
+$exec_command cd /testbed && sed -n '120,200p' django/db/migrations/serializer.py
+         for k, v in sorted(self.value.items()):
+            k_string, k_imports = serializer_factory(k).serialize()
+            v_string, v_imports = serializer_factory(v).serialize()
+            imports.update(k_imports)
+            imports.update(v_imports)
+            strings.append((k_string, v_string))
+        return "{%s}" % (", ".join("%s: %s" % (k, v) for k, v in strings)), imports
+
+
+class EnumSerializer(BaseSerializer):
+    def serialize(self):
+        enum_class = self.value.__class__
+        module = enum_class.__module__
+        if issubclass(enum_class, enum.Flag):
+            if PY311:
+                members = list(self.value)
+            else:
+                members, _ = enum._decompose(enum_class, self.value)
+                members = reversed(members)
+        else:
+            members = (self.value,)
+        return (
+            " | ".join(
+                [
+                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+                    for item in members
+                ]
+            ),
+            {"import %s" % module},
+        )
+
+
+class FloatSerializer(BaseSimpleSerializer):
+    def serialize(self):
+        if math.isnan(self.value) or math.isinf(self.value):
+            return 'float("{}")'.format(self.value), set()
+        return super().serialize()
+
+
+class FrozensetSerializer(BaseUnorderedSequenceSerializer):
+    def _format(self):
+        return "frozenset([%s])"
+
+
+class FunctionTypeSerializer(BaseSerializer):
+    def serialize(self):
+        if getattr(self.value, "__self__", None) and isinstance(
+            self.value.__self__, type
+        ):
+            klass = self.value.__self__
+            module = klass.__module__
+            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
+                "import %s" % module
+            }
+        # Further error checking
+        if self.value.__name__ == "<lambda>":
+            raise ValueError("Cannot serialize function: lambda")
+        if self.value.__module__ is None:
+            raise ValueError("Cannot serialize function %r: No module" % self.value)
+
+        module_name = self.value.__module__
+
+        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+            return "%s.%s" % (module_name, self.value.__qualname__), {
+                "import %s" % self.value.__module__
+            }
+
+        raise ValueError(
+            "Could not find function %s in %s.\n" % (self.value.__name__, module_name)
+        )
+
+
+class FunctoolsPartialSerializer(BaseSerializer):
+    def serialize(self):
+        # Serialize functools.partial() arguments
+        func_string, func_imports = serializer_factory(self.value.func).serialize()
+        args_string, args_imports = serializer_factory(self.value.args).serialize()
+        keywords_string, keywords_imports = serializer_factory(
+            self.value.keywords
+        ).serialize()
+        # Add any imports needed by arguments
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = 'return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {'
+new = 'return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+print("serialized:", s, i)
+assert s.endswith(".Outer.Inner.default"), s
+print("OK")
+EOF
+ patched
+serialized: __main__.Outer.Inner.default {'import __main__'}
+OK
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = '            klass = self.value.__self__\n            module = klass.__module__\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+new = '            klass = self.value.__self__\n            module = klass.__module__\n            if "<" in klass.__qualname__:\n                raise ValueError(\n                    "Could not find klass %s in %s.\\n"\n                    % (klass.__qualname__, module)\n                )\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+EOF
+git diff && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func().cm).serialize()
+    raise AssertionError("expected ValueError")
+except ValueError as e:
+    print("local class raises:", e)
+print("OK")
+EOF
+python tests/runtests.py migrations.test_writer 2>&1 | tail -3
+ patched
+diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..efacd60686 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,12 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            if "<" in klass.__qualname__:
++                raise ValueError(
++                    "Could not find klass %s in %s.\n"
++                    % (klass.__qualname__, module)
++                )
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+Ran 53 tests in 0.050s
+
+OK
+
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 20, in <module>
+AttributeError: 'function' object has no attribute 'cm'
+
+
+$exec_command cd /testbed && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+print("nested classmethod OK:", s)
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func()).serialize()
+    raise SystemExit("expected ValueError")
+except ValueError as e:
+    print("local class raises ValueError:", str(e).replace("\n", " | "))
+EOF
+python tests/runtests.py migrations 2>&1 | tail -4
+ nested classmethod OK: __main__.Outer.Inner.default
+local class raises ValueError: Could not find klass outer_func.<locals>.Local in __main__. | 
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+
+
+$exec_command cd /testbed && grep -n "class_method\|ClassMethod\|classmethod\|Could not find\|local" tests/migrations/test_writer.py | head -40
+ 685:            "Could not find object EmailValidator2 in django.core.validators.",
+742:    def test_serialize_local_function_reference(self):
+743:        """A reference in a local scope can't be serialized."""
+752:            ValueError, "Could not find function upload_to in migrations.test_writer"
+
+
+$exec_command cd /testbed && python - <<'PYEOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = 'Could not find klass %s in %s'
+new = 'Could not find class %s in %s'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print('patched')
+PYEOF
+sed -n '163,180p' django/db/migrations/serializer.py && python tests/runtests.py migrations 2>&1 | grep -E "^(OK|FAILED|Ran)"
+ patched
+
+class FunctionTypeSerializer(BaseSerializer):
+    def serialize(self):
+        if getattr(self.value, "__self__", None) and isinstance(
+            self.value.__self__, type
+        ):
+            klass = self.value.__self__
+            module = klass.__module__
+            if "<" in klass.__qualname__:
+                raise ValueError(
+                    "Could not find class %s in %s.\n"
+                    % (klass.__qualname__, module)
+                )
+            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                "import %s" % module
+            }
+        # Further error checking
+        if self.value.__name__ == "<lambda>":
+Ran 737 tests in 9.935s
+OK (skipped=2)
+
+
+$exec_command cd /testbed && git diff && python tests/runtests.py migrations 2>&1 | tail -2
+ diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..c0e5a0c96a 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,12 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            if "<" in klass.__qualname__:
++                raise ValueError(
++                    "Could not find class %s in %s.\n"
++                    % (klass.__qualname__, module)
++                )
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+
+
+
+[model reply, complete and unedited] (4587 tokens in, 9564 tokens out)
+
+
+exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = (
+    '            module = klass.__module__\n'
+    '            if "<" in klass.__qualname__:\n'
+    '                raise ValueError(\n'
+    '                    "Could not find class %s in %s.\\n"\n'
+    '                    % (klass.__qualname__, module)\n'
+    '                )\n'
+    '            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n'
+)
+new = (
+    '            module = klass.__module__\n'
+    '            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n'
+)
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print('reverted to minimal patch (only __qualname__ change)')
+EOF
+git diff && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+print("sanity OK:", s, i)
+EOF
+python tests/runtests.py migrations 2>&1 | grep -E "^(OK|FAILED|Ran)"
+
+[command executed: exec_command]
+cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = (
+    '            module = klass.__module__\n'
+    '            if "<" in klass.__qualname__:\n'
+    '                raise ValueError(\n'
+    '                    "Could not find class %s in %s.\\n"\n'
+    '                    % (klass.__qualname__, module)\n'
+    '                )\n'
+    '            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n'
+)
+new = (
+    '            module = klass.__module__\n'
+    '            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n'
+)
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print('reverted to minimal patch (only __qualname__ change)')
+EOF
+git diff && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+print("sanity OK:", s, i)
+EOF
+python tests/runtests.py migrations 2>&1 | grep -E "^(OK|FAILED|Ran)"
+
+[result]
+reverted to minimal patch (only __qualname__ change)
+diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..06657ebaab 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,7 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+sanity OK: __main__.Outer.Inner.default {'import __main__'}
+Ran 737 tests in 9.975s
+OK (skipped=2)
+
+
+------------------------------------------------------------------------------
+TURN 15
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 19597 characters, the same as turn 1 plus the history below]
+$exec_command <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>
+ 
+[stderr]
+bash: -c: line 1: syntax error near unexpected token `newline'
+bash: -c: line 1: `source /opt/miniconda3/bin/activate && conda activate testbed && cd /testbed && <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>'
+
+[exit code: 2]
+
+$exec_command find /testbed -maxdepth 1 -type d | head -30
+ /testbed
+/testbed/.git
+/testbed/tests
+/testbed/django
+/testbed/scripts
+/testbed/docs
+/testbed/extras
+/testbed/Django.egg-info
+/testbed/.github
+/testbed/js_tests
+/testbed/.tx
+
+
+$exec_command cd /testbed && git log --oneline -3 && grep -n "def get_class_description" django/db/migrations/utils.py && grep -n "Callable\|get_class_description\|bound\|__self__" django/db/migrations/serializer.py | head -40
+ c6b2b2206f SWE-bench
+4a72da7100 Refs #27471 -- Made admin's filter choice arrows use cursor pointers.
+da2f8e8257 Refs #34118 -- Improved sanitize_address() error message for tuple with empty strings.
+
+[exit code: 1]
+
+$exec_command cd /testbed && grep -n "get_class_description\|Callable\|__self__\|bound" django/db/migrations/serializer.py | head -50
+ 166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+
+
+$exec_command cd /testbed && grep -rn "def get_class_description" django/ && grep -n "__self__\|__qualname__\|__name__" django/db/migrations/serializer.py | head -30 && sed -n '150,210p' django/db/migrations/serializer.py
+</shell command>
+ 
+[stderr]
+bash: -c: line 2: syntax error near unexpected token `newline'
+bash: -c: line 2: `</shell command>'
+
+[exit code: 2]
+
+$exec_command cd /testbed && sed -n '1,80p' django/db/migrations/utils.py && grep -n "get_class_description\|ClassDescription\|qualname\|__self__" django/db/migrations/serializer.py | head -40
+ import datetime
+import re
+from collections import namedtuple
+
+from django.db.models.fields.related import RECURSIVE_RELATIONSHIP_CONSTANT
+
+FieldReference = namedtuple("FieldReference", "to through")
+
+COMPILED_REGEX_TYPE = type(re.compile(""))
+
+
+class RegexObject:
+    def __init__(self, obj):
+        self.pattern = obj.pattern
+        self.flags = obj.flags
+
+    def __eq__(self, other):
+        if not isinstance(other, RegexObject):
+            return NotImplemented
+        return self.pattern == other.pattern and self.flags == other.flags
+
+
+def get_migration_name_timestamp():
+    return datetime.datetime.now().strftime("%Y%m%d_%H%M")
+
+
+def resolve_relation(model, app_label=None, model_name=None):
+    """
+    Turn a model class or model reference string and return a model tuple.
+
+    app_label and model_name are used to resolve the scope of recursive and
+    unscoped model relationship.
+    """
+    if isinstance(model, str):
+        if model == RECURSIVE_RELATIONSHIP_CONSTANT:
+            if app_label is None or model_name is None:
+                raise TypeError(
+                    "app_label and model_name must be provided to resolve "
+                    "recursive relationships."
+                )
+            return app_label, model_name
+        if "." in model:
+            app_label, model_name = model.split(".", 1)
+            return app_label, model_name.lower()
+        if app_label is None:
+            raise TypeError(
+                "app_label must be provided to resolve unscoped model relationships."
+            )
+        return app_label, model.lower()
+    return model._meta.app_label, model._meta.model_name
+
+
+def field_references(
+    model_tuple,
+    field,
+    reference_model_tuple,
+    reference_field_name=None,
+    reference_field=None,
+):
+    """
+    Return either False or a FieldReference if `field` references provided
+    context.
+
+    False positives can be returned if `reference_field_name` is provided
+    without `reference_field` because of the introspection limitation it
+    incurs. This should not be an issue when this function is used to determine
+    whether or not an optimization can take place.
+    """
+    remote_field = field.remote_field
+    if not remote_field:
+        return False
+    references_to = None
+    references_through = None
+    if resolve_relation(remote_field.model, *model_tuple) == reference_model_tuple:
+        to_fields = getattr(field, "to_fields", None)
+        if (
+            reference_field_name is None
+            or
+            # Unspecified to_field(s).
+            to_fields is None
+144:                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+182:        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+183:            return "%s.%s" % (module_name, self.value.__qualname__), {
+322:                return "%s.%s" % (module, self.value.__qualname__), {
+
+
+$exec_command cd /testbed && sed -n '120,200p' django/db/migrations/serializer.py
+         for k, v in sorted(self.value.items()):
+            k_string, k_imports = serializer_factory(k).serialize()
+            v_string, v_imports = serializer_factory(v).serialize()
+            imports.update(k_imports)
+            imports.update(v_imports)
+            strings.append((k_string, v_string))
+        return "{%s}" % (", ".join("%s: %s" % (k, v) for k, v in strings)), imports
+
+
+class EnumSerializer(BaseSerializer):
+    def serialize(self):
+        enum_class = self.value.__class__
+        module = enum_class.__module__
+        if issubclass(enum_class, enum.Flag):
+            if PY311:
+                members = list(self.value)
+            else:
+                members, _ = enum._decompose(enum_class, self.value)
+                members = reversed(members)
+        else:
+            members = (self.value,)
+        return (
+            " | ".join(
+                [
+                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+                    for item in members
+                ]
+            ),
+            {"import %s" % module},
+        )
+
+
+class FloatSerializer(BaseSimpleSerializer):
+    def serialize(self):
+        if math.isnan(self.value) or math.isinf(self.value):
+            return 'float("{}")'.format(self.value), set()
+        return super().serialize()
+
+
+class FrozensetSerializer(BaseUnorderedSequenceSerializer):
+    def _format(self):
+        return "frozenset([%s])"
+
+
+class FunctionTypeSerializer(BaseSerializer):
+    def serialize(self):
+        if getattr(self.value, "__self__", None) and isinstance(
+            self.value.__self__, type
+        ):
+            klass = self.value.__self__
+            module = klass.__module__
+            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
+                "import %s" % module
+            }
+        # Further error checking
+        if self.value.__name__ == "<lambda>":
+            raise ValueError("Cannot serialize function: lambda")
+        if self.value.__module__ is None:
+            raise ValueError("Cannot serialize function %r: No module" % self.value)
+
+        module_name = self.value.__module__
+
+        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+            return "%s.%s" % (module_name, self.value.__qualname__), {
+                "import %s" % self.value.__module__
+            }
+
+        raise ValueError(
+            "Could not find function %s in %s.\n" % (self.value.__name__, module_name)
+        )
+
+
+class FunctoolsPartialSerializer(BaseSerializer):
+    def serialize(self):
+        # Serialize functools.partial() arguments
+        func_string, func_imports = serializer_factory(self.value.func).serialize()
+        args_string, args_imports = serializer_factory(self.value.args).serialize()
+        keywords_string, keywords_imports = serializer_factory(
+            self.value.keywords
+        ).serialize()
+        # Add any imports needed by arguments
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = 'return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {'
+new = 'return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+print("serialized:", s, i)
+assert s.endswith(".Outer.Inner.default"), s
+print("OK")
+EOF
+ patched
+serialized: __main__.Outer.Inner.default {'import __main__'}
+OK
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = '            klass = self.value.__self__\n            module = klass.__module__\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+new = '            klass = self.value.__self__\n            module = klass.__module__\n            if "<" in klass.__qualname__:\n                raise ValueError(\n                    "Could not find klass %s in %s.\\n"\n                    % (klass.__qualname__, module)\n                )\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+EOF
+git diff && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func().cm).serialize()
+    raise AssertionError("expected ValueError")
+except ValueError as e:
+    print("local class raises:", e)
+print("OK")
+EOF
+python tests/runtests.py migrations.test_writer 2>&1 | tail -3
+ patched
+diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..efacd60686 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,12 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            if "<" in klass.__qualname__:
++                raise ValueError(
++                    "Could not find klass %s in %s.\n"
++                    % (klass.__qualname__, module)
++                )
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+Ran 53 tests in 0.050s
+
+OK
+
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 20, in <module>
+AttributeError: 'function' object has no attribute 'cm'
+
+
+$exec_command cd /testbed && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+print("nested classmethod OK:", s)
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func()).serialize()
+    raise SystemExit("expected ValueError")
+except ValueError as e:
+    print("local class raises ValueError:", str(e).replace("\n", " | "))
+EOF
+python tests/runtests.py migrations 2>&1 | tail -4
+ nested classmethod OK: __main__.Outer.Inner.default
+local class raises ValueError: Could not find klass outer_func.<locals>.Local in __main__. | 
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+
+
+$exec_command cd /testbed && grep -n "class_method\|ClassMethod\|classmethod\|Could not find\|local" tests/migrations/test_writer.py | head -40
+ 685:            "Could not find object EmailValidator2 in django.core.validators.",
+742:    def test_serialize_local_function_reference(self):
+743:        """A reference in a local scope can't be serialized."""
+752:            ValueError, "Could not find function upload_to in migrations.test_writer"
+
+
+$exec_command cd /testbed && python - <<'PYEOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = 'Could not find klass %s in %s'
+new = 'Could not find class %s in %s'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print('patched')
+PYEOF
+sed -n '163,180p' django/db/migrations/serializer.py && python tests/runtests.py migrations 2>&1 | grep -E "^(OK|FAILED|Ran)"
+ patched
+
+class FunctionTypeSerializer(BaseSerializer):
+    def serialize(self):
+        if getattr(self.value, "__self__", None) and isinstance(
+            self.value.__self__, type
+        ):
+            klass = self.value.__self__
+            module = klass.__module__
+            if "<" in klass.__qualname__:
+                raise ValueError(
+                    "Could not find class %s in %s.\n"
+                    % (klass.__qualname__, module)
+                )
+            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                "import %s" % module
+            }
+        # Further error checking
+        if self.value.__name__ == "<lambda>":
+Ran 737 tests in 9.935s
+OK (skipped=2)
+
+
+$exec_command cd /testbed && git diff && python tests/runtests.py migrations 2>&1 | tail -2
+ diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..c0e5a0c96a 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,12 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            if "<" in klass.__qualname__:
++                raise ValueError(
++                    "Could not find class %s in %s.\n"
++                    % (klass.__qualname__, module)
++                )
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = (
+    '            module = klass.__module__\n'
+    '            if "<" in klass.__qualname__:\n'
+    '                raise ValueError(\n'
+    '                    "Could not find class %s in %s.\\n"\n'
+    '                    % (klass.__qualname__, module)\n'
+    '                )\n'
+    '            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n'
+)
+new = (
+    '            module = klass.__module__\n'
+    '            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n'
+)
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print('reverted to minimal patch (only __qualname__ change)')
+EOF
+git diff && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+print("sanity OK:", s, i)
+EOF
+python tests/runtests.py migrations 2>&1 | grep -E "^(OK|FAILED|Ran)"
+ reverted to minimal patch (only __qualname__ change)
+diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..06657ebaab 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,7 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+sanity OK: __main__.Outer.Inner.default {'import __main__'}
+Ran 737 tests in 9.975s
+OK (skipped=2)
+
+
+
+[model reply, complete and unedited] (5173 tokens in, 16384 tokens out)
+(empty reply)
+
+[command executed: exec_command]
+
+
+[result]
+(no output)
+
+------------------------------------------------------------------------------
+TURN 16
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 19613 characters, the same as turn 1 plus the history below]
+$exec_command <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>
+ 
+[stderr]
+bash: -c: line 1: syntax error near unexpected token `newline'
+bash: -c: line 1: `source /opt/miniconda3/bin/activate && conda activate testbed && cd /testbed && <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>'
+
+[exit code: 2]
+
+$exec_command find /testbed -maxdepth 1 -type d | head -30
+ /testbed
+/testbed/.git
+/testbed/tests
+/testbed/django
+/testbed/scripts
+/testbed/docs
+/testbed/extras
+/testbed/Django.egg-info
+/testbed/.github
+/testbed/js_tests
+/testbed/.tx
+
+
+$exec_command cd /testbed && git log --oneline -3 && grep -n "def get_class_description" django/db/migrations/utils.py && grep -n "Callable\|get_class_description\|bound\|__self__" django/db/migrations/serializer.py | head -40
+ c6b2b2206f SWE-bench
+4a72da7100 Refs #27471 -- Made admin's filter choice arrows use cursor pointers.
+da2f8e8257 Refs #34118 -- Improved sanitize_address() error message for tuple with empty strings.
+
+[exit code: 1]
+
+$exec_command cd /testbed && grep -n "get_class_description\|Callable\|__self__\|bound" django/db/migrations/serializer.py | head -50
+ 166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+
+
+$exec_command cd /testbed && grep -rn "def get_class_description" django/ && grep -n "__self__\|__qualname__\|__name__" django/db/migrations/serializer.py | head -30 && sed -n '150,210p' django/db/migrations/serializer.py
+</shell command>
+ 
+[stderr]
+bash: -c: line 2: syntax error near unexpected token `newline'
+bash: -c: line 2: `</shell command>'
+
+[exit code: 2]
+
+$exec_command cd /testbed && sed -n '1,80p' django/db/migrations/utils.py && grep -n "get_class_description\|ClassDescription\|qualname\|__self__" django/db/migrations/serializer.py | head -40
+ import datetime
+import re
+from collections import namedtuple
+
+from django.db.models.fields.related import RECURSIVE_RELATIONSHIP_CONSTANT
+
+FieldReference = namedtuple("FieldReference", "to through")
+
+COMPILED_REGEX_TYPE = type(re.compile(""))
+
+
+class RegexObject:
+    def __init__(self, obj):
+        self.pattern = obj.pattern
+        self.flags = obj.flags
+
+    def __eq__(self, other):
+        if not isinstance(other, RegexObject):
+            return NotImplemented
+        return self.pattern == other.pattern and self.flags == other.flags
+
+
+def get_migration_name_timestamp():
+    return datetime.datetime.now().strftime("%Y%m%d_%H%M")
+
+
+def resolve_relation(model, app_label=None, model_name=None):
+    """
+    Turn a model class or model reference string and return a model tuple.
+
+    app_label and model_name are used to resolve the scope of recursive and
+    unscoped model relationship.
+    """
+    if isinstance(model, str):
+        if model == RECURSIVE_RELATIONSHIP_CONSTANT:
+            if app_label is None or model_name is None:
+                raise TypeError(
+                    "app_label and model_name must be provided to resolve "
+                    "recursive relationships."
+                )
+            return app_label, model_name
+        if "." in model:
+            app_label, model_name = model.split(".", 1)
+            return app_label, model_name.lower()
+        if app_label is None:
+            raise TypeError(
+                "app_label must be provided to resolve unscoped model relationships."
+            )
+        return app_label, model.lower()
+    return model._meta.app_label, model._meta.model_name
+
+
+def field_references(
+    model_tuple,
+    field,
+    reference_model_tuple,
+    reference_field_name=None,
+    reference_field=None,
+):
+    """
+    Return either False or a FieldReference if `field` references provided
+    context.
+
+    False positives can be returned if `reference_field_name` is provided
+    without `reference_field` because of the introspection limitation it
+    incurs. This should not be an issue when this function is used to determine
+    whether or not an optimization can take place.
+    """
+    remote_field = field.remote_field
+    if not remote_field:
+        return False
+    references_to = None
+    references_through = None
+    if resolve_relation(remote_field.model, *model_tuple) == reference_model_tuple:
+        to_fields = getattr(field, "to_fields", None)
+        if (
+            reference_field_name is None
+            or
+            # Unspecified to_field(s).
+            to_fields is None
+144:                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+182:        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+183:            return "%s.%s" % (module_name, self.value.__qualname__), {
+322:                return "%s.%s" % (module, self.value.__qualname__), {
+
+
+$exec_command cd /testbed && sed -n '120,200p' django/db/migrations/serializer.py
+         for k, v in sorted(self.value.items()):
+            k_string, k_imports = serializer_factory(k).serialize()
+            v_string, v_imports = serializer_factory(v).serialize()
+            imports.update(k_imports)
+            imports.update(v_imports)
+            strings.append((k_string, v_string))
+        return "{%s}" % (", ".join("%s: %s" % (k, v) for k, v in strings)), imports
+
+
+class EnumSerializer(BaseSerializer):
+    def serialize(self):
+        enum_class = self.value.__class__
+        module = enum_class.__module__
+        if issubclass(enum_class, enum.Flag):
+            if PY311:
+                members = list(self.value)
+            else:
+                members, _ = enum._decompose(enum_class, self.value)
+                members = reversed(members)
+        else:
+            members = (self.value,)
+        return (
+            " | ".join(
+                [
+                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+                    for item in members
+                ]
+            ),
+            {"import %s" % module},
+        )
+
+
+class FloatSerializer(BaseSimpleSerializer):
+    def serialize(self):
+        if math.isnan(self.value) or math.isinf(self.value):
+            return 'float("{}")'.format(self.value), set()
+        return super().serialize()
+
+
+class FrozensetSerializer(BaseUnorderedSequenceSerializer):
+    def _format(self):
+        return "frozenset([%s])"
+
+
+class FunctionTypeSerializer(BaseSerializer):
+    def serialize(self):
+        if getattr(self.value, "__self__", None) and isinstance(
+            self.value.__self__, type
+        ):
+            klass = self.value.__self__
+            module = klass.__module__
+            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
+                "import %s" % module
+            }
+        # Further error checking
+        if self.value.__name__ == "<lambda>":
+            raise ValueError("Cannot serialize function: lambda")
+        if self.value.__module__ is None:
+            raise ValueError("Cannot serialize function %r: No module" % self.value)
+
+        module_name = self.value.__module__
+
+        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+            return "%s.%s" % (module_name, self.value.__qualname__), {
+                "import %s" % self.value.__module__
+            }
+
+        raise ValueError(
+            "Could not find function %s in %s.\n" % (self.value.__name__, module_name)
+        )
+
+
+class FunctoolsPartialSerializer(BaseSerializer):
+    def serialize(self):
+        # Serialize functools.partial() arguments
+        func_string, func_imports = serializer_factory(self.value.func).serialize()
+        args_string, args_imports = serializer_factory(self.value.args).serialize()
+        keywords_string, keywords_imports = serializer_factory(
+            self.value.keywords
+        ).serialize()
+        # Add any imports needed by arguments
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = 'return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {'
+new = 'return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+print("serialized:", s, i)
+assert s.endswith(".Outer.Inner.default"), s
+print("OK")
+EOF
+ patched
+serialized: __main__.Outer.Inner.default {'import __main__'}
+OK
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = '            klass = self.value.__self__\n            module = klass.__module__\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+new = '            klass = self.value.__self__\n            module = klass.__module__\n            if "<" in klass.__qualname__:\n                raise ValueError(\n                    "Could not find klass %s in %s.\\n"\n                    % (klass.__qualname__, module)\n                )\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+EOF
+git diff && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func().cm).serialize()
+    raise AssertionError("expected ValueError")
+except ValueError as e:
+    print("local class raises:", e)
+print("OK")
+EOF
+python tests/runtests.py migrations.test_writer 2>&1 | tail -3
+ patched
+diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..efacd60686 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,12 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            if "<" in klass.__qualname__:
++                raise ValueError(
++                    "Could not find klass %s in %s.\n"
++                    % (klass.__qualname__, module)
++                )
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+Ran 53 tests in 0.050s
+
+OK
+
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 20, in <module>
+AttributeError: 'function' object has no attribute 'cm'
+
+
+$exec_command cd /testbed && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+print("nested classmethod OK:", s)
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func()).serialize()
+    raise SystemExit("expected ValueError")
+except ValueError as e:
+    print("local class raises ValueError:", str(e).replace("\n", " | "))
+EOF
+python tests/runtests.py migrations 2>&1 | tail -4
+ nested classmethod OK: __main__.Outer.Inner.default
+local class raises ValueError: Could not find klass outer_func.<locals>.Local in __main__. | 
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+
+
+$exec_command cd /testbed && grep -n "class_method\|ClassMethod\|classmethod\|Could not find\|local" tests/migrations/test_writer.py | head -40
+ 685:            "Could not find object EmailValidator2 in django.core.validators.",
+742:    def test_serialize_local_function_reference(self):
+743:        """A reference in a local scope can't be serialized."""
+752:            ValueError, "Could not find function upload_to in migrations.test_writer"
+
+
+$exec_command cd /testbed && python - <<'PYEOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = 'Could not find klass %s in %s'
+new = 'Could not find class %s in %s'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print('patched')
+PYEOF
+sed -n '163,180p' django/db/migrations/serializer.py && python tests/runtests.py migrations 2>&1 | grep -E "^(OK|FAILED|Ran)"
+ patched
+
+class FunctionTypeSerializer(BaseSerializer):
+    def serialize(self):
+        if getattr(self.value, "__self__", None) and isinstance(
+            self.value.__self__, type
+        ):
+            klass = self.value.__self__
+            module = klass.__module__
+            if "<" in klass.__qualname__:
+                raise ValueError(
+                    "Could not find class %s in %s.\n"
+                    % (klass.__qualname__, module)
+                )
+            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                "import %s" % module
+            }
+        # Further error checking
+        if self.value.__name__ == "<lambda>":
+Ran 737 tests in 9.935s
+OK (skipped=2)
+
+
+$exec_command cd /testbed && git diff && python tests/runtests.py migrations 2>&1 | tail -2
+ diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..c0e5a0c96a 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,12 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            if "<" in klass.__qualname__:
++                raise ValueError(
++                    "Could not find class %s in %s.\n"
++                    % (klass.__qualname__, module)
++                )
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = (
+    '            module = klass.__module__\n'
+    '            if "<" in klass.__qualname__:\n'
+    '                raise ValueError(\n'
+    '                    "Could not find class %s in %s.\\n"\n'
+    '                    % (klass.__qualname__, module)\n'
+    '                )\n'
+    '            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n'
+)
+new = (
+    '            module = klass.__module__\n'
+    '            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n'
+)
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print('reverted to minimal patch (only __qualname__ change)')
+EOF
+git diff && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+print("sanity OK:", s, i)
+EOF
+python tests/runtests.py migrations 2>&1 | grep -E "^(OK|FAILED|Ran)"
+ reverted to minimal patch (only __qualname__ change)
+diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..06657ebaab 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,7 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+sanity OK: __main__.Outer.Inner.default {'import __main__'}
+Ran 737 tests in 9.975s
+OK (skipped=2)
+
+
+$
+ (no output)
+
+
+[model reply, complete and unedited] (5180 tokens in, 1700 tokens out)
+
+
+exec_command cd /testbed && git status --short && git diff
+
+
+[command executed: exec_command]
+cd /testbed && git status --short && git diff
+
+[result]
+ M django/db/migrations/serializer.py
+diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..06657ebaab 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,7 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+
+
+------------------------------------------------------------------------------
+TURN 17
+------------------------------------------------------------------------------
+
+[prompt sent to the model: 20330 characters, the same as turn 1 plus the history below]
+$exec_command <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>
+ 
+[stderr]
+bash: -c: line 1: syntax error near unexpected token `newline'
+bash: -c: line 1: `source /opt/miniconda3/bin/activate && conda activate testbed && cd /testbed && <shell command>find /testbed -maxdepth 1 -type d | head -30</shell command>'
+
+[exit code: 2]
+
+$exec_command find /testbed -maxdepth 1 -type d | head -30
+ /testbed
+/testbed/.git
+/testbed/tests
+/testbed/django
+/testbed/scripts
+/testbed/docs
+/testbed/extras
+/testbed/Django.egg-info
+/testbed/.github
+/testbed/js_tests
+/testbed/.tx
+
+
+$exec_command cd /testbed && git log --oneline -3 && grep -n "def get_class_description" django/db/migrations/utils.py && grep -n "Callable\|get_class_description\|bound\|__self__" django/db/migrations/serializer.py | head -40
+ c6b2b2206f SWE-bench
+4a72da7100 Refs #27471 -- Made admin's filter choice arrows use cursor pointers.
+da2f8e8257 Refs #34118 -- Improved sanitize_address() error message for tuple with empty strings.
+
+[exit code: 1]
+
+$exec_command cd /testbed && grep -n "get_class_description\|Callable\|__self__\|bound" django/db/migrations/serializer.py | head -50
+ 166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+
+
+$exec_command cd /testbed && grep -rn "def get_class_description" django/ && grep -n "__self__\|__qualname__\|__name__" django/db/migrations/serializer.py | head -30 && sed -n '150,210p' django/db/migrations/serializer.py
+</shell command>
+ 
+[stderr]
+bash: -c: line 2: syntax error near unexpected token `newline'
+bash: -c: line 2: `</shell command>'
+
+[exit code: 2]
+
+$exec_command cd /testbed && sed -n '1,80p' django/db/migrations/utils.py && grep -n "get_class_description\|ClassDescription\|qualname\|__self__" django/db/migrations/serializer.py | head -40
+ import datetime
+import re
+from collections import namedtuple
+
+from django.db.models.fields.related import RECURSIVE_RELATIONSHIP_CONSTANT
+
+FieldReference = namedtuple("FieldReference", "to through")
+
+COMPILED_REGEX_TYPE = type(re.compile(""))
+
+
+class RegexObject:
+    def __init__(self, obj):
+        self.pattern = obj.pattern
+        self.flags = obj.flags
+
+    def __eq__(self, other):
+        if not isinstance(other, RegexObject):
+            return NotImplemented
+        return self.pattern == other.pattern and self.flags == other.flags
+
+
+def get_migration_name_timestamp():
+    return datetime.datetime.now().strftime("%Y%m%d_%H%M")
+
+
+def resolve_relation(model, app_label=None, model_name=None):
+    """
+    Turn a model class or model reference string and return a model tuple.
+
+    app_label and model_name are used to resolve the scope of recursive and
+    unscoped model relationship.
+    """
+    if isinstance(model, str):
+        if model == RECURSIVE_RELATIONSHIP_CONSTANT:
+            if app_label is None or model_name is None:
+                raise TypeError(
+                    "app_label and model_name must be provided to resolve "
+                    "recursive relationships."
+                )
+            return app_label, model_name
+        if "." in model:
+            app_label, model_name = model.split(".", 1)
+            return app_label, model_name.lower()
+        if app_label is None:
+            raise TypeError(
+                "app_label must be provided to resolve unscoped model relationships."
+            )
+        return app_label, model.lower()
+    return model._meta.app_label, model._meta.model_name
+
+
+def field_references(
+    model_tuple,
+    field,
+    reference_model_tuple,
+    reference_field_name=None,
+    reference_field=None,
+):
+    """
+    Return either False or a FieldReference if `field` references provided
+    context.
+
+    False positives can be returned if `reference_field_name` is provided
+    without `reference_field` because of the introspection limitation it
+    incurs. This should not be an issue when this function is used to determine
+    whether or not an optimization can take place.
+    """
+    remote_field = field.remote_field
+    if not remote_field:
+        return False
+    references_to = None
+    references_through = None
+    if resolve_relation(remote_field.model, *model_tuple) == reference_model_tuple:
+        to_fields = getattr(field, "to_fields", None)
+        if (
+            reference_field_name is None
+            or
+            # Unspecified to_field(s).
+            to_fields is None
+144:                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+166:        if getattr(self.value, "__self__", None) and isinstance(
+167:            self.value.__self__, type
+169:            klass = self.value.__self__
+182:        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+183:            return "%s.%s" % (module_name, self.value.__qualname__), {
+322:                return "%s.%s" % (module, self.value.__qualname__), {
+
+
+$exec_command cd /testbed && sed -n '120,200p' django/db/migrations/serializer.py
+         for k, v in sorted(self.value.items()):
+            k_string, k_imports = serializer_factory(k).serialize()
+            v_string, v_imports = serializer_factory(v).serialize()
+            imports.update(k_imports)
+            imports.update(v_imports)
+            strings.append((k_string, v_string))
+        return "{%s}" % (", ".join("%s: %s" % (k, v) for k, v in strings)), imports
+
+
+class EnumSerializer(BaseSerializer):
+    def serialize(self):
+        enum_class = self.value.__class__
+        module = enum_class.__module__
+        if issubclass(enum_class, enum.Flag):
+            if PY311:
+                members = list(self.value)
+            else:
+                members, _ = enum._decompose(enum_class, self.value)
+                members = reversed(members)
+        else:
+            members = (self.value,)
+        return (
+            " | ".join(
+                [
+                    f"{module}.{enum_class.__qualname__}[{item.name!r}]"
+                    for item in members
+                ]
+            ),
+            {"import %s" % module},
+        )
+
+
+class FloatSerializer(BaseSimpleSerializer):
+    def serialize(self):
+        if math.isnan(self.value) or math.isinf(self.value):
+            return 'float("{}")'.format(self.value), set()
+        return super().serialize()
+
+
+class FrozensetSerializer(BaseUnorderedSequenceSerializer):
+    def _format(self):
+        return "frozenset([%s])"
+
+
+class FunctionTypeSerializer(BaseSerializer):
+    def serialize(self):
+        if getattr(self.value, "__self__", None) and isinstance(
+            self.value.__self__, type
+        ):
+            klass = self.value.__self__
+            module = klass.__module__
+            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
+                "import %s" % module
+            }
+        # Further error checking
+        if self.value.__name__ == "<lambda>":
+            raise ValueError("Cannot serialize function: lambda")
+        if self.value.__module__ is None:
+            raise ValueError("Cannot serialize function %r: No module" % self.value)
+
+        module_name = self.value.__module__
+
+        if "<" not in self.value.__qualname__:  # Qualname can include <locals>
+            return "%s.%s" % (module_name, self.value.__qualname__), {
+                "import %s" % self.value.__module__
+            }
+
+        raise ValueError(
+            "Could not find function %s in %s.\n" % (self.value.__name__, module_name)
+        )
+
+
+class FunctoolsPartialSerializer(BaseSerializer):
+    def serialize(self):
+        # Serialize functools.partial() arguments
+        func_string, func_imports = serializer_factory(self.value.func).serialize()
+        args_string, args_imports = serializer_factory(self.value.args).serialize()
+        keywords_string, keywords_imports = serializer_factory(
+            self.value.keywords
+        ).serialize()
+        # Add any imports needed by arguments
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = 'return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {'
+new = 'return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+print("serialized:", s, i)
+assert s.endswith(".Outer.Inner.default"), s
+print("OK")
+EOF
+ patched
+serialized: __main__.Outer.Inner.default {'import __main__'}
+OK
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = '            klass = self.value.__self__\n            module = klass.__module__\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+new = '            klass = self.value.__self__\n            module = klass.__module__\n            if "<" in klass.__qualname__:\n                raise ValueError(\n                    "Could not find klass %s in %s.\\n"\n                    % (klass.__qualname__, module)\n                )\n            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n                "import %s" % module\n            }'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print("patched")
+EOF
+git diff && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func().cm).serialize()
+    raise AssertionError("expected ValueError")
+except ValueError as e:
+    print("local class raises:", e)
+print("OK")
+EOF
+python tests/runtests.py migrations.test_writer 2>&1 | tail -3
+ patched
+diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..efacd60686 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,12 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            if "<" in klass.__qualname__:
++                raise ValueError(
++                    "Could not find klass %s in %s.\n"
++                    % (klass.__qualname__, module)
++                )
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+Ran 53 tests in 0.050s
+
+OK
+
+[stderr]
+Traceback (most recent call last):
+  File "<stdin>", line 20, in <module>
+AttributeError: 'function' object has no attribute 'cm'
+
+
+$exec_command cd /testbed && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+print("nested classmethod OK:", s)
+
+def outer_func():
+    class Local:
+        @classmethod
+        def cm(cls):
+            pass
+    return Local.cm
+
+try:
+    serializer_factory(outer_func()).serialize()
+    raise SystemExit("expected ValueError")
+except ValueError as e:
+    print("local class raises ValueError:", str(e).replace("\n", " | "))
+EOF
+python tests/runtests.py migrations 2>&1 | tail -4
+ nested classmethod OK: __main__.Outer.Inner.default
+local class raises ValueError: Could not find klass outer_func.<locals>.Local in __main__. | 
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+
+
+$exec_command cd /testbed && grep -n "class_method\|ClassMethod\|classmethod\|Could not find\|local" tests/migrations/test_writer.py | head -40
+ 685:            "Could not find object EmailValidator2 in django.core.validators.",
+742:    def test_serialize_local_function_reference(self):
+743:        """A reference in a local scope can't be serialized."""
+752:            ValueError, "Could not find function upload_to in migrations.test_writer"
+
+
+$exec_command cd /testbed && python - <<'PYEOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = 'Could not find klass %s in %s'
+new = 'Could not find class %s in %s'
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print('patched')
+PYEOF
+sed -n '163,180p' django/db/migrations/serializer.py && python tests/runtests.py migrations 2>&1 | grep -E "^(OK|FAILED|Ran)"
+ patched
+
+class FunctionTypeSerializer(BaseSerializer):
+    def serialize(self):
+        if getattr(self.value, "__self__", None) and isinstance(
+            self.value.__self__, type
+        ):
+            klass = self.value.__self__
+            module = klass.__module__
+            if "<" in klass.__qualname__:
+                raise ValueError(
+                    "Could not find class %s in %s.\n"
+                    % (klass.__qualname__, module)
+                )
+            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                "import %s" % module
+            }
+        # Further error checking
+        if self.value.__name__ == "<lambda>":
+Ran 737 tests in 9.935s
+OK (skipped=2)
+
+
+$exec_command cd /testbed && git diff && python tests/runtests.py migrations 2>&1 | tail -2
+ diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..c0e5a0c96a 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,12 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            if "<" in klass.__qualname__:
++                raise ValueError(
++                    "Could not find class %s in %s.\n"
++                    % (klass.__qualname__, module)
++                )
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+Destroying test database for alias 'other'...
+Destroying test database for alias 'other'...
+
+
+$exec_command cd /testbed && python - <<'EOF'
+path = 'django/db/migrations/serializer.py'
+src = open(path).read()
+old = (
+    '            module = klass.__module__\n'
+    '            if "<" in klass.__qualname__:\n'
+    '                raise ValueError(\n'
+    '                    "Could not find class %s in %s.\\n"\n'
+    '                    % (klass.__qualname__, module)\n'
+    '                )\n'
+    '            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n'
+)
+new = (
+    '            module = klass.__module__\n'
+    '            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {\n'
+)
+assert src.count(old) == 1, src.count(old)
+open(path, 'w').write(src.replace(old, new))
+print('reverted to minimal patch (only __qualname__ change)')
+EOF
+git diff && python - <<'EOF'
+from django.db.migrations.serializer import serializer_factory
+
+class Outer:
+    class Inner:
+        @classmethod
+        def default(cls):
+            return []
+
+s, i = serializer_factory(Outer.Inner.default).serialize()
+assert s == "__main__.Outer.Inner.default", s
+print("sanity OK:", s, i)
+EOF
+python tests/runtests.py migrations 2>&1 | grep -E "^(OK|FAILED|Ran)"
+ reverted to minimal patch (only __qualname__ change)
+diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..06657ebaab 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,7 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+sanity OK: __main__.Outer.Inner.default {'import __main__'}
+Ran 737 tests in 9.975s
+OK (skipped=2)
+
+
+$
+ (no output)
+
+$exec_command cd /testbed && git status --short && git diff
+  M django/db/migrations/serializer.py
+diff --git a/django/db/migrations/serializer.py b/django/db/migrations/serializer.py
+index d88cda6e20..06657ebaab 100755
+--- a/django/db/migrations/serializer.py
++++ b/django/db/migrations/serializer.py
+@@ -168,7 +168,7 @@ class FunctionTypeSerializer(BaseSerializer):
+         ):
+             klass = self.value.__self__
+             module = klass.__module__
+-            return "%s.%s.%s" % (module, klass.__name__, self.value.__name__), {
++            return "%s.%s.%s" % (module, klass.__qualname__, self.value.__name__), {
+                 "import %s" % module
+             }
+         # Further error checking
+
+
+
+[model reply, complete and unedited] (5387 tokens in, 469 tokens out)
+
+
+submit_patch Fix FunctionTypeSerializer to use klass.__qualname__ instead of klass.__name__ when serializing bound classmethods, so classmethods of nested classes (e.g. Profile.Capability.default) are written with their fully qualified name in migrations.
+
+[command executed: submit_patch]
+Fix FunctionTypeSerializer to use klass.__qualname__ instead of klass.__name__ when serializing bound classmethods, so classmethods of nested classes (e.g. Profile.Capability.default) are written with their fully qualified name in migrations.
+
+[result]
+TESTS_PASSED
+
+------------------------------------------------------------------------------
+STATUS: Run finished successfully
