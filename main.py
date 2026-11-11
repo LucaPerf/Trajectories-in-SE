@@ -45,6 +45,10 @@ SHELL_PREFIX = "source /opt/miniconda3/bin/activate && conda activate testbed"
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC_DIR = os.path.join(HERE, "src")
 LOG_DIR = os.path.join(HERE, "job_logs")
+OUTPUT_DIR = os.path.join(HERE, "output")
+# runs with hints from the Markov chain are kept apart from the runs without hints
+LOG_DIR_HINTS = os.path.join(HERE, "job_logs_hints")
+OUTPUT_DIR_HINTS = os.path.join(HERE, "output_hints")
 
 def _test_files(instance) -> list[str]:
     """Files touched by the instance's test_patch."""
@@ -141,7 +145,18 @@ def main():
     parser.add_argument("--runs", type=int, default=1, help="how many independent runs to do in a row")
     parser.add_argument("--max-turns", type=int, default=20)
     parser.add_argument("--keep-container", action="store_true", help="do not remove the container at the end")
+    parser.add_argument("--hints-file", type=str, default="",
+                        help="text file with the hints from the Markov chain: uses the prompt with hints and "
+                             "writes to job_logs_hints/ and output_hints/ instead of job_logs/ and output/")
     args = parser.parse_args()
+
+    hints = ""
+    if args.hints_file:
+        with open(args.hints_file, encoding="utf-8") as f:
+            hints = f.read().strip()
+        if not hints:
+            sys.exit(f"{args.hints_file} is empty")
+    log_dir, output_dir = (LOG_DIR_HINTS, OUTPUT_DIR_HINTS) if hints else (LOG_DIR, OUTPUT_DIR)
 
     api_key = os.environ.get(API_KEY_ENV)
     if not api_key:
@@ -158,11 +173,11 @@ def main():
 
     ensure_image(image)
 
-    os.makedirs(LOG_DIR, exist_ok=True)
-    patch_path = os.path.join(LOG_DIR, f"{instance_id}.test.patch")
+    os.makedirs(log_dir, exist_ok=True)
+    patch_path = os.path.join(log_dir, f"{instance_id}.test.patch")
     with open(patch_path, "w", encoding="utf-8", newline="") as f:
         f.write(instance["test_patch"])
-    db_path = os.path.join(LOG_DIR, f"{instance_id}.sqlite3")
+    db_path = os.path.join(log_dir, f"{instance_id}.sqlite3")
 
     cmd = [
         sys.executable, "-m", "hackingBuddyGPT.cli.wintermute", "SWEBenchPilot",
@@ -181,6 +196,8 @@ def main():
         f"--log_db.connection_string={db_path}",
         f"--log.tag={tag}",
     ]
+    if hints:
+        cmd.append(f"--hints={hints}")
     # The key travels through the environment (configurable.py reads "llm.api_key"), never the command line.
     env = dict(os.environ)
     env["PYTHONPATH"] = SRC_DIR + os.pathsep + env.get("PYTHONPATH", "")
@@ -200,7 +217,7 @@ def main():
             if not args.keep_container:
                 docker("rm", "-f", container)
         if os.path.exists(db_path):
-            transcript_path = write_transcript(db_path, os.path.join(HERE, "output"))
+            transcript_path = write_transcript(db_path, output_dir)
             if transcript_path:
                 print(f"Readable transcript: {transcript_path}")
         if result.returncode != 0:
@@ -222,7 +239,7 @@ def main():
         sys.exit(1)
 
     import json
-    with open(os.path.join(LOG_DIR, "last_summary.json"), "w") as f:
+    with open(os.path.join(log_dir, "last_summary.json"), "w") as f:
         json.dump({"successes": successes, "completed": len(outcomes)}, f)
 
 

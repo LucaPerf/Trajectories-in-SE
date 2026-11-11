@@ -50,7 +50,46 @@ Your entire reply must be a single action, in one of these two forms, and nothin
 exec_command <shell command>
 submit_patch <short note>
 The command may span several lines (for example a heredoc to write a script). 
-Do not explain your reasoning, do not add markup, and do not continue the conversation after that line.       
+Do not explain your reasoning, do not add markup, and do not continue the conversation after that line.
+""")
+
+# Same prompt as swe_template plus the hints extracted from the Markov chain of similar instances.
+# swe_template stays untouched: runs without hints keep using exactly the original prompt.
+swe_template_hints = Template("""You are a software engineer working inside a checked-out git repository
+at ${repo_path}. Your goal is to resolve the following issue by editing the code so that the
+project's test suite passes.
+
+ISSUE:
+${issue_text}
+
+HINTS FROM EARLIER RUNS ON SIMILAR ISSUES:
+${hints}
+
+${capabilities}
+
+% if len(history) != 0:
+You already tried the following commands:
+
+~~~ bash
+${history}
+~~~
+
+Do not repeat commands that already told you what you need to know.
+%endif
+
+Do not modify the files in the `tests/` directory: they will be replaced by the official tests.
+
+The official tests are not in the repository: do not search for them.
+
+Decide your next single action. Use exec_command to read/search/edit files or run commands, and
+submit_patch only once you believe the fix is complete and want it verified against the test
+suite.
+
+Your entire reply must be a single action, in one of these two forms, and nothing else:
+exec_command <shell command>
+submit_patch <short note>
+The command may span several lines (for example a heredoc to write a script).
+Do not explain your reasoning, do not add markup, and do not continue the conversation after that line.
 """)
 
 # The hosted model tends to answer with markdown reasoning around (and after) the command, sometimes
@@ -73,6 +112,10 @@ class SWEBenchPilotUseCase(CommandStrategy):
         desc="Host path of a file with the instance's test_patch, applied only while submit_patch runs the tests",
         default="",
     )
+    hints: str = parameter(
+        desc="Hints extracted from the Markov chain; when given, the prompt with the hints section is used",
+        default="",
+    )
 
     def get_name(self) -> str:
         return "SWE-bench Pilot Task"
@@ -86,7 +129,7 @@ class SWEBenchPilotUseCase(CommandStrategy):
             with open(self.test_patch_file, encoding="utf-8", newline="") as f:
                 test_patch = f.read()
 
-        self._template = swe_template
+        self._template = swe_template_hints if self.hints else swe_template
         self._capabilities.add_capability(DockerRunCommand(conn=self.conn), default=True)
         self._capabilities.add_capability(SubmitPatch(conn=self.conn, test_cmd=self.test_cmd, test_patch=test_patch))
 
@@ -94,6 +137,8 @@ class SWEBenchPilotUseCase(CommandStrategy):
             "issue_text": self.issue_text,
             "repo_path": self.repo_path,
         })
+        if self.hints:
+            self._template_params["hints"] = self.hints
 
     def postprocess_commands(self, cmd: str) -> list[str]:
         lines = cmd.strip().splitlines()
@@ -117,7 +162,8 @@ class SWEBenchPilotUseCase(CommandStrategy):
         # rendered issue text and capability block would otherwise push the real
         # prompt past context_size.
         capabilities_block = self._template_params.get("capabilities", "")
-        return self.llm.count_tokens(self.issue_text) + self.llm.count_tokens(capabilities_block)
+        return (self.llm.count_tokens(self.issue_text) + self.llm.count_tokens(capabilities_block)
+                + self.llm.count_tokens(self.hints))
 
     def check_success(self, cmd: str, result: str) -> bool:
         return cmd.startswith("submit_patch") and "TESTS_PASSED" in result

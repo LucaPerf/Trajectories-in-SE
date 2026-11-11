@@ -1,0 +1,2 @@
+In earlier successful runs on a similar issue, the agent followed this sequence of commands (a value in square brackets stands for something you choose for this issue):
+grep -rn [TERM: code search term] [PATH: repository directory] -> head -n [COUNT: line limit] [PATH: source file] | tail -n [COUNT: line limit] -> sed -i [EXPR: substitution expression] [PATH: source file] -> grep -n [TERM: code search term] [PATH: source file] -> submit_patch

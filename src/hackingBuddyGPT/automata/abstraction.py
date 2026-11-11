@@ -254,7 +254,8 @@ def _parse_assignments(text: str) -> dict[int, tuple[str, str]]:
             continue
         split_cat = category.strip().split("->")
         if len(split_cat) >= 2:
-            result[idx] = (_clean_cat(split_cat[0]), _clean_cat(split_cat[1]))
+            # output categories never contain parentheses: a trailing one closes a group opened on an earlier line
+            result[idx] = (_clean_cat(split_cat[0]), _clean_cat(split_cat[1]).rstrip(") "))
         elif len(split_cat) == 1:
             result[idx] = (_clean_cat(split_cat[0]), "")
 
