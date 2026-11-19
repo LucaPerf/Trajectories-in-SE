@@ -36,7 +36,7 @@ DATASET = "SWE-bench/SWE-bench_Lite"
 
 # Maximum length of each model reply (every API call has to send one; this is the framework's default).
 # Cost and memory are not a concern on the hosted model: raise it if replies get cut off.
-MAX_TOKENS = 32768
+MAX_TOKENS = 24576
 
 # SWE-bench images keep the project's Python environment in a conda env called "testbed"
 # (checked inside the astropy image: /opt/miniconda3, env "testbed", Python 3.9).
