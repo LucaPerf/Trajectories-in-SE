@@ -12,7 +12,7 @@ Step 3, Alergia. Fully offline, can be repeated as often as you like with differ
 
     python learn.py learn --out artifacts\\vm_0 [--eps 0.05]
 
-  Learns a Markov chain from abstractions.json and writes hb_mc.dot plus model_summary.txt.
+  Learns a Markov chain from the success runs in abstractions.json and writes hb_mc.dot plus model_summary.txt.
 """
 
 import argparse
@@ -24,7 +24,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE / "src"))
 
-from main import API_KEY_ENV, API_URL, MAX_TOKENS, MODEL  # noqa: E402  (endpoint and model are set in main.py)
+from main import API_KEY_ENV, API_URL, MAX_TOKENS, MODEL 
 
 
 def short(text: str, width: int = 110) -> str:
@@ -235,25 +235,40 @@ def pair_frequencies(abstractions: dict) -> str:
         lines.append(f"{count:>5} {runs[(action, output)]:>4}  {action} -> {output}")
     return "\n".join(lines)
 
+def is_success_trace(trace: dict) -> bool:
+    if not trace:
+        return False
+    last = max(trace, key=int)
+    return trace[last] == "success"
 
 def cmd_learn(args) -> None:
-    from hackingBuddyGPT.automata.automaton_learning import learn_and_save
+    from hackingBuddyGPT.automata.automaton_learning import learn_automaton, save_learned_model, traces_to_aalpy
 
     out_dir = Path(args.out)
     abstractions_path = out_dir / "abstractions.json"
     if not abstractions_path.exists():
         sys.exit(f"{abstractions_path} not found: run the 'abstract' step first.")
+    abstractions = json.loads(abstractions_path.read_text(encoding="utf-8"))
+
+    # Only successful runs go into the Markov chain (abstractions.json on disk keeps all of them).
+    total = len(abstractions["traces"])
+    abstractions["traces"] = [t for t in abstractions["traces"] if is_success_trace(t)]
+    if not abstractions["traces"]:
+        sys.exit(f"{abstractions_path}: none of the {total} runs is successful, no model to learn.")
+    print(f"Learning from {len(abstractions['traces'])} successful run(s) out of {total}.")
+
     dot_path = out_dir / "hb_mc.dot"
-    learn_and_save(str(abstractions_path), str(dot_path), "mc", args.eps)
+    aalpy_traces = traces_to_aalpy(abstractions, automaton_type="mc")
+    learned = learn_automaton(aalpy_traces, automaton_type="mc", eps=args.eps)
+    save_learned_model(learned, path=str(dot_path))
 
     summary = describe_dot(dot_path)
     (out_dir / "model_summary.txt").write_text(summary, encoding="utf-8")
     print(f"\n{summary}\n\nWrote {dot_path} and {out_dir / 'model_summary.txt'}")
 
-    frequencies = pair_frequencies(json.loads(abstractions_path.read_text(encoding="utf-8")))
+    frequencies = pair_frequencies(abstractions)
     (out_dir / "pair_frequencies.txt").write_text(frequencies, encoding="utf-8")
     print("\n" + "\n".join(frequencies.splitlines()[:4]) + f"\n\nWrote {out_dir / 'pair_frequencies.txt'}")
-
 
 def main() -> None:
     parser = argparse.ArgumentParser()
