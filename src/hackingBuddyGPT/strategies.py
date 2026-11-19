@@ -121,13 +121,16 @@ class CommandStrategy(UseCase, abc.ABC):
 
     @log_section("Executing that command...")
     def run_command(self, cmd, message_id) -> str:
-        # The LLM sometimes outputs multiple commands separated by newlines
-        # (e.g. "exec_command id\nexec_command whoami\n...").  Take only the
-        # first line — the rest are ignored.  If the whole thing looks like
-        # leaked chain-of-thought (multi-line and very long), reject it outright.
         cleaned = cmd.strip()
-        # Multi-line commands (e.g. heredocs) are allowed; the capability parser decides what to run.
-        # Safety net only for runaway output (e.g. leaked reasoning), far above any real script.
+
+        # for reply that is empty
+        if not cleaned:
+            error_msg = ("Your previous reply was empty: you used up the whole token budget while thinking and never wrote an action. Think briefly and reply with a single action.")
+            self.log.add_tool_call(message_id, tool_call_id=0, function_name="",
+                                            arguments="", result_text=error_msg, duration=datetime.timedelta(0))
+            return error_msg
+
+        # for reply that is too long
         if len(cleaned) > 8000:
             error_msg = "Your reply is too long. Reply with a single short action and no explanation."
             self.log.add_tool_call(message_id, tool_call_id=0, function_name="",

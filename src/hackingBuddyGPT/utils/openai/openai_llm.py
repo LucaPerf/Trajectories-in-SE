@@ -29,7 +29,7 @@ class OpenAIConnection(LLM):
     )
     api_url: str = parameter(desc="URL of the OpenAI API", default="https://api.openai.com")
     api_path: str = parameter(desc="Path to the OpenAI API", default="/v1/chat/completions")
-    api_timeout: int = parameter(desc="Timeout for the API request", default=240)
+    api_timeout: int = parameter(desc="Timeout for the API request", default=900)
     api_backoff: int = parameter(desc="Backoff time in seconds when running into rate-limits", default=60)
     api_retries: int = parameter(desc="Number of retries when running into rate-limits", default=3)
     max_tokens: int = parameter(desc="Maximum number of tokens in the response", default=4096)
