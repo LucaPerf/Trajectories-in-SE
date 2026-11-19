@@ -79,6 +79,11 @@ class OpenAIConnection(LLM):
                 else:
                     raise Exception(f"Error from Gateway ({response.status_code})")
 
+            if response.status_code == 504:
+                # the gateway (Aqueduct) gives up after 600 s: the model thought too long and never answered
+                print("[RestAPI-Connector] gateway timeout (504): treating it as an empty reply")
+                return LLMResult("", prompt, "", datetime.datetime.now() - tic, 0, 0)
+
             if response.status_code != 200:
                 raise Exception(f"Error from OpenAI Gateway ({response.status_code}): {response.text}")
 
