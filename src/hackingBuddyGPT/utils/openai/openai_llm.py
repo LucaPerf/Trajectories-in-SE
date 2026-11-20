@@ -8,6 +8,9 @@ from urllib.parse import urlparse
 
 from hackingBuddyGPT.utils.configurable import configurable, parameter
 from hackingBuddyGPT.utils.llm_util import LLM, LLMResult
+import pathlib
+
+_REASONING_LOG = (pathlib.Path(__file__).resolve().parents[4] / "reasoning_logs" / f"reasoning_{datetime.datetime.now():%Y%m%d-%H%M%S}.txt")
 
 
 @configurable("openai-compatible-llm-api", "OpenAI-compatible LLM API")
@@ -50,7 +53,8 @@ class OpenAIConnection(LLM):
             # normal header
             headers = {"Authorization": f"Bearer {self.api_key}"}
 
-        data = {"model": self.model, "messages": [{"role": "user", "content": prompt}], "max_tokens": self.max_tokens}
+        #data = {"model": self.model, "messages": [{"role": "user", "content": prompt}], "max_tokens": self.max_tokens}
+        data = {"model": self.model, "messages": [{"role": "user", "content": prompt}], "max_tokens": self.max_tokens, "temperature": 0.6, "top_p": 0.95, "presence_penalty": 1.0}
 
         if self.thinking:
             data["thinking"] = {"type": "enabled"}
@@ -103,7 +107,7 @@ class OpenAIConnection(LLM):
         result = message.get("content", "") or ""
         # Some Ollama models (qwen3.5) return all output in "reasoning" (not "reasoning_content")
         # when thinking mode is enabled by default in the model
-        reasoning = message.get("reasoning_content", "") or message.get("reasoning", "")
+        reasoning = message.get("reasoning_content") or message.get("reasoning") or ""
         # If content is empty (model put everything in reasoning), extract the actual
         # command/output from the reasoning field
         if not result.strip() and reasoning:
@@ -137,7 +141,20 @@ class OpenAIConnection(LLM):
             print(f"[RestAPI-Connector] empty response: finish_reason={response['choices'][0].get('finish_reason')}, "
                   f"completion_tokens={tok_res}, max_tokens={self.max_tokens}, reasoning_chars={len(reasoning)}")
 
+        self._log_reasoning(response, message, reasoning, tok_query, tok_res, duration)
+
         return LLMResult(result, prompt, result, duration, tok_query, tok_res, reasoning_content=reasoning)
+
+    def _log_reasoning(self, response, message, reasoning, tok_query, tok_res, duration) -> None:
+        _REASONING_LOG.parent.mkdir(exist_ok=True)
+        finish = response["choices"][0].get("finish_reason")
+        with open(_REASONING_LOG, "a", encoding="utf-8") as f:
+            f.write("=" * 78 + "\n")
+            f.write(f"{datetime.datetime.now():%H:%M:%S}  in={tok_query}  out={tok_res}  finish_reason={finish}  "
+                    f"duration={duration.total_seconds():.0f}s  reasoning_chars={len(reasoning)}\n")
+            f.write(f"message fields: {sorted(message.keys())}\n")
+            f.write("--- REASONING ---\n" + (reasoning or "(none returned)") + "\n")
+            f.write("--- CONTENT ---\n" + (message.get("content") or "(empty)") + "\n")
 
     def encode(self, query) -> list[int]:
         # I know this is crappy for all non-openAI models but sadly this
