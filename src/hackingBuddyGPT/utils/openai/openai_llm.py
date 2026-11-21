@@ -53,8 +53,7 @@ class OpenAIConnection(LLM):
             # normal header
             headers = {"Authorization": f"Bearer {self.api_key}"}
 
-        #data = {"model": self.model, "messages": [{"role": "user", "content": prompt}], "max_tokens": self.max_tokens}
-        data = {"model": self.model, "messages": [{"role": "user", "content": prompt}], "max_tokens": self.max_tokens, "temperature": 0.6, "top_p": 0.95, "presence_penalty": 1.0}
+        data = {"model": self.model, "messages": [{"role": "user", "content": prompt}], "max_tokens": self.max_tokens}
 
         if self.thinking:
             data["thinking"] = {"type": "enabled"}
