@@ -5,7 +5,7 @@ pairs seen at most 5 time(s): 62 (83%)
 
 count runs  action -> output
    52   36  sed -i [EXPR: substitution expression] [PATH: source file] -> PROGRESS_PATCH
-   38   38  submit_patch [PATCH: fix subclass check] -> PROGRESS_TEST
+   38   38  submit_patch [PATCH: fix subclass check] -> PROGRESS_TEST__success
    20   17  grep -n [TERM: code search term] [PATH: source file] -> DISCOVERY_SOURCE
    20   15  sed -n [RANGE: line range] [PATH: source file] -> DISCOVERY_SOURCE
    17   13  grep -n -A [COUNT: context lines] [TERM: code search term] [PATH: source file] -> DISCOVERY_SOURCE
@@ -58,7 +58,7 @@ count runs  action -> output
     1    1  grep -r [TERM: code search term] [PATH: repository directory] --include=[GLOB: python source files] -> DISCOVERY_TEST
     1    1  python3 -c [SCRIPT: inspect source file] -> EMPTY_NONE
     1    1  cd [PATH: repository root] && python [PATH: test runner script] [ARG: issue test module] 2>&1 | tail [COUNT: line limit] -> ERROR_TEST
-    1    1  submit_patch [PATCH: fix subclass check] -> PROGRESS_PATCH
+    1    1  submit_patch [PATCH: fix subclass check] -> PROGRESS_PATCH__success
     1    1  exec_command grep -n -B [COUNT: context lines] -A [COUNT: context lines] [TERM: code search term] [PATH: source file] -> ERROR_NONE
     1    1  cat [PATH: source file] | head -n [COUNT: line limit] | grep -n [TERM: code search term] -> EMPTY_SOURCE
     1    1  grep -n [TERM: code search term] [PATH: repository directory] -> ERROR_SOURCE
@@ -66,7 +66,7 @@ count runs  action -> output
     1    1  head -n [COUNT: line limit] [PATH: source file] | tail -n [COUNT: line limit] -> DISCOVERY_SOURCE
     1    1  sed -i [EXPR: substitution expression] [PATH: source file] -> PROGRESS_SOURCE
     1    1  grep -n [TERM: code search term] [PATH: source file] -> PROGRESS_SOURCE
-    1    1  submit_patch [PATCH: fix subclass check] -> PROGRESS_TEST)
+    1    1  submit_patch [PATCH: fix subclass check] -> PROGRESS_TEST)__success
     1    1  grep -n -A [COUNT: context lines] [TERM: code search term] [PATH: source file] | head [COUNT: line limit] -> DISCOVERY_SOURCE
     1    1  grep -r [TERM: code search term] [PATH: source file] -A [COUNT: context lines] -B [COUNT: context lines] -> DISCOVERY_SOURCE
     1    1  cat [PATH: source file] | grep -A [COUNT: context lines] [TERM: code search term] -> PROGRESS_PATCH

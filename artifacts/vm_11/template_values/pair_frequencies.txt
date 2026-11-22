@@ -4,7 +4,7 @@ pairs seen at most 2 time(s): 36 (62%)
 pairs seen at most 5 time(s): 48 (83%)
 
 count runs  action -> output
-   39   39  submit_patch [SUMMARY: error message format fix] -> PROGRESS_TEST
+   39   39  submit_patch [SUMMARY: error message format fix] -> PROGRESS_TEST__success
    26   25  sed -i [SCRIPT: fix format string] [PATH: target source file] -> PROGRESS_PATCH
    12   12  python3 -c [SCRIPT: fix format string] -> PROGRESS_PATCH
    11    9  sed -n [RANGE: surrounding lines] [PATH: target source file] -> DISCOVERY_SOURCE
@@ -61,4 +61,4 @@ count runs  action -> output
     1    1  grep -rn [TERM: target format string] [PATH: top-level package] --include=[PATTERN: Python source files] -> ERROR_NONE
     1    1  grep -rn [TERM: target format string] [PATH: top-level package] | grep -v [PATTERN: Python cache files] -> DISCOVERY_SOURCE
     1    1  find [PATH: repository root] -type f -name [PATTERN: Python source files] | xargs grep -l [TERM: target format string] | head [COUNT: small limit] -> DISCOVERY_SOURCE
-    1    1  submit_patch [SUMMARY: error message format fix] -> PROGRESS_TEST)
+    1    1  submit_patch [SUMMARY: error message format fix] -> PROGRESS_TEST)__success
