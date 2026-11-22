@@ -1,0 +1,45 @@
+==============================================================================
+Run transcript: django__django-16408
+run id: 1    tag: 'vm_111_iter_0'    turns: 0
+model: SWE-bench Pilot Task
+final state: exception occurred
+started: 2026-11-21 12:28:30.604573    stopped: 2026-11-21 11:29:00  (start is local time, stop is UTC)
+==============================================================================
+
+HOW TO READ THIS FILE
+Each TURN is one round trip with the model:
+  1. prompt   what we send: the task, the available commands and the history of the earlier commands
+  2. reply    what the model answered, complete and unedited
+  3. command  the single line we extracted from the reply and actually executed in the container
+  4. result   what the container printed (this becomes part of the history in the next prompt)
+The run ends with a status line: "got root" means the tests passed (that is the framework's name for
+any success), anything else is the reason the run stopped.
+
+------------------------------------------------------------------------------
+STATUS: Run failed: exception occurred: :
+
+Traceback (most recent call last):
+  File "/Users/lucaperfetti/Desktop/Experiments/Trajectories-in-SE/src/hackingBuddyGPT/strategies.py", line 75, in run
+    task_successful = self.perform_round(turn)
+  File "/Users/lucaperfetti/Desktop/Experiments/Trajectories-in-SE/src/hackingBuddyGPT/utils/logging.py", line 39, in inner
+    return fun(self, *args, **kwargs)
+  File "/Users/lucaperfetti/Desktop/Experiments/Trajectories-in-SE/src/hackingBuddyGPT/strategies.py", line 92, in perform_round
+    cmd, message_id = self.get_next_command()
+  File "/Users/lucaperfetti/Desktop/Experiments/Trajectories-in-SE/src/hackingBuddyGPT/utils/logging.py", line 28, in inner
+    return fun(self, *args, **kwargs)
+  File "/Users/lucaperfetti/Desktop/Experiments/Trajectories-in-SE/src/hackingBuddyGPT/strategies.py", line 117, in get_next_command
+    cmd = self.llm.get_response(self._template, **self._template_params)
+  File "/Users/lucaperfetti/Desktop/Experiments/Trajectories-in-SE/src/hackingBuddyGPT/utils/openai/openai_llm.py", line 91, in get_response
+    raise Exception(f"Error from OpenAI Gateway ({response.status_code}): {response.text}")
+Exception: Error from OpenAI Gateway (500): 
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Server Error (500)</title>
+</head>
+<body>
+  <h1>Server Error (500)</h1><p></p>
+</body>
+</html>
+
+
