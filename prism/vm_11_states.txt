@@ -1,0 +1,59 @@
+0	init
+1	find [PATH: repository root] -type f -name [PATTERN: Python source files] | xargs grep -l [TERM: target class name] | head [COUNT: small limit],DISCOVERY_REPO
+2	find [PATH: repository root] -type f -name [PATTERN: Python source files] | xargs grep -l [TERM: target class name] | head [COUNT: small limit],DISCOVERY_SOURCE
+3	find [PATH: repository root] -type f -name [PATTERN: Python source files] | xargs grep -l [TERM: target format string] | head [COUNT: small limit],DISCOVERY_SOURCE
+4	grep -n [TERM: target format string] [PATH: target source file],EMPTY_NONE
+5	grep -r [TERM: target format string] [PATH: repository root] --include=[PATTERN: Python source files],DISCOVERY_SOURCE
+6	grep -r [TERM: target format string] [PATH: repository root],DISCOVERY_REPO
+7	grep -r [TERM: target format string] [PATH: repository root],DISCOVERY_SOURCE
+8	grep -r [TERM: target format string] [PATH: top-level package],DISCOVERY_REPO
+9	grep -rn [TERM: target format string] [PATH: repository root] --include=[PATTERN: Python source files],DISCOVERY_SOURCE
+10	grep -rn [TERM: target format string] [PATH: repository root] | grep -i [TERM: issue keyword],DISCOVERY_SOURCE
+11	grep -rn [TERM: target format string] [PATH: repository root] | head [COUNT: small limit],DISCOVERY_SOURCE
+12	grep -rn [TERM: target format string] [PATH: repository root],DISCOVERY_REPO
+13	grep -rn [TERM: target format string] [PATH: repository root],DISCOVERY_SOURCE
+14	grep -rn [TERM: target format string] [PATH: top-level package] --include=[PATTERN: Python source files],DISCOVERY_SOURCE
+15	grep -rn [TERM: target format string] [PATH: top-level package] --include=[PATTERN: Python source files],ERROR_NONE
+16	grep -rn [TERM: target format string] [PATH: top-level package],DISCOVERY_REPO
+17	grep -rn [TERM: target format string] [PATH: top-level package],DISCOVERY_SOURCE
+18	grep -rnF [TERM: target format string] [PATH: repository root],DISCOVERY_SOURCE
+19	grep -rnF [TERM: target format string] [PATH: repository root],EMPTY_NONE
+20	ls -la [PATH: repository root],DISCOVERY_REPO
+21	submit_patch [SUMMARY: error message format fix],ERROR_TEST
+22	grep -A [COUNT: context lines] [TERM: target class name] [PATH: target source file],DISCOVERY_SOURCE
+23	grep -r [TERM: target format string] [PATH: top-level package] --include=[PATTERN: Python source files] | head [COUNT: small limit],DISCOVERY_SOURCE
+24	grep -rn [TERM: target format string] [PATH: top-level package] | grep -v [PATTERN: Python cache files],DISCOVERY_SOURCE
+25	grep -r [TERM: target format string] [PATH: top-level package] --include=[PATTERN: Python source files],ERROR_NONE
+26	grep -n [TERM: target format string] [PATH: target source file],DISCOVERY_SOURCE
+27	python3 -c [SCRIPT: fix format string],PROGRESS_PATCH
+28	sed -i [SCRIPT: fix format string] [PATH: target source file],PROGRESS_PATCH
+29	cat [PATH: target source file] | grep -n -A [COUNT: context lines] -B [COUNT: context lines] [TERM: target format string],DISCOVERY_SOURCE
+30	grep -n [TERM: target format string] [PATH: target source file],REPEATED_SOURCE
+31	python3 << [SCRIPT: fix format string],PROGRESS_PATCH
+32	grep -rn [TERM: target format string] [PATH: top-level package] --include=[PATTERN: Python source files] | head [COUNT: small limit],DISCOVERY_SOURCE
+33	head -n [COUNT: line limit] [PATH: target source file] | tail -n [COUNT: small limit],DISCOVERY_SOURCE
+34	cat [PATH: target source file] | sed -n [RANGE: surrounding lines],DISCOVERY_SOURCE
+35	sed -n [RANGE: surrounding lines] [PATH: target source file],DISCOVERY_SOURCE
+36	cat [PATH: target source file] | head -n [COUNT: line limit] | tail -n [COUNT: small limit],DISCOVERY_SOURCE
+37	grep -n -B [COUNT: context lines] -A [COUNT: context lines] [TERM: target format string] [PATH: target source file],DISCOVERY_SOURCE
+38	submit_patch [SUMMARY: error message format fix],PROGRESS_TEST__success
+39	sed -i [SCRIPT: fix format string] [PATH: target source file]; find [PATH: repository root] -type f -name [PATTERN: locale files] -exec sed -i [SCRIPT: fix format string] [EXEC: find exec placeholder] +,PROGRESS_PATCH
+40	submit_patch [SUMMARY: error message format fix],PROGRESS_TEST)__success
+41	grep -rn [TERM: target format string] [PATH: top-level package] --include=[PATTERN: Python source files],EMPTY_NONE
+42	grep -n -B [COUNT: context lines] -A [COUNT: context lines] [TERM: target format string] [PATH: target source file],REPEATED_SOURCE
+43	sed -n [RANGE: surrounding lines] [PATH: target source file],REPEATED_SOURCE
+44	grep -n [TERM: target format string] [PATH: target source file] | grep -i [TERM: issue keyword],EMPTY_NONE
+45	grep -n [TERM: target format string] [PATH: target source file] | grep -i [TERM: issue keyword] -A [COUNT: context lines] -B [COUNT: context lines],EMPTY_NONE
+46	cat [PATH: target source file] | sed -n [RANGE: surrounding lines],PROGRESS_PATCH
+47	grep -n [TERM: target format string] [PATH: target source file],PROGRESS_PATCH
+48	sed -n [RANGE: surrounding lines] [PATH: target source file],PROGRESS_PATCH
+49	python -c [SCRIPT: fix format string],PROGRESS_PATCH
+50	sed -i [SCRIPT: fix format string] [PATH: target source file],EMPTY_NONE
+51	head -n [COUNT: line limit] [PATH: target source file] | grep -A [COUNT: context lines] [TERM: target class name],EMPTY_NONE
+52	grep -nF [TERM: target format string] [PATH: target source file],REPEATED_SOURCE
+53	git checkout -- [PATH: target source file] && sed -i [SCRIPT: fix format string] [PATH: target source file] && grep -n [TERM: target format string] [PATH: target source file],PROGRESS_PATCH
+54	grep -n [TERM: target format string] [PATH: target source file],ERROR_NONE
+55	git checkout -- [PATH: target source file] && python3 -c [SCRIPT: fix format string],PROGRESS_PATCH
+56	grep -rn [TERM: target format string] [PATH: repository root] | head [COUNT: small limit],EMPTY_NONE
+57	grep -A [COUNT: context lines] [TERM: target class name] [PATH: target source file],EMPTY_NONE
+58	grep -rn [TERM: target format string] [PATH: top-level package] | grep -v [PATTERN: Python cache files],EMPTY_NONE

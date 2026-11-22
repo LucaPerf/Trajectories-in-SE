@@ -1,0 +1,108 @@
+0	init
+1	cat [FILE: relevant source file] | head [COUNT: line limit],INFO_SOURCE
+2	find [DIR: repository root] -type f -name [GLOB: Python source files] | head [COUNT: small list],DISCOVERY_REPO
+3	find [DIR: repository root] -type f -name [GLOB: Python source files] | head [COUNT: small list],INFO_REPO
+4	find [DIR: repository root] -type f -name [GLOB: Python source files] | xargs grep -l [PATTERN: target class definition] 2>/dev/null | head [COUNT: small list],DISCOVERY_REPO
+5	find [DIR: repository root] -type f -name [GLOB: Python source files] | xargs grep -l [PATTERN: target class definition] 2>/dev/null | head [COUNT: small list],DISCOVERY_SOURCE
+6	find [DIR: repository root] -type f -name [GLOB: Python source files] | xargs grep -l [PATTERN: target class definition],DISCOVERY_REPO
+7	find [DIR: repository root] -type f -name [GLOB: Python source files] | xargs grep -l [PATTERN: target keyword] | head [COUNT: small list],DISCOVERY_REPO
+8	grep -n [PATTERN: target class definition] [FILE: relevant source file],EMPTY_SOURCE
+9	grep -r [PATTERN: target class definition] [DIR: repository root] --include=[GLOB: Python source files] -l,DISCOVERY_REPO
+10	grep -r [PATTERN: target class definition] [DIR: source package] --include=[GLOB: Python source files],DISCOVERY_SOURCE
+11	grep -rn [PATTERN: target class definition] [DIR: source package],DISCOVERY_SOURCE
+12	ls [DIR: repository root],DISCOVERY_REPO
+13	ls [DIR: repository root],INFO_REPO
+14	cat [FILE: relevant source file] | grep -A [COUNT: source context lines] [PATTERN: target class definition],EMPTY_SOURCE
+15	find [DIR: repository root] -type f -name [GLOB: Python source files] -exec grep -l [PATTERN: target class definition] [ARG: found file] \;,DISCOVERY_SOURCE
+16	find [DIR: repository root] -type f -name [GLOB: Python source files] -path [PATH: target package path] | head [COUNT: small list],EMPTY_SOURCE
+17	find [DIR: repository root] -type f -name [GLOB: Python source files] | xargs grep -l [PATTERN: target class definition],DISCOVERY_SOURCE
+18	grep -n [PATTERN: target class definition] [FILE: relevant source file],ERROR_NONE
+19	find [DIR: repository root] -type f -name [GLOB: Python source files] -path [PATH: target package path] | head [COUNT: small list],DISCOVERY_REPO
+20	grep -n -A [COUNT: source context lines] [PATTERN: target class definition] [FILE: relevant source file],DISCOVERY_SOURCE
+21	head -n [COUNT: line limit] [FILE: relevant source file] | grep -A [COUNT: source context lines] [PATTERN: target class definition],EMPTY_SOURCE
+22	cat [FILE: relevant source file] | grep -A [COUNT: source context lines] [PATTERN: target class definition],DISCOVERY_SOURCE
+23	cat [FILE: relevant source file] | grep -A [COUNT: source context lines] [PATTERN: target class definition],INFO_SOURCE
+24	head -n [COUNT: line limit] [FILE: relevant source file] | tail -n [COUNT: line limit],INFO_SOURCE
+25	sed -n [RANGE: source line range] [FILE: relevant source file] | head [COUNT: small list],DISCOVERY_SOURCE
+26	grep -r [PATTERN: target class definition] [DIR: source package],DISCOVERY_SOURCE
+27	cat [FILE: relevant source file] | grep -n -A [COUNT: source context lines] [PATTERN: target class definition],DISCOVERY_SOURCE
+28	head -n [COUNT: line limit] [FILE: relevant source file] | tail -n [COUNT: line limit],DISCOVERY_SOURCE
+29	grep -rn [PATTERN: target class definition] [DIR: source package] --include=[GLOB: Python source files],DISCOVERY_SOURCE
+30	grep -A [COUNT: source context lines] [PATTERN: target class definition] [FILE: relevant source file],DISCOVERY_SOURCE
+31	grep -n [PATTERN: target class definition] [FILE: relevant source file],DISCOVERY_SOURCE
+32	grep -n -A [COUNT: source context lines] [PATTERN: target class definition] [FILE: relevant source file] | head [COUNT: small list],DISCOVERY_SOURCE
+33	cat > [FILE: temporary script] << [SCRIPT: patch source file]; python3 [FILE: temporary script],PROGRESS_PATCH
+34	python3 << [SCRIPT: patch source file],PROGRESS_PATCH
+35	grep -A [COUNT: source context lines] [PATTERN: target class definition] [FILE: relevant source file],INFO_SOURCE
+36	python3 -c [SCRIPT: patch source file],PROGRESS_PATCH
+37	sed -i [SCRIPT: patch source file] [FILE: relevant source file],PROGRESS_PATCH
+38	grep -A [COUNT: source context lines] [PATTERN: target class definition] [FILE: relevant source file] | head [COUNT: output lines],DISCOVERY_SOURCE
+39	sed -n [RANGE: source line range] [FILE: relevant source file],DISCOVERY_SOURCE
+40	grep -A [COUNT: source context lines] [PATTERN: target class definition] [FILE: relevant source file],REPEATED_SOURCE
+41	grep -n -A [COUNT: source context lines] [PATTERN: target class definition] [FILE: relevant source file] | head [COUNT: small list],EMPTY_SOURCE
+42	grep -n -A [COUNT: source context lines] [PATTERN: target class definition] [FILE: relevant source file],INFO_SOURCE
+43	sed -n [RANGE: source line range] [FILE: relevant source file],REPEATED_SOURCE
+44	submit_patch [PATCH: issue fix],PROGRESS_TEST__success
+45	grep -n [PATTERN: keyword] [FILE: relevant source file],PROGRESS_PATCH
+46	grep -n [PATTERN: keyword] [FILE: relevant source file] | grep -A [COUNT: source context lines] -B [COUNT: source context lines] [PATTERN: target class definition] | head [COUNT: small list],EMPTY_SOURCE
+47	grep -A [COUNT: source context lines] [PATTERN: target class definition] [FILE: relevant source file] | head [COUNT: output lines],REPEATED_SOURCE
+48	sed -n [RANGE: source line range] [FILE: relevant source file],INFO_SOURCE
+49	grep -n -A [COUNT: source context lines] [PATTERN: target class definition] [FILE: relevant source file] | head [COUNT: small list],REPEATED_SOURCE
+50	grep -n [PATTERN: keyword] [FILE: relevant source file],EMPTY_TEST
+51	cat [FILE: relevant source file] | sed -n [RANGE: source line range],REPEATED_SOURCE
+52	cat [FILE: relevant source file] | sed -n [RANGE: source line range],DISCOVERY_SOURCE
+53	cat > [FILE: temporary script] << [SCRIPT: patch source file]; python [FILE: temporary script],PROGRESS_PATCH
+54	submit_patch [PATCH: issue fix],ERROR_TEST
+55	grep -n [PATTERN: keyword] [FILE: relevant source file] | head [COUNT: small list],DISCOVERY_SOURCE
+56	cat [FILE: relevant source file] | grep -n -A [COUNT: source context lines] [PATTERN: target class definition],REPEATED_SOURCE
+57	python3 -c [SCRIPT: patch source file],ERROR_NONE
+58	cat [FILE: relevant test file],ERROR_TEST
+59	grep -B [COUNT: source context lines] -A [COUNT: source context lines] [PATTERN: target method definition] [FILE: relevant source file] | head [COUNT: small list],DISCOVERY_SOURCE
+60	sed -n [RANGE: source line range] [FILE: relevant source file],PROGRESS_PATCH
+61	find [DIR: test directory] -name [GLOB: relevant test files],DISCOVERY_TEST
+62	cat [FILE: relevant test file],ERROR_NONE
+63	cat [FILE: relevant source file] | sed -n [RANGE: source line range],INFO_SOURCE
+64	grep -B [COUNT: source context lines] -A [COUNT: source context lines] [PATTERN: target method definition] [FILE: relevant source file] | head [COUNT: small list],REPEATED_SOURCE
+65	grep -rn [PATTERN: target keyword] [FILE: relevant test file] 2>/dev/null || echo [MESSAGE: fallback message],EMPTY_TEST
+66	cat [FILE: relevant source file] | grep -A [COUNT: source context lines] [PATTERN: target class definition],REPEATED_SOURCE
+67	cd [DIR: repository root] && python [SCRIPT: test runner] [TESTS: relevant test modules] -v2 2>&1 | tail [COUNT: output lines],ERROR_TEST
+68	cat [FILE: relevant test file],REPEATED_ERROR_TEST
+69	python3 << [SCRIPT: patch source file],INFO_SOURCE
+70	cd [DIR: repository root] && python -m django test [TESTS: relevant test modules] --settings=[SETTINGS: test settings] -v2 2>&1,ERROR_TEST
+71	grep -B [COUNT: source context lines] -A [COUNT: source context lines] [PATTERN: target method definition] [FILE: relevant source file] | head [COUNT: small list],INFO_SOURCE
+72	python3 [SCRIPT: test runner] [TESTS: relevant test modules] --verbosity=[COUNT: verbose level],ERROR_TEST
+73	cd [DIR: repository root] && python [SCRIPT: test runner] [TESTS: relevant test modules] -v2 2>&1 | tail [COUNT: output lines],REPEATED_ERROR_TEST
+74	sed -n [RANGE: source line range] [FILE: relevant source file],ERROR_NONE
+75	find [DIR: test directory] -name [GLOB: relevant test files] 2>/dev/null; find [DIR: test directory] -path [PATH: target package path] -name [GLOB: Python source files] | head [COUNT: small list],DISCOVERY_TEST
+76	submit_patch [PATCH: issue fix],REPEATED_ERROR_TEST
+77	submit_patch [PATCH: issue fix],ERROR_NONE
+78	cd [DIR: repository root] && python -m django test [TESTS: relevant test modules] --settings=[SETTINGS: test settings] -v2 2>&1 | head [COUNT: output lines],ERROR_TEST
+79	cd [DIR: repository root] && python [SCRIPT: test runner] [TESTS: relevant test modules] -v2 2>&1,ERROR_NONE
+80	cd [DIR: repository root] && git checkout -- [FILE: relevant source file],PROGRESS_PATCH
+81	cat [FILE: relevant test file],DISCOVERY_TEST
+82	grep -rn [PATTERN: target class definition] [DIR: source package] --include=[GLOB: Python source files],DISCOVERY_TEST
+83	grep -rn [PATTERN: target keyword] [FILE: relevant test file] 2>/dev/null || echo [MESSAGE: fallback message],DISCOVERY_TEST
+84	cd [DIR: repository root] && python [SCRIPT: test runner] [TESTS: relevant test modules] -v2 2>&1,ERROR_TEST
+85	cat [FILE: relevant source file] | sed -n [RANGE: source line range],ERROR_NONE
+86	cat [FILE: relevant test file],EMPTY_TEST
+87	find [DIR: repository root] -type f -name [GLOB: Python source files] -path [PATH: target package path] | head [COUNT: small list],DISCOVERY_TEST
+88	grep -rn [PATTERN: target class definition] [DIR: source package],DISCOVERY_TEST
+89	grep -n [PATTERN: keyword] [FILE: relevant source file],ERROR_NONE
+90	submit_patch [PATCH: issue fix],PROGRESS_TEST)__success
+91	cd [DIR: repository root] && python [SCRIPT: test runner] [TESTS: relevant test modules] -v2 2>&1 | head [COUNT: output lines],ERROR_TEST
+92	grep -n [PATTERN: keyword] [FILE: relevant source file],INFO_SOURCE
+93	find [DIR: repository root] -type f -name [GLOB: Python source files] | head [COUNT: small list],DISCOVERY_TEST
+94	ls -la [DIR: test subdirectory] 2>/dev/null || ls -la [DIR: test directory] | head [COUNT: small list],DISCOVERY_REPO
+95	find [DIR: repository root] -type f -name [GLOB: Python source files] | xargs grep -l [PATTERN: target class definition] 2>/dev/null | head [COUNT: small list],DISCOVERY_TEST
+96	cd [DIR: repository root] && python [SCRIPT: test runner] [TESTS: relevant test modules] -v2 2>&1 | head [COUNT: output lines],PROGRESS_TEST
+97	cd [DIR: repository root] && python [SCRIPT: test runner] [TESTS: relevant test modules] -v2 2>&1,REPEATED_ERROR_TEST
+98	python3 -c [SCRIPT: patch source file],ERROR_TEST
+99	find [DIR: repository root] -type f -name [GLOB: Python source files] -exec grep -l [PATTERN: target class definition] [ARG: found file] \;,EMPTY_TEST
+100	python3 -c [SCRIPT: patch source file],REPEATED_ERROR_TEST
+101	grep -n [PATTERN: keyword] [FILE: relevant source file] | head [COUNT: small list],EMPTY_SOURCE
+102	cd [DIR: repository root] && python [SCRIPT: test runner] [TESTS: relevant test modules] -v2 2>&1 | tail [COUNT: output lines],PROGRESS_TEST
+103	python3 << [SCRIPT: patch source file],DISCOVERY_TEST
+104	cd [DIR: repository root] && python [SCRIPT: test runner] [TESTS: relevant test modules] -v2 2>&1,PROGRESS_TEST
+105	cd [DIR: repository root] && python [SCRIPT: test runner] [TESTS: relevant test modules] -v2 2>&1 | tail [COUNT: output lines],REPEATED_TEST
+106	cd [DIR: repository root] && python [SCRIPT: test runner] [TESTS: relevant test modules] -v2 2>&1,REPEATED_TEST
+107	submit_patch [PATCH: issue fix],PROGRESS_PATCH__success

@@ -1,0 +1,78 @@
+0	init
+1	cat [FILE: choices file],DISCOVERY_SOURCE
+2	cat [FILE: choices file],ERROR_SOURCE
+3	find [PATH: repository root] -name [GLOB: Python files] | xargs grep -l [PATTERN: choices class] | head [COUNT: line limit],DISCOVERY_SOURCE
+4	find [PATH: repository root] -type f -name [GLOB: Python files] -exec grep -l [PATTERN: choices class] [EXEC: find replacement] \;,DISCOVERY_SOURCE
+5	find [PATH: repository root] -type f -name [GLOB: Python files] | head [COUNT: line limit],DISCOVERY_REPO
+6	find [PATH: repository root] -type f -name [GLOB: Python files] | head [COUNT: line limit],DISCOVERY_TEST
+7	find [PATH: repository root] -type f -name [GLOB: Python files] | head [COUNT: line limit],INFO_REPO
+8	grep -r [PATTERN: choices class] [PATH: repository root] --include [GLOB: Python files],DISCOVERY_SOURCE
+9	grep -rn [PATTERN: choices class] [PATH: repository root] --include [GLOB: Python files],DISCOVERY_SOURCE
+10	grep -rn [PATTERN: choices class] [PATH: source package] --include [GLOB: Python files],DISCOVERY_SOURCE
+11	ls -la [PATH: repository root],DISCOVERY_REPO
+12	ls -la [PATH: repository root],INFO_REPO
+13	ls [PATH: repository root],DISCOVERY_REPO
+14	ls [PATH: repository root],ERROR_NONE
+15	ls [PATH: repository root],INFO_REPO
+16	python3 << [SCRIPT: patch choices file],PROGRESS_PATCH
+17	find [PATH: repository root] -name [GLOB: filename] -type f,EMPTY_SOURCE
+18	find [PATH: repository root] -name [GLOB: filename] -path [GLOB: source package path] | head [COUNT: line limit],EMPTY_SOURCE
+19	grep -rn [PATTERN: choices class] [FILE: source file] | head [COUNT: line limit],EMPTY_SOURCE
+20	grep -r [PATTERN: choices class] [PATH: source package] --include [GLOB: Python files] -l,DISCOVERY_SOURCE
+21	grep -r [PATTERN: choices class] [PATH: source package] --include [GLOB: Python files],DISCOVERY_SOURCE
+22	cat [FILE: source file],DISCOVERY_SOURCE
+23	cat [FILE: source file],ERROR_SOURCE
+24	find [PATH: source package] -name [GLOB: Python files] -exec grep -l [PATTERN: choices class] [EXEC: find replacement] \;,DISCOVERY_SOURCE
+25	grep -r [PATTERN: choices class] [PATH: source package],ERROR_SOURCE
+26	grep -r [PATTERN: choices class] [PATH: source package] --include [GLOB: Python files],ERROR_SOURCE
+27	grep -r [PATTERN: choices class] [PATH: source package],DISCOVERY_SOURCE
+28	submit_patch,PROGRESS_TEST__success
+29	cat > [FILE: choices file] << [SCRIPT: patch choices file],PROGRESS_PATCH
+30	find [PATH: repository root] -type f -name [GLOB: Python files] -path [GLOB: test path] -exec grep -l [PATTERN: choices class] [EXEC: find replacement] \; | head [COUNT: line limit],DISCOVERY_TEST
+31	grep -rn [PATTERN: choices class] [PATH: source package] | head [COUNT: line limit],DISCOVERY_SOURCE
+32	grep -n [PATTERN: code symbols] [FILE: source file] | head [COUNT: line limit],EMPTY_SOURCE
+33	cat [FILE: choices file],ERROR_NONE
+34	python3 -c [SCRIPT: patch choices file],PROGRESS_PATCH
+35	find [PATH: repository root] -name [GLOB: filename] -type f,DISCOVERY_SOURCE
+36	grep -rn [PATTERN: choices class] [PATH: source package] --include [GLOB: Python files],EMPTY_SOURCE
+37	find [PATH: repository root] -name [GLOB: filename] | head [COUNT: line limit],EMPTY_SOURCE
+38	cat [FILE: choices file],INFO_SOURCE
+39	grep -r [PATTERN: choices class] [PATH: source package] --include [GLOB: Python files] -A [COUNT: context],DISCOVERY_SOURCE
+40	submit_patch,PROGRESS_PATCH__success
+41	cat [FILE: choices file],REPEATED_SOURCE
+42	cat [FILE: choices file] | head [COUNT: line limit],REPEATED_SOURCE
+43	sed -i [SCRIPT: patch choices file] [FILE: choices file],PROGRESS_PATCH
+44	sed -n [RANGE: line range] [FILE: source file],DISCOVERY_SOURCE
+45	python3 << [SCRIPT: patch choices file],ERROR_SOURCE
+46	cat > [FILE: patch script] << [SCRIPT: patch choices file] ; python3 [FILE: patch script],PROGRESS_PATCH
+47	find [PATH: repository root] -path [GLOB: source package path] -name [GLOB: Python files] | grep -i [PATTERN: code symbols],DISCOVERY_SOURCE
+48	grep -r [PATTERN: choices class] [PATH: source package] --include [GLOB: Python files] -l,DISCOVERY_TEST
+49	grep -r [PATTERN: code symbols] [FILE: source file] | head [COUNT: line limit],DISCOVERY_SOURCE
+50	cat [FILE: source file] | head [COUNT: line limit],INFO_SOURCE
+51	cat > [FILE: patch script] << [SCRIPT: patch choices file] ; python [FILE: patch script],PROGRESS_PATCH
+52	grep -n [PATTERN: code symbols] [FILE: source file] | head [COUNT: line limit],INFO_SOURCE
+53	submit_patch,ERROR_TEST
+54	cat [FILE: choices file] | tail [COUNT: line limit],DISCOVERY_SOURCE
+55	grep -n [PATTERN: code symbols] [FILE: source file],EMPTY_SOURCE
+56	grep -r [PATTERN: choices class] [PATH: source package] --include [GLOB: Python files],REPEATED_SOURCE
+57	cat [FILE: choices test],DISCOVERY_TEST
+58	grep -n [PATTERN: code symbols] [FILE: source file] | head [COUNT: line limit],DISCOVERY_SOURCE
+59	grep -r [PATTERN: code symbols] [FILE: source file] -A [COUNT: context] | head [COUNT: line limit],DISCOVERY_SOURCE
+60	python3 -c [SCRIPT: inline test],PROGRESS_TEST
+61	grep -rn [PATTERN: dunder methods] [FILE: choices file],EMPTY_SOURCE
+62	cd [PATH: repository root] && python [FILE: test runner] [TEST: test module],PROGRESS_TEST
+63	cat [FILE: choices test] | head [COUNT: line limit],REPEATED_TEST
+64	grep -n [PATTERN: code symbols] [FILE: source file] | grep -A [COUNT: context] -B [COUNT: context] [PATTERN: line numbers] | head [COUNT: line limit],EMPTY_SOURCE
+65	grep -r [PATTERN: code symbols] [FILE: source file] -A [COUNT: context] | grep -A [COUNT: context] [PATTERN: class name] | head [COUNT: line limit],DISCOVERY_SOURCE
+66	grep -n [PATTERN: code symbols] [FILE: source file] | grep -A [COUNT: context] -B [COUNT: context] [PATTERN: line numbers] | head [COUNT: line limit],INFO_SOURCE
+67	cat [FILE: choices test] | head [COUNT: line limit],DISCOVERY_TEST
+68	python3 -c [SCRIPT: inline test],ERROR_TEST
+69	grep -n [PATTERN: code symbols] [FILE: source file],INFO_SOURCE
+70	grep -n [PATTERN: code symbols] [FILE: source file] -A [COUNT: context] | head [COUNT: line limit],INFO_SOURCE
+71	grep -n [PATTERN: choices class] [FILE: choices file] -A [COUNT: context],ERROR_SOURCE
+72	grep -n [PATTERN: code symbols] [FILE: source file] -A [COUNT: context] | grep -A [COUNT: context] [PATTERN: line numbers],ERROR_NONE
+73	cat [FILE: choices file] | tail [COUNT: line limit],REPEATED_SOURCE
+74	grep -n [PATTERN: code symbols] [FILE: source file] -A [COUNT: context] | grep -A [COUNT: context] [PATTERN: line numbers],INFO_SOURCE
+75	sed -n [RANGE: line range] [FILE: source file],INFO_SOURCE
+76	grep -n [PATTERN: dunder methods] [FILE: choices file],ERROR_NONE
+77	sed -n [RANGE: line range] [FILE: source file],PROGRESS_PATCH

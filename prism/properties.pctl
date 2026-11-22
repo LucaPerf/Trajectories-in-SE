@@ -1,0 +1,7 @@
+
+P=? [ F "success" ]
+P=? [ F "fail" ]
+P=? [ F<=10 "success" ]
+P=? [ F<=20 "success" ]
+P=? [ F<=40 "success" ]
+R{"steps"}=? [ F "end" ]
