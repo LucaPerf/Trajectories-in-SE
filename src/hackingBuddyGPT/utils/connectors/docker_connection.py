@@ -27,7 +27,7 @@ class DockerConnection:
                 subprocess.run([self.binary, "start", self.container_name], check=True, capture_output=True)
         else:
             subprocess.run(
-                [self.binary, "run", "-d", "--platform", "linux/amd64",
+                [self.binary, "run", "-d", "--platform", "linux/amd64", "--network", "none",
                  "--name", self.container_name, self.image, "sleep", "infinity"],
                 check=True, capture_output=True,
             )
