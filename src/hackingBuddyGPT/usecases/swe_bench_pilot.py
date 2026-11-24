@@ -51,6 +51,8 @@ exec_command <shell command>
 submit_patch <short note>
 The command may span several lines (for example a heredoc to write a script). 
 Do not explain your reasoning, do not add markup, and do not continue the conversation after that line.
+
+Note: the container has no internet access.
 """)
 
 # Same prompt as swe_template plus the hints extracted from the Markov chain of similar instances.
