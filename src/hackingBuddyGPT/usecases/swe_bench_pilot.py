@@ -121,13 +121,19 @@ Do not modify the files in the `tests/` directory: they will be replaced by the 
 The official tests are not in the repository: do not search for them.
 
 % if plan:
-YOUR PLAN (written by you in earlier turns):
+YOUR INITIAL PLAN (written at the start, kept for reference):
+${initial_plan}
+
+YOUR CURRENT PLAN (from your last reply):
 ${plan}
 
-Carry out the plan. Continue from where you are: do not re-analyze the issue from scratch.
-Change the plan only if a result contradicts it.
+Carry out the plan. Continue from the step marked [current]: do not re-analyze the issue
+from scratch. Never remove a step: only update its status. Mark a finished step [done].
+If a result contradicts a step, mark it [replaced], add the new step right after it, and
+say why in NOW.
 % else:
 First understand the issue and devise a plan to solve it, as bullet points.
+Mark the first step [current] and all the others [todo].
 % endif
 % if plan_mode == "ps_plus":
 Identify the files and functions involved in the issue. After each edit, check its effect by
@@ -138,10 +144,13 @@ Use exec_command to read/search/edit files or run commands, and submit_patch onl
 believe the fix is complete and want it verified against the test suite.
 
 Your reply must have exactly this form and nothing else:
-PLAN: 
-- <step of your plan>
-- <step of your plan>
-NOW: <which part of the plan the action below carries out>
+PLAN:
+- [done] <step>
+- [replaced] <step>
+- [current] <step>
+- [todo] <step>
+(use [done] and [replaced] only for steps they apply to; exactly one step is [current])
+NOW: <the [current] step and how the action below carries it out>
 exec_command <shell command> (or submit_patch <short note>)
 
 The command may span several lines (for example a heredoc to write a script).
@@ -207,7 +216,7 @@ class SWEBenchPilotUseCase(CommandStrategy):
         if self.hints:
             self._template_params["hints"] = self.hints
         if self.plan_mode:
-            self._template_params.update({"plan": "", "plan_mode": self.plan_mode})
+            self._template_params.update({"plan": "", "initial_plan": "", "plan_mode": self.plan_mode})
 
     def postprocess_commands(self, cmd: str) -> list[str]:
         if self.plan_mode:
@@ -216,6 +225,8 @@ class SWEBenchPilotUseCase(CommandStrategy):
                 plan = m.group(1).strip()
                 if plan:                      # empty or cut-off reply: keep the previous plan
                     self._template_params["plan"] = plan
+                    if not self._template_params.get("initial_plan"):
+                        self._template_params["initial_plan"] = plan    # the first plan is never overwritten
                 cmd = cmd[m.end():]           # look for the action only after the NOW line
         lines = cmd.strip().splitlines()
         start = next((i for i, l in enumerate(lines) if _ACTION_RE.match(l)), None)
@@ -240,7 +251,8 @@ class SWEBenchPilotUseCase(CommandStrategy):
         capabilities_block = self._template_params.get("capabilities", "")
         return (self.llm.count_tokens(self.issue_text) + self.llm.count_tokens(capabilities_block)
                 + self.llm.count_tokens(self.hints)
-                + self.llm.count_tokens(self._template_params.get("plan", "")))
+                + self.llm.count_tokens(self._template_params.get("plan", ""))
+                + self.llm.count_tokens(self._template_params.get("initial_plan", "")))
 
     def check_success(self, cmd: str, result: str) -> bool:
         return cmd.startswith("submit_patch") and "TESTS_PASSED" in result
