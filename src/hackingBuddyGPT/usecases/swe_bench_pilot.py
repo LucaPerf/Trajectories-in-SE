@@ -96,6 +96,60 @@ Do not explain your reasoning, do not add markup, and do not continue the conver
 Note: the container has no internet access.
 """)
 
+# prompt for plan and solve
+swe_template_plan = Template("""You are a software engineer working inside a checked-out git repository
+at ${repo_path}. Your goal is to resolve the following issue by editing the code so that the
+project's test suite passes.
+
+ISSUE:
+${issue_text}
+
+${capabilities}
+
+% if len(history) != 0:
+You already tried the following commands:
+
+~~~ bash
+${history}
+~~~
+
+Do not repeat commands that already told you what you need to know.
+%endif
+
+Do not modify the files in the `tests/` directory: they will be replaced by the official tests.
+
+The official tests are not in the repository: do not search for them.
+
+% if plan:
+YOUR PLAN (written by you in earlier turns):
+${plan}
+
+Carry out the plan. Continue from where you are: do not re-analyze the issue from scratch.
+Change the plan only if a result contradicts it.
+% else:
+First understand the issue and devise a plan to solve it, as bullet points.
+% endif
+% if plan_mode == "ps_plus":
+Identify the files and functions involved in the issue. After each edit, check its effect by
+running it. Keep the change minimal and do not touch unrelated code.
+% endif
+
+Use exec_command to read/search/edit files or run commands, and submit_patch only once you
+believe the fix is complete and want it verified against the test suite.
+
+Your reply must have exactly this form and nothing else:
+PLAN: 
+- <step of your plan>
+- <step of your plan>
+NOW: <which part of the plan the action below carries out>
+exec_command <shell command> (or submit_patch <short note>)
+
+The command may span several lines (for example a heredoc to write a script).
+Do not add markup and do not continue the conversation after the action.
+
+Note: the container has no internet access.
+""")
+
 # The hosted model tends to answer with markdown reasoning around (and after) the command, sometimes
 # ending with stray tool-call tags. Keep only the first command line and drop those tags.
 _ACTION_RE = re.compile(r"[ \t]*(?:exec_command|submit_patch)\b")
@@ -103,6 +157,8 @@ _JUNK_RE = re.compile(
     r"[ \t]*</?(?:think|thinking|anth|antml\w*|parameter|output|command|invoke|function_calls|tool_call)\b[^>]*>"
 )
 _STRAY_TAGS_RE = re.compile(r"(?:</?(?:parameter|output|command|invoke|function_calls)[^>]*>\s*)+$")
+# PLAN: ... up to the NOW: line (included); the action comes after it.
+_PLAN_RE = re.compile(r"^[ \t]*PLAN:[ \t]*(.*?)^[ \t]*NOW:[^\n]*\n?", re.S | re.M)
 
 
 @use_case("SWE-bench Pilot Task (single instance, ATLAS methodology-transfer experiment)")
@@ -120,6 +176,10 @@ class SWEBenchPilotUseCase(CommandStrategy):
         desc="Hints extracted from the Markov chain; when given, the prompt with the hints section is used",
         default="",
     )
+    plan_mode: str = parameter(
+        desc='"" = no plan, "ps" = Plan-and-Solve plan kept across turns, "ps_plus" = same plus the PS+ instructions',
+        default="",
+    )
 
     def get_name(self) -> str:
         return "SWE-bench Pilot Task"
@@ -133,7 +193,10 @@ class SWEBenchPilotUseCase(CommandStrategy):
             with open(self.test_patch_file, encoding="utf-8", newline="") as f:
                 test_patch = f.read()
 
-        self._template = swe_template_hints if self.hints else swe_template
+        if self.plan_mode:
+            self._template = swe_template_plan
+        else:
+            self._template = swe_template_hints if self.hints else swe_template
         self._capabilities.add_capability(DockerRunCommand(conn=self.conn), default=True)
         self._capabilities.add_capability(SubmitPatch(conn=self.conn, test_cmd=self.test_cmd, test_patch=test_patch))
 
@@ -143,8 +206,17 @@ class SWEBenchPilotUseCase(CommandStrategy):
         })
         if self.hints:
             self._template_params["hints"] = self.hints
+        if self.plan_mode:
+            self._template_params.update({"plan": "", "plan_mode": self.plan_mode})
 
     def postprocess_commands(self, cmd: str) -> list[str]:
+        if self.plan_mode:
+            m = _PLAN_RE.search(cmd)
+            if m:
+                plan = m.group(1).strip()
+                if plan:                      # empty or cut-off reply: keep the previous plan
+                    self._template_params["plan"] = plan
+                cmd = cmd[m.end():]           # look for the action only after the NOW line
         lines = cmd.strip().splitlines()
         start = next((i for i, l in enumerate(lines) if _ACTION_RE.match(l)), None)
         if start is None:
@@ -167,7 +239,8 @@ class SWEBenchPilotUseCase(CommandStrategy):
         # prompt past context_size.
         capabilities_block = self._template_params.get("capabilities", "")
         return (self.llm.count_tokens(self.issue_text) + self.llm.count_tokens(capabilities_block)
-                + self.llm.count_tokens(self.hints))
+                + self.llm.count_tokens(self.hints)
+                + self.llm.count_tokens(self._template_params.get("plan", "")))
 
     def check_success(self, cmd: str, result: str) -> bool:
         return cmd.startswith("submit_patch") and "TESTS_PASSED" in result

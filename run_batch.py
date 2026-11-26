@@ -10,9 +10,10 @@ INSTANCES = [111]
 
 RUNS_PER_INSTANCE = 5
 MAX_TURNS = 40
+PLAN = "ps"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-LOG_DIR = os.path.join(HERE, "job_logs")
+LOG_DIR = os.path.join(HERE, f"job_logs_{PLAN}" if PLAN else "job_logs")
 SUMMARY_FILE = os.path.join(LOG_DIR, "last_summary.json")
 
 
@@ -44,6 +45,8 @@ def run_all():
             "--runs", str(RUNS_PER_INSTANCE),
             "--max-turns", str(MAX_TURNS),
         ]
+        if PLAN:
+            cmd += ["--plan", PLAN]
         result = subprocess.run(cmd)
         status = "ok" if result.returncode == 0 else f"crashed (exit {result.returncode})"
 

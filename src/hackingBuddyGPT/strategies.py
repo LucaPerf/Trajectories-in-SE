@@ -125,7 +125,7 @@ class CommandStrategy(UseCase, abc.ABC):
 
         # for reply that is empty
         if not cleaned:
-            error_msg = ("Your previous reply was empty: you used up the whole token budget while thinking and never wrote an action. Think briefly and reply with a single action.")
+            error_msg = ("Your previous reply was empty: you used up the whole token budget while thinking and never wrote an action. Think briefly and reply in the required form, ending with a single action.")
             self.log.add_tool_call(message_id, tool_call_id=0, function_name="",
                                             arguments="", result_text=error_msg, duration=datetime.timedelta(0))
             return error_msg

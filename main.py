@@ -148,6 +148,8 @@ def main():
     parser.add_argument("--hints-file", type=str, default="",
                         help="text file with the hints from the Markov chain: uses the prompt with hints and "
                              "writes to job_logs_hints/ and output_hints/ instead of job_logs/ and output/")
+    parser.add_argument("--plan", choices=["ps", "ps_plus"], default="",
+                        help="prompt with a plan kept across turns; writes to job_logs_<plan>/ and output_<plan>/")
     args = parser.parse_args()
 
     hints = ""
@@ -157,6 +159,9 @@ def main():
         if not hints:
             sys.exit(f"{args.hints_file} is empty")
     log_dir, output_dir = (LOG_DIR_HINTS, OUTPUT_DIR_HINTS) if hints else (LOG_DIR, OUTPUT_DIR)
+    if args.plan:
+        log_dir = os.path.join(HERE, f"job_logs_{args.plan}")
+        output_dir = os.path.join(HERE, f"output_{args.plan}")
 
     api_key = os.environ.get(API_KEY_ENV)
     if not api_key:
@@ -198,6 +203,8 @@ def main():
     ]
     if hints:
         cmd.append(f"--hints={hints}")
+    if args.plan:
+        cmd.append(f"--plan_mode={args.plan}")
     # The key travels through the environment (configurable.py reads "llm.api_key"), never the command line.
     env = dict(os.environ)
     env["PYTHONPATH"] = SRC_DIR + os.pathsep + env.get("PYTHONPATH", "")
