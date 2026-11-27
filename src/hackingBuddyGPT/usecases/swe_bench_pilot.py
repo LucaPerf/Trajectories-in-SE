@@ -128,9 +128,13 @@ YOUR CURRENT PLAN (from your last reply):
 ${plan}
 
 Carry out the plan. Continue from the step marked [current]: do not re-analyze the issue
-from scratch. Never remove a step: only update its status. Mark a finished step [done].
+from scratch, and do not look again for what the plan already records as found.
+Never remove a step: only update its status. Mark a finished step [done].
 If a result contradicts a step, mark it [replaced], add the new step right after it, and
-say why in NOW.
+say why in NOW. Do not reorder steps: if you change the order, mark the moved step
+[replaced], add it again in its new position, and say why in NOW.
+After "->" write in one line what the step found (file, function, line or result), so that
+you do not need to look for it again.
 % else:
 First understand the issue and devise a plan to solve it, as bullet points.
 Mark the first step [current] and all the others [todo].
@@ -145,9 +149,9 @@ believe the fix is complete and want it verified against the test suite.
 
 Your reply must have exactly this form and nothing else:
 PLAN:
-- [done] <step>
-- [replaced] <step>
-- [current] <step>
+- [done] <step> -> <what it found>
+- [replaced] <step> -> <why it was replaced>
+- [current] <step> -> <what you found so far>
 - [todo] <step>
 (use [done] and [replaced] only for steps they apply to; exactly one step is [current])
 NOW: <the [current] step and how the action below carries it out>
