@@ -69,7 +69,7 @@ class CommandStrategy(UseCase, abc.ABC):
         task_successful = False
         turn = 1
         try:
-            while turn <= self.max_turns and not task_successful:
+            while turn <= self.max_turns and not task_successful and not getattr(self, "_stop_reason", None):
                 with self.log.section(f"round {turn}"):
                     self.log.console.log(f"[yellow]Starting turn {turn} of {self.max_turns}")
                     task_successful = self.perform_round(turn)
@@ -82,10 +82,12 @@ class CommandStrategy(UseCase, abc.ABC):
         # write the final result to the database and console
         if task_successful:
             self.log.run_was_success()
+        elif getattr(self, "_stop_reason", None):
+            self.log.run_was_failure(self._stop_reason)
         else:
             self.log.run_was_failure("maximum turn number reached")
         return task_successful
-    
+
     @log_conversation("Asking LLM for a new command(s)...")
     def perform_round(self, turn: int) -> bool:
          # get the next command and run it

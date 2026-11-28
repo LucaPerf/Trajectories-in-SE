@@ -20,10 +20,15 @@ class SubmitPatch(Capability):
     test_cmd: str
     test_patch: str = ""
 
+    max_submissions: int = 3
+    failed_submissions: int = 0
+
     def describe(self) -> str:
         return (
-            "Call this when you believe the issue is fixed. I will run the project's test suite "
-            "inside the container and tell you whether it passes. "
+            "Call this when you believe the issue is fixed. I will run the project's official tests "
+            "inside the container and tell you only whether they pass, without any test output. "
+            f"You can submit at most {self.max_submissions} times: after {self.max_submissions} "
+            "failed submissions the run ends. "
             "Usage: submit_patch <short note about what you changed>"
         )
 
@@ -46,7 +51,9 @@ class SubmitPatch(Capability):
 
         if returncode == 0:
             return "TESTS_PASSED"
-        tail = (stdout + "\n" + stderr).strip()[-2000:]
+        self.failed_submissions += 1
+        attempts = f"(submission {self.failed_submissions} of {self.max_submissions})"
         if returncode == 97:
-            return f"PATCH_APPLY_ERROR\n{tail}"
-        return f"TESTS_FAILED\n{tail}"
+            return (f"PATCH_APPLY_ERROR {attempts}\n"
+                    "The official tests could not be applied: did you modify files in tests/?")
+        return f"TESTS_FAILED {attempts}"

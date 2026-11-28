@@ -13,6 +13,7 @@ import re
 from mako.template import Template
 
 from hackingBuddyGPT.capabilities.docker_run_command import DockerRunCommand
+from hackingBuddyGPT.capabilities.give_up import GiveUp
 from hackingBuddyGPT.capabilities.submit_patch import SubmitPatch
 from hackingBuddyGPT.strategies import CommandStrategy
 from hackingBuddyGPT.usecases.usecase import use_case
@@ -96,7 +97,7 @@ Do not explain your reasoning, do not add markup, and do not continue the conver
 Note: the container has no internet access.
 """)
 
-# prompt for plan and solve
+# prompt for plan and solve, sam as swe_template
 swe_template_plan = Template("""You are a software engineer working inside a checked-out git repository
 at ${repo_path}. Your goal is to resolve the following issue by editing the code so that the
 project's test suite passes.
@@ -163,14 +164,12 @@ Do not add markup and do not continue the conversation after the action.
 Note: the container has no internet access.
 """)
 
-# The hosted model tends to answer with markdown reasoning around (and after) the command, sometimes
-# ending with stray tool-call tags. Keep only the first command line and drop those tags.
-_ACTION_RE = re.compile(r"[ \t]*(?:exec_command|submit_patch)\b")
+
+_ACTION_RE = re.compile(r"[ \t]*(?:exec_command|submit_patch|give_up)\b")
 _JUNK_RE = re.compile(
     r"[ \t]*</?(?:think|thinking|anth|antml\w*|parameter|output|command|invoke|function_calls|tool_call)\b[^>]*>"
 )
 _STRAY_TAGS_RE = re.compile(r"(?:</?(?:parameter|output|command|invoke|function_calls)[^>]*>\s*)+$")
-# PLAN: ... up to the NOW: line (included); the action comes after it.
 _PLAN_RE = re.compile(r"^[ \t]*PLAN:[ \t]*(.*?)^[ \t]*NOW:[^\n]*\n?", re.S | re.M)
 
 
@@ -211,7 +210,10 @@ class SWEBenchPilotUseCase(CommandStrategy):
         else:
             self._template = swe_template_hints if self.hints else swe_template
         self._capabilities.add_capability(DockerRunCommand(conn=self.conn), default=True)
-        self._capabilities.add_capability(SubmitPatch(conn=self.conn, test_cmd=self.test_cmd, test_patch=test_patch))
+        self._submit_patch = SubmitPatch(conn=self.conn, test_cmd=self.test_cmd, test_patch=test_patch)
+        self._capabilities.add_capability(self._submit_patch)
+        self._capabilities.add_capability(GiveUp())
+        self._stop_reason = None
 
         self._template_params.update({
             "issue_text": self.issue_text,
@@ -244,14 +246,21 @@ class SWEBenchPilotUseCase(CommandStrategy):
         text = "\n".join(out).strip()
         text = _STRAY_TAGS_RE.sub("", text).strip()
         text = re.split(r"\n[ \t]*```", text, maxsplit=1)[0].rstrip()
-        if text.startswith("submit_patch"):
+        if text.startswith(("submit_patch", "give_up")):
             text = text.splitlines()[0]
         return [text]
 
+    def after_command_execution(self, cmd, result, got_root):
+        if got_root:
+            return
+        if cmd.startswith("give_up"):
+            reason = cmd[len("give_up"):].strip() or "no reason given"
+            self._stop_reason = f"gave up: {reason[:300]}"
+        elif (cmd.startswith("submit_patch")
+              and self._submit_patch.failed_submissions >= self._submit_patch.max_submissions):
+            self._stop_reason = f"submission limit reached ({self._submit_patch.max_submissions} failed submit_patch)"
+
     def get_token_overhead(self) -> int:
-        # CommandStrategy only budgets history against the raw template source; the
-        # rendered issue text and capability block would otherwise push the real
-        # prompt past context_size.
         capabilities_block = self._template_params.get("capabilities", "")
         return (self.llm.count_tokens(self.issue_text) + self.llm.count_tokens(capabilities_block)
                 + self.llm.count_tokens(self.hints)
